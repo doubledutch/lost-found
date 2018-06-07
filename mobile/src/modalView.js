@@ -21,15 +21,8 @@ export default class ModalView extends Component {
 
     return (
       <View style={{flex: 1}}>
-        {this.renderCurrentStage()}
-        <View style={s.bottomButtons}>
-          <View style={{flex:1}}>
-          <TouchableOpacity style={s.topicsButton} onPress={() => handleChange("showTopics", false)}><Text style={s.topicsButtonText}>Back to Question</Text></TouchableOpacity>
-          </View>
-          <View style={{flex:1}}>
-          <TouchableOpacity style={s.sendButton} onPress={() => makeQuestion()}><Text style={s.sendButtonText}>Submit Question</Text></TouchableOpacity>
-          </View>
-        </View>
+        {this.renderCurrentStage()}>
+        {this.renderButtons()}
         <TouchableOpacity style={s.modalBottom} onPress={modalClose}></TouchableOpacity> 
       </View>
     )
@@ -45,6 +38,21 @@ export default class ModalView extends Component {
   }
 
   renderButtons = () => {
+    switch (stage) {
+      case "1":
+        return <View><Text>Test2</Text></View>
+      default:
+        return (
+          <View style={s.bottomButtons}>
+            <View style={{flex:1}}>
+              <TouchableOpacity style={s.topicsButton} onPress={() => handleChange("showTopics", false)}><Text style={s.topicsButtonText}>Back to Question</Text></TouchableOpacity>
+            </View>
+            <View style={{flex:1}}>
+              <TouchableOpacity style={s.sendButton} onPress={() => makeQuestion()}><Text style={s.sendButtonText}>Submit Question</Text></TouchableOpacity>
+            </View>
+          </View>
+        )
+    }
 
   }
 
@@ -176,7 +184,7 @@ const s = ReactNative.StyleSheet.create({
   },
   topicsButton: {
     justifyContent: 'center',
-    marginRight: 10,
+    marginHorizontal: 10,
     borderColor: client.primaryColor,
     height: 42,
     borderRadius: 4,
