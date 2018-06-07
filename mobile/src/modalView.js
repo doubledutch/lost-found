@@ -38,7 +38,7 @@ export default class ModalView extends Component {
   renderCurrentStage = (stage) => {
     switch (stage) {
       case "1":
-        return <View><Text>Hello</Text></View>
+        return <View><Text>Test</Text></View>
       default:
         return this.renderInputSection(stage)
     }
