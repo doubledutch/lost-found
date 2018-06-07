@@ -58,7 +58,7 @@ export default class HomeView extends Component {
   renderPage = () => {
     switch (this.state.currentPage) {
       case 'bigScreen':
-        return <View><Text>Test1</Text></View>
+        return <View><Text>Test2</Text></View>
       default:
         return <ModalView/>
     }
