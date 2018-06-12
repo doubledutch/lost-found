@@ -16,13 +16,12 @@
 
 import React, { Component } from 'react'
 import ReactNative, {
-  KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, Button
+  KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, ScrollView
 } from 'react-native'
-import DefaultViewTable from "./defaultViewTable"
-import DefaultViewHeader from "./defaultViewHeader"
+import client, { Avatar } from '@doubledutch/rn-client'
 
 
-export default class DefaultView extends Component {
+export default class DefaultViewTable extends Component {
   constructor() {
     super()
     this.state = { 
@@ -33,12 +32,8 @@ export default class DefaultView extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
-        <TouchableOpacity style={s.topBar} onPress={()=>this.props.changeView("modal")}>
-          <Text>Click Here</Text>
-        </TouchableOpacity>
-        <DefaultViewHeader />
-        <DefaultViewTable />
+      <View>
+        <Text>Hello</Text>
       </View>
     )
   }
@@ -47,11 +42,8 @@ export default class DefaultView extends Component {
 }
 
 const s = ReactNative.StyleSheet.create({
-  topBar:{
-    height: 60, 
-    marginTop: 20, 
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center"
-  }
+  container: {
+    flex: 1,
+    backgroundColor: '#d9e1f9',
+  },
 })

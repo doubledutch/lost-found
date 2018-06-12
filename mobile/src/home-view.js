@@ -23,8 +23,9 @@ import ReactNative, {
 import client, { Avatar, TitleBar } from '@doubledutch/rn-client'
 import FirebaseConnector from '@doubledutch/firebase-connector'
 import ModalView from "./modalView"
-const fbc = FirebaseConnector(client, 'lostfound')
+import DefaultView from "./defaultView"
 
+const fbc = FirebaseConnector(client, 'lostfound')
 fbc.initializeAppWithSimpleBackend()
 
 export default class HomeView extends Component {
@@ -32,7 +33,9 @@ export default class HomeView extends Component {
     super()
 
     this.state = { 
-      currentPage : "Home"
+      currentPage : "home",
+      currentItem: {},
+      itemStage: 0
     }
 
     this.signin = fbc.signin()
@@ -57,17 +60,77 @@ export default class HomeView extends Component {
 
   renderPage = () => {
     switch (this.state.currentPage) {
-      case 'bigScreen':
-        return <View><Text>Test1</Text></View>
+      case 'home':
+        return <DefaultView changeView={this.changeView}/>
+      case "modal":
+        return <ModalView changeView={this.changeView} saveItem={this.saveItem} updateItem = {this.updateItem} itemStage={this.state.itemStage} selectItemType={this.selectItemType} currentItem={this.state.currentItem} advanceStage={this.advanceStage} backStage={this.backStage}/>
       default:
-        return <ModalView/>
+        return <DefaultView changeView={this.changeView}/>
     }
+  }
+
+  updateItem = (variable, input) => {
+    const updatedItem = this.state.currentItem
+    updatedItem[variable] = input
+    this.setState({currentItem: updatedItem})
+  }
+
+  selectItemType = (type) => {
+    if (type === "found") {
+      this.setState({currentItem: newFoundItem, itemStage: 1})
+    }
+    else {
+      this.setState({currentItem: newLostItem, itemStage: 1})
+    }
+  }
+
+  saveItem = () => {
+    fbc.database.public.userRef('item').push(this.state.currentItem)
+    .then(() => {
+      setTimeout(() => {
+        this.changeView("home")
+        this.setState({currentItem: {}, itemStage: 0})
+        }
+        ,250)
+    })
+    .catch(error => this.setState({questionError: "Retry"}))
+
+  }
+
+
+  advanceStage = () => {
+    const newStage = this.state.itemStage++
+    if (newStage === 6) { this.props.submitItem() }
+    else { this.setState({currentStage: newStage}) }
+  }
+
+  backStage = (stage) => {
+    const newStage = this.state.itemStage--
+    if (stage === 0) { }
+    else {
+      this.setState({currentStage: newStage}) 
+    }
+  }
+
+  changeView = (newView) => {
+    this.setState({currentPage: newView})
   }
 
 }
 
+const newFoundItem = {
+  type: "found",
+  description: "",
+  lastLocation: "",
+  currentLocation: ""
+}
 
-const fontSize = 18
+const newLostItem = {
+  type: "lost",
+  description:"",
+  lastLocation: ""
+}
+
 const s = ReactNative.StyleSheet.create({
   container: {
     flex: 1,

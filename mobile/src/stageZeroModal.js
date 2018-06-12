@@ -1,45 +1,30 @@
 'use strict'
 import React, { Component } from 'react'
-import ReactNative, { TouchableOpacity, View } from 'react-native'
-import client, { Color } from '@doubledutch/rn-client'
-import StageOneModal from "./stageOneModal"
-import StageZeroModal from "./stageZeroModal"
-import StageTwoModal from "./stageTwoModal"
-import StageThreeModal from "./stageThreeModal"
+import ReactNative, { TouchableOpacity, Text, View } from 'react-native'
+import client, { } from '@doubledutch/rn-client'
 
-export default class ModalView extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-    }
-  }
+export default class StageZeroModal extends Component {
 
   render() {
-
     return (
-      <View style={{flex: 1}}>
-        {this.renderCurrentStage()}
-        <TouchableOpacity style={s.modalBottom} onPress={() => this.props.changeView("bigScreen")}></TouchableOpacity> 
+      <View>
+        {this.renderButtons()}
       </View>
     )
   }
 
-  renderCurrentStage = () => {
-    const {itemStage} = this.props
-    switch (itemStage) {
-      case  0: 
-        return <StageZeroModal selectItemType={this.props.selectItemType}/>
-      case 1:
-        return <StageOneModal updateItem={this.props.updateItem} advanceStage={this.props.advanceStage} backStage={this.props.backStage} currentItem={this.props.currentItem}/>
-      case 2:
-        return <StageTwoModal updateItem={this.props.updateItem} advanceStage={this.props.advanceStage} backStage={this.props.backStage} currentItem={this.props.currentItem} saveItem={this.props.saveItem}/>
-      case 3:
-        return <StageThreeModal updateItem={this.props.updateItem} currentItem={this.props.currentItem} saveItem={this.props.saveItem}/>
-      default:
-        return <StageZeroModal selectItemType={this.props.selectItemType}/>
-    }
+  renderButtons = () => {
+    return (
+      <View style={s.bottomButtons}>
+        <View style={{flex:1}}>
+          <TouchableOpacity style={s.topicsButton} onPress={() => this.props.selectItemType("found")}><Text style={s.topicsButtonText}>I Found Something</Text></TouchableOpacity>
+        </View>
+        <View style={{flex:1}}>
+          <TouchableOpacity style={s.sendButton} onPress={() => this.props.selectItemType("lost")}><Text style={s.sendButtonText}>I Lost Something</Text></TouchableOpacity>
+        </View>
+      </View>
+    )
   }
-
 
 }
 
