@@ -24,6 +24,12 @@ import client, { Avatar, TitleBar } from '@doubledutch/rn-client'
 import FirebaseConnector from '@doubledutch/firebase-connector'
 import ModalView from "./modalView"
 import DefaultView from "./defaultView"
+import {
+  mapPerUserPublicPushedDataToStateObjects,
+  mapPerUserPublicPushedDataToObjectOfStateObjects,
+  reducePerUserPublicDataToStateCount,
+  mapPushedDataToStateObjects
+} from '@doubledutch/firebase-connector'
 
 const fbc = FirebaseConnector(client, 'lostfound')
 fbc.initializeAppWithSimpleBackend()
@@ -31,11 +37,12 @@ fbc.initializeAppWithSimpleBackend()
 export default class HomeView extends Component {
   constructor() {
     super()
-
     this.state = { 
-      currentPage : "home",
+      currentPage: "home",
       currentItem: {},
-      itemStage: 0
+      itemStage: 0,
+      items: {},
+      currentFilter: "All"
     }
 
     this.signin = fbc.signin()
@@ -46,10 +53,12 @@ export default class HomeView extends Component {
 
   componentDidMount() {
     this.signin.then(() => {
+      mapPerUserPublicPushedDataToStateObjects(fbc, 'items', this, 'items', (userId, key, value) => key)
     })
   }
 
   render() {
+    console.log(this.state.items)
     return (
       <KeyboardAvoidingView style={s.container} behavior={Platform.select({ios: "padding", android: null})}>
         <TitleBar title="Lost &amp; Found" client={client} signin={this.signin} />
@@ -61,11 +70,11 @@ export default class HomeView extends Component {
   renderPage = () => {
     switch (this.state.currentPage) {
       case 'home':
-        return <DefaultView changeView={this.changeView}/>
+        return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter}/>
       case "modal":
         return <ModalView changeView={this.changeView} saveItem={this.saveItem} updateItem = {this.updateItem} itemStage={this.state.itemStage} selectItemType={this.selectItemType} currentItem={this.state.currentItem} advanceStage={this.advanceStage} backStage={this.backStage}/>
       default:
-        return <DefaultView changeView={this.changeView}/>
+        return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter = {this.state.currentFilter}/>
     }
   }
 
@@ -85,7 +94,7 @@ export default class HomeView extends Component {
   }
 
   saveItem = () => {
-    fbc.database.public.userRef('item').push(this.state.currentItem)
+    fbc.database.public.userRef('items').push(this.state.currentItem)
     .then(() => {
       setTimeout(() => {
         this.changeView("home")
@@ -116,24 +125,34 @@ export default class HomeView extends Component {
     this.setState({currentPage: newView})
   }
 
+  changeTableFilter = (item) => {
+    this.setState({currentFilter: item})
+  }
+
 }
 
 const newFoundItem = {
   type: "found",
   description: "",
   lastLocation: "",
-  currentLocation: ""
+  currentLocation: "",
+  dateCreate: new Date().getTime(),
+  creator: client.currentUser,
+  status: "new"
 }
 
 const newLostItem = {
   type: "lost",
   description:"",
-  lastLocation: ""
+  lastLocation: "",
+  dateCreate: new Date().getTime(),
+  status: "new",
+  creator: client.currentUser
 }
 
 const s = ReactNative.StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#d9e1f9',
+    backgroundColor: '#EFEFEF',
   },
 })

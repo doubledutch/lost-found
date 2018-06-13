@@ -18,8 +18,9 @@ import React, { Component } from 'react'
 import ReactNative, {
   KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, Button
 } from 'react-native'
-import DefaultViewTable from "./defaultViewTable"
-import DefaultViewHeader from "./defaultViewHeader"
+import DefaultViewTable from "./defaultViewComponents/defaultViewTable"
+import DefaultViewHeader from "./defaultViewComponents/defaultViewHeader"
+import DefaultViewTopBar from "./defaultViewComponents/defaultViewTopBar"
 
 
 export default class DefaultView extends Component {
@@ -32,13 +33,12 @@ export default class DefaultView extends Component {
   }
 
   render() {
+    const { changeView, currentFilter, changeTableFilter, items } = this.props
     return (
       <View style={{flex: 1}}>
-        <TouchableOpacity style={s.topBar} onPress={()=>this.props.changeView("modal")}>
-          <Text>Click Here</Text>
-        </TouchableOpacity>
-        <DefaultViewHeader />
-        <DefaultViewTable />
+        <DefaultViewTopBar />
+        <DefaultViewHeader changeView={changeView} />
+        <DefaultViewTable items={items} currentFilter={currentFilter} changeTableFilter={changeTableFilter} />
       </View>
     )
   }
@@ -47,11 +47,5 @@ export default class DefaultView extends Component {
 }
 
 const s = ReactNative.StyleSheet.create({
-  topBar:{
-    height: 60, 
-    marginTop: 20, 
-    backgroundColor: "#FFFFFF",
-    alignItems: "center",
-    justifyContent: "center"
-  }
+
 })

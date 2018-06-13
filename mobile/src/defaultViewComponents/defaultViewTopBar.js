@@ -18,24 +18,23 @@ import React, { Component } from 'react'
 import ReactNative, {
   KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, ScrollView
 } from 'react-native'
-import client, { Avatar } from '@doubledutch/rn-client'
+import client, { } from '@doubledutch/rn-client'
 
 
-export default class DefaultViewHeader extends Component {
-  constructor() {
-    super()
-    this.state = { 
-      currentPage : "Home"
-    }
-
-  }
-
+export default class DefaultViewTopBar extends Component {
   render() {
     return (
-      <View>
-        <TouchableOpacity style={s.button} onPress={()=>this.props.changeView("modal")}>
-          <Text style={s.buttonText}>What did you lose or find?</Text>
-        </TouchableOpacity>
+      <View style={{backgroundColor: "#FFFFFF"}}>
+        { this.renderBar() }
+      </View>
+    )
+  }
+
+  renderBar = () => {
+    return (
+      <View style={s.button}>
+        <Text style={s.buttonText}>Official Lost & Found Location</Text>
+        <Text style={s.buttonDesText}>Placeholder</Text>
       </View>
     )
   }
@@ -43,16 +42,30 @@ export default class DefaultViewHeader extends Component {
 
 }
 
+function hexToRgb(hex) {
+  var hex = hex.slice(1)
+  var bigint = parseInt(hex, 16);
+  var r = (bigint >> 16) & 255;
+  var g = (bigint >> 8) & 255;
+  var b = bigint & 255;
+  return r + "," + g + "," + b;
+}
+
 const s = ReactNative.StyleSheet.create({
   button:{
-    height: 60, 
-    marginTop: 10, 
-    backgroundColor: "#FFFFFF",
+    padding: 20,
+    backgroundColor: 'rgba('+ hexToRgb(client.primaryColor) + ',0.1)',
     justifyContent: "center",
-    padding: 15
+    borderWidth: 1,
+    borderColor: client.primaryColor
   },
   buttonText:{
     fontSize: 18,
-    color: "#838383"
+    fontWeight: "bold",
+    color: client.primaryColor
+  },
+  buttonDesText:{
+    color: client.primaryColor,
+    fontSize: 18,
   }
 })

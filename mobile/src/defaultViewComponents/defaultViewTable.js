@@ -16,26 +16,60 @@
 
 import React, { Component } from 'react'
 import ReactNative, {
-  KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, ScrollView
+  KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, ScrollView, FlatList
 } from 'react-native'
 import client, { Avatar } from '@doubledutch/rn-client'
+import DefaultViewTableCell from "./defaultViewTableCell"
+import DefaultViewTableHeader from "./defaultViewTableHeader"
 
 
 export default class DefaultViewTable extends Component {
-  constructor() {
-    super()
-    this.state = { 
-      currentPage : "Home"
-    }
-
-  }
 
   render() {
+    const { currentFilter, changeTableFilter, items } = this.props
+    const data = this.verifyData()
     return (
       <View>
-        <Text>Hello</Text>
+        <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)}/>
+        <FlatList
+          data={data}
+          renderItem={({item}) => {
+            return (
+              <DefaultViewTableCell item={item} />
+            )
+          }}
+        />
       </View>
     )
+  }
+
+  verifyData = () => {
+    let items = Object.values(this.props.items)
+    items.filter(item=> item.status !== "resolved")
+    if (this.props.currentFilter !== "All") {
+      console.log("hello")
+      items = items.filter(item => item.type === this.props.currentFilter.toLowerCase()) || []
+    }
+
+    // if (this.props.showQuestion) {
+    //   questions = questions.filter(question => question.block === false)
+    //   return this.originalOrder(questions)
+    // }
+    return items
+    // else {
+    //   if (this.props.comments) {    
+    //     const comments = this.props.comments[this.props.question.id]
+    //     if (comments) {
+    //       return this.commentsOrder(comments)
+    //     }
+    //     else {
+    //       return []
+    //     }
+    //   }
+    //   else {
+    //     return []
+    //   }
+    // }
   }
 
 
