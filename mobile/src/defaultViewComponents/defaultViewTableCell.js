@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react'
 import ReactNative, {
-  KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, ScrollView
+  Platform, TouchableOpacity, Text, View,
 } from 'react-native'
 import client, { Avatar } from '@doubledutch/rn-client'
 import Chevron from './chevron'
@@ -70,17 +70,16 @@ export default class DefaultViewTableCell extends Component {
   }
 
   renderExpandedCell = () => {
-    const { item } = this.props
-
+    const { item, reportItem, isReported } = this.props
     return (
       <View>
         { item.type === "found" ? <Text style={s.foundText}>Found: {item.lastLocation}</Text> : null}
         <View style={{flexDirection: "row", marginTop: 10}}>
-          <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Location " + item.lastLocation: "Current Location: " + item.currentLocation}</Text>
+          <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation: "Current Location: " + item.currentLocation}</Text>
           <View style={{flex:1}}/>
-          <TouchableOpacity>
-            <Text style={s.reportText}>Report</Text>
-          </TouchableOpacity>
+          { item.creator.id === client.currentUser.id ? <TouchableOpacity onPress={()=>reportItem(item)}>
+            <Text style={s.reportText}>{isReported ? "Reported" : "Report"}</Text>
+          </TouchableOpacity> : null }
         </View>
         {this.renderCellButtons()}
       </View>
@@ -88,28 +87,18 @@ export default class DefaultViewTableCell extends Component {
   }
 
   renderCellButtons = () => {
-    if (this.props.isAdmin || this.props.item.creator.id === client.currentUser.id) {
-      return (
-        <View style={s.buttonBox}>
-          <TouchableOpacity style={s.largeButton}>
-            <Text style={s.largeButtonText}>Message</Text>
+    return (
+      <View style={s.buttonBox}>
+        <TouchableOpacity style={s.largeButton}>
+          <Text style={s.largeButtonText}>Message</Text>
+        </TouchableOpacity>
+        { (this.props.isAdmin || this.props.item.creator.id === client.currentUser.id) &&
+          <TouchableOpacity style={[s.largeButton, s.resolveButton]} onPress={() => this.props.resolveItem(this.props.item)}>
+            <Text style={s.largeButtonText}>Resolve</Text>
           </TouchableOpacity>
-          <View style={{width: 10}}/>
-          <TouchableOpacity style={s.largeButton}>
-            <Text style={s.largeButtonText}>Message</Text>
-          </TouchableOpacity>
-        </View>
-      )
-    }
-    else {
-      return (
-        <View style={s.buttonBox}>
-          <TouchableOpacity style={s.largeButton}>
-            <Text style={s.largeButtonText}>Message</Text>
-          </TouchableOpacity>
-        </View>
-      )
-    }
+        }
+      </View>
+    )
   }
 
   convertTime = (dateString) => {
@@ -182,6 +171,9 @@ const s = ReactNative.StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 10
+  },
+  resolveButton: {
+    marginLeft: 10
   },
   largeButtonText: {
     color: client.primaryColor

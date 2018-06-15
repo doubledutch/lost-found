@@ -33,12 +33,12 @@ export default class DefaultView extends Component {
   }
 
   render() {
-    const { changeView, currentFilter, changeTableFilter, items } = this.props
+    const { changeView, currentFilter, changeTableFilter, items, reportItem, reports, resolveItem, lostFoundLocation } = this.props
     return (
       <View style={{flex: 1}}>
-        <DefaultViewTopBar />
+        <DefaultViewTopBar lostFoundLocation={lostFoundLocation}/>
         <DefaultViewHeader changeView={changeView} />
-        <DefaultViewTable items={items} currentFilter={currentFilter} changeTableFilter={changeTableFilter} />
+        <DefaultViewTable items={items} currentFilter={currentFilter} changeTableFilter={changeTableFilter} reportItem={reportItem} reports={reports} resolveItem={resolveItem}/>
       </View>
     )
   }

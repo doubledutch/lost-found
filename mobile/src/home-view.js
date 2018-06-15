@@ -15,21 +15,15 @@
  */
 
 import React, { Component } from 'react'
-import ReactNative, {
-  KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, ScrollView
-} from 'react-native'
-
+import ReactNative, { KeyboardAvoidingView, Platform, Modal } from 'react-native'
 // rn-client must be imported before FirebaseConnector
-import client, { Avatar, TitleBar } from '@doubledutch/rn-client'
+import client, { TitleBar } from '@doubledutch/rn-client'
 import FirebaseConnector from '@doubledutch/firebase-connector'
+import firebase from 'firebase'
 import ModalView from "./modalView"
 import DefaultView from "./defaultView"
-import {
-  mapPerUserPublicPushedDataToStateObjects,
-  mapPerUserPublicPushedDataToObjectOfStateObjects,
-  reducePerUserPublicDataToStateCount,
-  mapPushedDataToStateObjects
-} from '@doubledutch/firebase-connector'
+import ReportModal from './reportModal'
+import { mapPerUserPublicPushedDataToStateObjects } from '@doubledutch/firebase-connector'
 
 const fbc = FirebaseConnector(client, 'lostfound')
 fbc.initializeAppWithSimpleBackend()
@@ -42,7 +36,11 @@ export default class HomeView extends Component {
       currentItem: {},
       itemStage: 0,
       items: {},
-      currentFilter: "All"
+      lostFoundLocation: {},
+      currentFilter: "All",
+      showReportModal: false,
+      reports: [],
+      isAdmin: false,
     }
 
     this.signin = fbc.signin()
@@ -53,15 +51,43 @@ export default class HomeView extends Component {
 
   componentDidMount() {
     this.signin.then(() => {
-      mapPerUserPublicPushedDataToStateObjects(fbc, 'items', this, 'items', (userId, key, value) => key)
+      const reportRef = fbc.database.private.adminableUserRef('reports')
+      const locationRef = fbc.database.public.adminRef('lostFoundLocation') 
+      const wireListeners = () => {
+        mapPerUserPublicPushedDataToStateObjects(fbc, 'items', this, 'items', (userId, key, value) => key)
+        reportRef.on('child_added', data => {
+          this.setState({ reports: [...this.state.reports, data.key ] })
+        })
+
+        locationRef.on('child_added', data => {
+          this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
+        })
+
+        locationRef.on('child_changed', data => {
+          this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
+        })
+      }
+
+      fbc.database.private.adminableUserRef('adminToken').once('value', async data => {
+        const longLivedToken = data.val()
+        if (longLivedToken) {
+          console.log('Attendee appears to be admin.  Logging out and logging in w/ admin token.')
+          await firebase.auth().signOut()
+          client.longLivedToken = longLivedToken
+          await fbc.signinAdmin()
+          console.log('Re-logged in as admin')
+          this.setState({isAdmin: true})
+        }
+        wireListeners()
+      })
     })
   }
 
   render() {
-    console.log(this.state.items)
     return (
       <KeyboardAvoidingView style={s.container} behavior={Platform.select({ios: "padding", android: null})}>
         <TitleBar title="Lost &amp; Found" client={client} signin={this.signin} />
+        {this.modalControl()}
         {this.renderPage()}
       </KeyboardAvoidingView>
     )
@@ -70,18 +96,37 @@ export default class HomeView extends Component {
   renderPage = () => {
     switch (this.state.currentPage) {
       case 'home':
-        return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter}/>
+        return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
       case "modal":
         return <ModalView changeView={this.changeView} saveItem={this.saveItem} updateItem = {this.updateItem} itemStage={this.state.itemStage} selectItemType={this.selectItemType} currentItem={this.state.currentItem} advanceStage={this.advanceStage} backStage={this.backStage}/>
       default:
-        return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter = {this.state.currentFilter}/>
+        return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
     }
+  }
+
+  modalControl = () => {
+    return (
+    <Modal
+      animationType="none"
+      transparent={true}
+      visible={this.state.showReportModal}
+      onRequestClose={() => {
+        alert('Modal has been closed.');
+      }}
+      >
+      <ReportModal handleChange={this.handleChange} makeReport={this.makeReport}/>
+    </Modal>
+    )
   }
 
   updateItem = (variable, input) => {
     const updatedItem = this.state.currentItem
     updatedItem[variable] = input
     this.setState({currentItem: updatedItem})
+  }
+
+  resolveItem = (item) => {
+    fbc.database.public.userRef('items').child(item.id).update({isResolved: true})
   }
 
   selectItemType = (type) => {
@@ -103,8 +148,32 @@ export default class HomeView extends Component {
         ,250)
     })
     .catch(error => this.setState({questionError: "Retry"}))
-
   }
+
+  reportItem = (item) => {
+    this.setState({currentItem: item, showReportModal: true})
+  }
+
+  makeReport = () => {
+    this.createReport(fbc.database.private.adminableUserRef, this.state.currentItem)
+  }
+
+  handleChange = (prop, value) => {
+    this.setState({[prop]: value})
+  }
+
+  createReport = (ref, item) => {
+    const reportTime = new Date().getTime()
+    ref('reports').child(item.id).set({
+      reportTime,
+      isBlock: false,
+      isApproved: false
+    })
+    .then(() => {
+      this.setState({showReportModal: false, currentItem: {}})
+    })
+  }
+
 
 
   advanceStage = () => {
@@ -138,7 +207,7 @@ const newFoundItem = {
   currentLocation: "",
   dateCreate: new Date().getTime(),
   creator: client.currentUser,
-  status: "new"
+  isResolved: false
 }
 
 const newLostItem = {
@@ -146,7 +215,7 @@ const newLostItem = {
   description:"",
   lastLocation: "",
   dateCreate: new Date().getTime(),
-  status: "new",
+  isResolved: false,
   creator: client.currentUser
 }
 

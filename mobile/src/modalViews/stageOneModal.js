@@ -31,7 +31,7 @@ export default class StageOneModal extends Component {
           <TouchableOpacity style={s.topicsButton} onPress={this.props.backStage}><Text style={s.topicsButtonText}>Back</Text></TouchableOpacity>
         </View>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.sendButton} onPress={this.props.advanceStage}><Text style={s.sendButtonText}>Next</Text></TouchableOpacity>
+          <TouchableOpacity style={s.sendButton} disabled={!this.props.currentItem.description.length} onPress={this.props.advanceStage}><Text style={s.sendButtonText}>Next</Text></TouchableOpacity>
         </View>
       </View>
     )

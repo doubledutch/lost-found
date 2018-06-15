@@ -20,9 +20,10 @@ export default class StageThreeModal extends Component {
     return (
       <View style={s.bottomButtons}>
         <View style={{flex:1}}>
+          <TouchableOpacity style={s.topicsButton} onPress={this.props.backStage}><Text style={s.topicsButtonText}>Back</Text></TouchableOpacity>
         </View>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.sendButton} onPress={this.props.saveItem}><Text style={s.sendButtonText}>Submit</Text></TouchableOpacity>
+          <TouchableOpacity style={s.sendButton} disabled={!this.props.currentItem.currentLocation.length} onPress={this.props.saveItem}><Text style={s.sendButtonText}>Submit</Text></TouchableOpacity>
         </View>
       </View>
     )

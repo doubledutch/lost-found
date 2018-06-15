@@ -1,7 +1,6 @@
 'use strict'
 import React, { Component } from 'react'
 import ReactNative, { TouchableOpacity, View } from 'react-native'
-import client, { Color } from '@doubledutch/rn-client'
 import StageOneModal from "./modalViews/stageOneModal"
 import StageZeroModal from "./modalViews/stageZeroModal"
 import StageTwoModal from "./modalViews/stageTwoModal"
@@ -19,7 +18,7 @@ export default class ModalView extends Component {
     return (
       <View style={{flex: 1}}>
         {this.renderCurrentStage()}
-        <TouchableOpacity style={s.modalBottom} onPress={() => this.props.changeView("bigScreen")}></TouchableOpacity> 
+        <TouchableOpacity style={s.modalBottom} onPress={() => this.props.changeView("home")}></TouchableOpacity> 
       </View>
     )
   }
@@ -34,7 +33,7 @@ export default class ModalView extends Component {
       case 2:
         return <StageTwoModal updateItem={this.props.updateItem} advanceStage={this.props.advanceStage} backStage={this.props.backStage} currentItem={this.props.currentItem} saveItem={this.props.saveItem}/>
       case 3:
-        return <StageThreeModal updateItem={this.props.updateItem} currentItem={this.props.currentItem} saveItem={this.props.saveItem}/>
+        return <StageThreeModal updateItem={this.props.updateItem} currentItem={this.props.currentItem} backStage={this.props.backStage} saveItem={this.props.saveItem}/>
       default:
         return <StageZeroModal selectItemType={this.props.selectItemType}/>
     }

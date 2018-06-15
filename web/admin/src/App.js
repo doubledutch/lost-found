@@ -15,10 +15,18 @@
  */
 
 import React, { Component } from 'react'
+import '@doubledutch/react-components/lib/base.css'
 import './App.css'
-
+import SettingsContainer from "./SettingsContainer.js"
+import AdminsContainer from "./AdminsContainer.js"
 import client from '@doubledutch/admin-client'
+import ReportsContainer from "./ReportsContainer.js"
 import FirebaseConnector from '@doubledutch/firebase-connector'
+import {
+  mapPerPrivateAdminableushedDataToStateObjects,
+  mapPerUserPublicPushedDataToStateObjects,
+  mapPerUserPrivateAdminablePushedDataToObjectOfStateObjects
+} from '@doubledutch/firebase-connector'
 const fbc = FirebaseConnector(client, 'lostfound')
 
 fbc.initializeAppWithSimpleBackend()
@@ -26,47 +34,204 @@ fbc.initializeAppWithSimpleBackend()
 export default class App extends Component {
   constructor() {
     super()
-
-    this.state = { sharedTasks: [] }
+    this.state = { 
+      lostFoundLocation: {},
+      admins: [],
+      allUsers: [],
+      reports: {},
+      items: {}  
+    }
+    this.signin = fbc.signinAdmin()
+    .then(user => this.user = user)
+    .catch(err => console.error(err))
   }
 
   componentDidMount() {
-    fbc.signinAdmin()
-    .then(user => {
-      const sharedRef = fbc.database.public.allRef('tasks')
-      sharedRef.on('child_added', data => {
-        this.setState({ sharedTasks: [...this.state.sharedTasks, {...data.val(), key: data.key }] })
-      })
-      sharedRef.on('child_removed', data => {
-        this.setState({ sharedTasks: this.state.sharedTasks.filter(x => x.key !== data.key) })
-      })  
+    this.signin.then(() => {
+      client.getUsers().then(users => {
+        this.setState({allUsers: users, isSignedIn: true})
+        const locationRef = fbc.database.public.adminRef('lostFoundLocation') 
+        const adminableUsersRef = () => fbc.database.private.adminableUsersRef()
+        adminableUsersRef().on('value', data => {
+          const users = data.val() || {}
+          this.setState(state => {
+            return {
+              admins: Object.keys(users).filter(id => users[id].adminToken)
+            }
+          })
+
+          mapPerUserPublicPushedDataToStateObjects(fbc, 'items', this, 'items', (userId, key, value) => key)
+          mapPerUserPrivateAdminablePushedDataToObjectOfStateObjects(fbc, 'reports', this, 'reports', (userId, key, value) => key, (userId) => userId)
+
+          locationRef.on('child_added', data => {
+            this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
+          })
+  
+          locationRef.on('child_changed', data => {
+            this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
+          })
+        })
+      }) 
     })
   }
 
   render() {
+    const itemIds = Object.keys(this.state.reports)
+    const itemsAndReports = itemIds.map(id => {
+      const reports = this.getReport(id)
+      const item = this.returnContent(reports, id)
+      return { item, reports }
+    })
+    .filter(x => x.item)
+    .sort((a, b) => {
+      function latestReportTimeFor(x) {
+        const reportsArray = Object.values(x.reports)
+        return reportsArray.reduce((latest, report) => Math.max(report.reportTime, latest), 0)
+      }
+      return latestReportTimeFor(b) - latestReportTimeFor(a)
+    })
+    const totalBlocked = this.returnTotal(false)
+    const totalReported = this.returnTotal(true)
+    console.log(totalReported)
     return (
       <div className="App">
-        <p className="App-intro">
-          This is a sample admin page. Developers should replace this page, or remove the <code>web/admin</code> folder entirely
-        </p>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <h3>Public tasks:</h3>
-        <ul>
-          { this.state.sharedTasks.map(task => {
-            const { image, firstName, lastName } = task.creator
-            return (
-              <li key={task.key}>
-                <img className="avatar" src={image} alt="" />
-                <span> {firstName} {lastName} - {task.text} - </span>
-                <button onClick={()=>this.markComplete(task)}>Mark complete</button>
-              </li>
-            )
-          }) }
-        </ul>
+        <SettingsContainer saveLostFoundLocal={this.saveLostFoundLocal} lostFoundLocation={this.state.lostFoundLocation.location || ""}/>
+        <ReportsContainer totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={this.getUser} getReport={this.getReport} returnItem={this.returnItem} returnContent={this.returnContent} blockAll={this.blockAll} approveAll={this.approveAll} markBlock={this.markBlock} approveQ={this.approveQ} unBlock={this.unBlock}/>
+        <AdminsContainer attendees={this.state.allUsers} onAdminSelected={this.onAdminSelected} onAdminDeselected={this.onAdminDeselected} client={client} isAdmin={this.isAdmin} admins={this.state.admins}/>
       </div>
     )
+  }
+
+  returnTotal(isReport) {
+    var total = 0
+    const itemsIds = Object.keys(this.state.reports)
+    if (isReport) {
+      itemsIds.forEach((task, i) => {
+        const itemReports = this.getReport(task)
+        const allReportsFlagged = Object.values(itemReports).filter(item => item.block !== true && item.approved !== true)
+        if (allReportsFlagged.length) {
+          total = total + 1
+        }
+      })
+    }
+    else {
+      itemsIds.forEach((task, i) => {
+        const itemReports = this.getReport(task)
+        const allReportsBlocked= Object.values(itemReports).filter(item => item.block === true && item.approved !== true)
+        if (allReportsBlocked.length) {
+          total = total + 1
+        }
+      })
+    }
+    return total
+  }
+
+  blockAll = (questionsOrAnswersAndReports) => {
+    questionsOrAnswersAndReports.map((questionOrAnswerAndReport) => {
+      const currentKey = questionOrAnswerAndReport.questionOrAnswer.id
+      const userId = questionOrAnswerAndReport.questionOrAnswer.userId
+      const allReportsFlagged = Object.values(questionOrAnswerAndReport.reports).filter(item => item.block !== true && item.approved !== true)
+      this.markBlock(allReportsFlagged, currentKey, questionOrAnswerAndReport.questionOrAnswer.userId)
+    })
+  }
+
+
+  approveAll = (questionsOrAnswersAndReports) => {
+    questionsOrAnswersAndReports.map((questionOrAnswerAndReport) => {
+      const currentKey = questionOrAnswerAndReport.questionOrAnswer.id
+      const userId = questionOrAnswerAndReport.questionOrAnswer.userId
+      const allReportsFlagged = Object.values(questionOrAnswerAndReport.reports).filter(item => item.block !== true && item.approved !== true)
+      this.approveQ(allReportsFlagged, currentKey, userId)
+    })
+  }
+
+  markBlock = (reports, key, userId) => {
+    if (reports.length && key && userId) {
+      reports.forEach((item) => {
+        fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: true})
+      })
+      if (reports[0].isQuestion) {
+        fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: true})
+      }
+      else {
+        fbc.database.public.usersRef(userId).child("answers").child(key).update({isBlock: true})
+      }
+    }
+  }
+
+  approveQ = (reports, key, userId) => {
+    if (reports.length && key && userId) {
+      reports.forEach((item) => {
+        fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: false, isApproved: true})
+      })
+      if (reports[0].isQuestion) {
+        fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: false})
+      }
+      else {
+        fbc.database.public.usersRef(userId).child("answers").child(key).update({isBlock: false})
+      }
+    }
+  }
+
+  unBlock = (reports, key, userId) => {
+    if (reports.length && key && userId) {
+      reports.forEach((item) => {
+        fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: false})
+      })
+      if (reports[0].isQuestion) {
+        fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: false})
+      }
+      else {
+        fbc.database.public.usersRef(userId).child("answers").child(key).update({isBlock: false})
+      }
+    }
+  }
+
+  getUser = (task) => {
+    const user = this.state.allUsers.find(user => user.id === task.userId)
+    return user
+  }
+
+  getReport = (key) => {
+    return this.state.reports[key]
+  }
+
+  returnItem = (key) => {
+    return this.state.items[key]
+  }
+
+  returnContent = (report, key) => {
+    // const array = Object.values(report)
+    // if (array[0].isQuestion) {
+      console.log(this.state.items)
+      console.log(key)
+      return this.state.items[key]
+    // }
+    // else {
+    //   const question = this.state.answersByQuestion[array[0].questionId]
+    //   return question[key]
+    // }
+  }
+
+  onAdminSelected = attendee => {
+    const tokenRef = fbc.database.private.adminableUsersRef(attendee.id).child('adminToken')
+    this.setState()
+    fbc.getLongLivedAdminToken().then(token => tokenRef.set(token))
+  }
+
+  onAdminDeselected = attendee => {
+    const tokenRef = fbc.database.private.adminableUsersRef(attendee.id).child('adminToken')
+    tokenRef.remove()
+  }
+
+  saveLostFoundLocal = (input) => {
+        //On initial launching of the app this fbc object would not exist. In that case the default is to be on. On first action we would set the object to the expected state and from there use update.
+        if (!this.state.lostFoundLocation) {
+          fbc.database.public.adminRef('lostFoundLocation').push({"location": input})
+        }
+        else {
+          fbc.database.public.adminRef('lostFoundLocation').child(this.state.lostFoundLocation.key).update({"location": input})
+        }
   }
 
   markComplete(task) {

@@ -15,10 +15,7 @@
  */
 
 import React, { Component } from 'react'
-import ReactNative, {
-  KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, ScrollView, FlatList
-} from 'react-native'
-import client, { Avatar } from '@doubledutch/rn-client'
+import ReactNative, { View, FlatList } from 'react-native'
 import DefaultViewTableCell from "./defaultViewTableCell"
 import DefaultViewTableHeader from "./defaultViewTableHeader"
 
@@ -26,7 +23,7 @@ import DefaultViewTableHeader from "./defaultViewTableHeader"
 export default class DefaultViewTable extends Component {
 
   render() {
-    const { currentFilter, changeTableFilter, items } = this.props
+    const { currentFilter, changeTableFilter, reportItem, resolveItem } = this.props
     const data = this.verifyData()
     return (
       <View>
@@ -34,8 +31,10 @@ export default class DefaultViewTable extends Component {
         <FlatList
           data={data}
           renderItem={({item}) => {
+            const reports = this.props.reports
+            const isReported = ((reports && reports.find(report => report === item.id)) ? true : false)
             return (
-              <DefaultViewTableCell item={item} />
+              <DefaultViewTableCell item={item} reportItem={reportItem} isReported={isReported} resolveItem={resolveItem}/>
             )
           }}
         />
@@ -47,29 +46,9 @@ export default class DefaultViewTable extends Component {
     let items = Object.values(this.props.items)
     items.filter(item=> item.status !== "resolved")
     if (this.props.currentFilter !== "All") {
-      console.log("hello")
       items = items.filter(item => item.type === this.props.currentFilter.toLowerCase()) || []
     }
-
-    // if (this.props.showQuestion) {
-    //   questions = questions.filter(question => question.block === false)
-    //   return this.originalOrder(questions)
-    // }
     return items
-    // else {
-    //   if (this.props.comments) {    
-    //     const comments = this.props.comments[this.props.question.id]
-    //     if (comments) {
-    //       return this.commentsOrder(comments)
-    //     }
-    //     else {
-    //       return []
-    //     }
-    //   }
-    //   else {
-    //     return []
-    //   }
-    // }
   }
 
 

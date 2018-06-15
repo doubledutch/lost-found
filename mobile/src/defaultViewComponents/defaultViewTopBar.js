@@ -15,9 +15,7 @@
  */
 
 import React, { Component } from 'react'
-import ReactNative, {
-  KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, ScrollView
-} from 'react-native'
+import ReactNative, { Text, View } from 'react-native'
 import client, { } from '@doubledutch/rn-client'
 
 
@@ -25,7 +23,7 @@ export default class DefaultViewTopBar extends Component {
   render() {
     return (
       <View style={{backgroundColor: "#FFFFFF"}}>
-        { this.renderBar() }
+        {this.props.lostFoundLocation.location ? this.renderBar(): null}
       </View>
     )
   }
@@ -34,7 +32,7 @@ export default class DefaultViewTopBar extends Component {
     return (
       <View style={s.button}>
         <Text style={s.buttonText}>Official Lost & Found Location</Text>
-        <Text style={s.buttonDesText}>Placeholder</Text>
+        <Text style={s.buttonDesText}>{this.props.lostFoundLocation.location}</Text>
       </View>
     )
   }
