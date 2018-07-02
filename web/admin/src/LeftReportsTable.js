@@ -18,7 +18,7 @@ import React, { Component } from 'react'
 import './App.css'
 import CustomCell from "./CustomCell"
 
-export default class RightReportsTable extends Component {
+export default class LeftReportsTable extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -33,8 +33,8 @@ export default class RightReportsTable extends Component {
       <div className="questionBox">
       <div className="cellBoxTop">
         <p className="listTitle">Reported ({totalReported})</p>
-        <button className="noBorderButton" disabled={!totalReported} onClick={() => this.approveAll(itemsAndReports)}>Approve All</button>
-        <button className="noBorderButton" disabled={!totalReported} onClick={() => this.blockAll(itemsAndReports)}>Block All</button>
+        <button className="noBorderButton" disabled={!totalReported} onClick={() => approveAll(itemsAndReports)}>Approve All</button>
+        <button className="noBorderButton" disabled={!totalReported} onClick={() => blockAll(itemsAndReports)}>Block All</button>
       </div>
       <ul className='listBox' ref={(input) => {this.flaggedList = input}}>
         { itemsAndReports.map((itemAndReport) => {
@@ -59,7 +59,7 @@ export default class RightReportsTable extends Component {
             )
           }
         }) }
-        {(totalReported) ? null : this.renderMessage("Reported Questions or Comments Will Display Here", "All Pending Reports will remain visible to", "attendees")}
+        {(totalReported) ? null : this.renderMessage("Reported Items Will Display Here", "All Pending Reports will remain visible", " to attendees")}
       </ul>
     </div>
     )

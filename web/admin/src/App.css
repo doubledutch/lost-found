@@ -24,6 +24,10 @@
   flex: 1;
   margin: 0px 40px 5px 0px;
 }
+.questionBox2 {
+  flex: 1;
+  margin: 0px 0px 5px 0px;
+}
 
 h2 {
   font-size: 24px;
@@ -33,6 +37,14 @@ h2 {
 
 html, body, select {
   font: inherit;
+}
+
+.App {
+  padding: 0px 10px 0px 10px;
+  overflow: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: row wrap;
 }
 
 .avatar {
@@ -183,12 +195,23 @@ ul {
   flex: 1;
 }
 
-.introText {
-  font-size: 12px;
-  color: #898989;
-  margin: 0px;
+.combinedText{
+  display: flex;
+  flex-flow: nowrap;
+  align-items: center;
+}
+
+.introTextRed {
+  font-size: 14px;
+  color: #E98686;
+  margin: 0px 5px 0px 0px;
   font-family: -apple-system, BlinkMacSystemFont, 'Fira Sans', 'Open Sans', 'Helvetica Neue', sans-serif;
-  margin-right: 10px
+}
+.introTextGreen {
+  font-size: 14px;
+  color: #87C34B;
+  margin: 0px 5px 0px 0px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Fira Sans', 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .timeText {

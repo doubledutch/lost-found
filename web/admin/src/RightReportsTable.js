@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import './App.css'
+import CustomCell from "./CustomCell"
 
 export default class RightReportsTable extends Component {
   constructor(props) {
@@ -26,10 +27,47 @@ export default class RightReportsTable extends Component {
 
 
   render() {
+    const { totalBlocked, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, blockAll, approveAll, unBlock } = this.props
+
     return (
-      <div className="sectionContainer">
+      <div className="questionBox2">
+      <div className="cellBoxTop">
+        <p className="listTitle">Blocked ({totalBlocked})</p>
       </div>
+      <ul className='listBox2' ref={(input) => {this.flaggedList = input}}>
+        { itemsAndReports.map((itemAndReport) => {
+          const id = itemAndReport.item.id
+          const allReportsFlagged = Object.values(itemAndReport.reports).filter(item => item.isBlock === true && item.approved !== true)
+          if (allReportsFlagged.length) {
+            return (
+              <li className='cellBox' key={id}>
+                <CustomCell
+                  currentKey={id}
+                  returnQuestion={returnItem}
+                  returnContent={returnContent}
+                  unBlock={approveQ}
+                  getUser={getUser}
+                  report = {allReportsFlagged}
+                  content = {itemAndReport.item}
+                  singleReport = {allReportsFlagged[0]}
+                  allReportsFlagged = {allReportsFlagged}
+                />
+              </li>
+            )
+          }
+        }) }
+        {(totalBlocked) ? null : this.renderMessage("Blocked items will appear here", "Any item in this list will not be", "visible to attendees")}
+      </ul>
+    </div>
     )
   }
+
+  renderMessage = (m1, m2, m3) => (
+    <div className="modTextBox">
+      <p className="bigModText">{m1}</p>
+      <p className="smallModText">{m2}</p>
+      <p className="smallModText">{m3}</p>
+    </div>
+  )
 
 }

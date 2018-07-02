@@ -35,10 +35,11 @@ export default class ReportsContainer extends Component {
     const { totalBlocked, totalReported, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, blockAll, approveAll, unBlock } = this.props
 
     return (
-      <div style={{marginBottom: 30}}>
+      <div style={{marginBottom: 30}} className="App" >
         <LeftReportsTable totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={getUser} 
         getReport={getReport} returnItem={returnItem} returnContent={returnContent} markBlock={markBlock} approveQ={approveQ} blockAll={blockAll} approveAll={approveAll} unBlock={unBlock}/>
-        <RightReportsTable totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports}/>
+        <RightReportsTable totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={getUser} 
+        getReport={getReport} returnItem={returnItem} returnContent={returnContent} approveQ={approveQ} blockAll={blockAll} approveAll={approveAll} unBlock={unBlock}/>
       </div>
     )
   }

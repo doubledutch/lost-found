@@ -37,13 +37,13 @@ export default class SettingsContainer extends Component {
           <h2>Admins</h2>
           <button className="displayButton" onClick={() => this.handleBoxExpand(!this.state.isBoxExpanded)}>{(this.state.isBoxExpanded ? "Hide Section" : "View Section")}</button>
         </div>
-        {this.state.isBoxExpanded ?  <AttendeeSelector 
+        {this.state.isBoxExpanded ?  <div style={{marginBottom: 25}}><AttendeeSelector 
             client={this.props.client}
             searchTitle="Select Admins"
             selectedTitle="Current Admins"
             onSelected={this.props.onAdminSelected}
             onDeselected={this.props.onAdminDeselected}
-            selected={this.props.attendees.filter(a => this.isAdmin(a.id))} /> : null}
+            selected={this.props.attendees.filter(a => this.isAdmin(a.id))} /></div> : null}
       </div>
     )
   }

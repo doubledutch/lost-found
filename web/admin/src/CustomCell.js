@@ -36,10 +36,10 @@ export default class CustomCell extends Component {
       return(
         <div className='cellBox'>
           <div className='cellBoxLeft'>
-            <div className='cellBoxTop'>
-              <p className='introText'>{((content.type === "lost") ? "Lost" : "Found")}</p>
+            <div className="combinedText">
+              {content.type==="lost"?<p className='introTextRed'>LOST: </p> : <p className='introTextGreen'>FOUND: </p>}
+              <p className="questionText">"{content.description}"</p>
             </div>
-            <p className="questionText">"{content.description}"</p>
             <div className="cellBoxTop">
               <p className="nameText">
                 {(content.creator ? "-" + content.creator.firstName + " " + content.creator.lastName : null)}

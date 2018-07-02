@@ -44,20 +44,13 @@ export default class DefaultViewTableCell extends Component {
   renderStandardCell = () => {
     const { isExpand } = this.state
     const { item } = this.props
-    if (this.state.isExpand) {
-      var rotate = { transform: [
-        { rotate: '180deg'}
-      ]}
-    }
     return (
       <View style={s.container}>
         <View style={{flexDirection: "row", alignItems: "center"}}>
           <Text style={item.type === "lost" ? s.redText : s.greenText}>{item.type.toUpperCase()}:</Text>
           <Text style={s.headlineText}>{this.props.item.description}</Text>
           <View style={{flex: 1}}/>
-          <TouchableOpacity onPress={this.expandCell}>
-            {this.showIcon(rotate)}
-          </TouchableOpacity>
+          <Chevron style={isExpand} expandCell={this.expandCell}/>
         </View>
         <View style={{flexDirection: "row", marginTop: 10, alignItems: "center"}}>
           <Avatar user={item.creator}/>
@@ -89,7 +82,7 @@ export default class DefaultViewTableCell extends Component {
   renderCellButtons = () => {
     return (
       <View style={s.buttonBox}>
-        <TouchableOpacity style={s.largeButton}>
+        <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
           <Text style={s.largeButtonText}>Message</Text>
         </TouchableOpacity>
         { (this.props.isAdmin || this.props.item.creator.id === client.currentUser.id) &&
@@ -112,20 +105,6 @@ export default class DefaultViewTableCell extends Component {
     const currentState = this.state.isExpand
     this.setState({isExpand: !currentState})
   }
-
-  showIcon = (rotate) => {
-    if (Platform.OS === "ios") {
-      return (
-        <Chevron style={rotate}/>
-      )
-    }
-    else {
-      return (
-        <Text>+</Text>
-      )
-    }
-  }
-
 
 }
 
