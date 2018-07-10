@@ -15,6 +15,7 @@
  */
 
 import React, { Component } from 'react'
+import {TextInput} from '@doubledutch/react-components'
 import './App.css'
 
 export default class SettingsContainer extends Component {
@@ -48,8 +49,8 @@ handleBlur = (event) => {
 renderInputBox = () => {
   return (
     <div style={{marginBottom: 30}}>
-      <input className="dd-bordered localInputButton" placeholder="Ex. The registration desk at the front of the convention center" onBlur={this.handleBlur} maxLength="150" name="lostLocation" value={this.state.lostFoundLocation} onChange={this.handleLocationChange}/>     
-      <button className="dd-bordered" value="save" onClick={()=>this.props.saveLostFoundLocal(this.state.lostFoundLocation)}>Submit</button>
+      <TextInput label="Where is the official lost and found location?" className="dd-bordered localInputButton" placeholder="Ex. The registration desk at the front of the convention center" onBlur={this.handleBlur} maxLength="150" name="lostLocation" value={this.state.lostFoundLocation} onChange={this.handleLocationChange}/> 
+      {this.state.lostFoundLocation.trim() !== this.props.lostFoundLocation.trim() ? <button className="dd-bordered" value="save" onClick={()=>this.props.saveLostFoundLocal(this.state.lostFoundLocation)}>Save</button> : null}
     </div>
   )
 }

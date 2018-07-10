@@ -92,11 +92,12 @@ export default class App extends Component {
     })
     const totalBlocked = this.returnTotal(false)
     const totalReported = this.returnTotal(true)
+    const totalApproved = this.returnApproved()
     return (
       <div>
         <SettingsContainer saveLostFoundLocal={this.saveLostFoundLocal} lostFoundLocation={this.state.lostFoundLocation.location || ""}/>
         <AdminsContainer attendees={this.state.allUsers} onAdminSelected={this.onAdminSelected} onAdminDeselected={this.onAdminDeselected} client={client} isAdmin={this.isAdmin} admins={this.state.admins}/>
-        <ReportsContainer totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={this.getUser} getReport={this.getReport} 
+        <ReportsContainer totalApproved={totalApproved} totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={this.getUser} getReport={this.getReport} 
         returnItem={this.returnItem} returnContent={this.returnContent} blockAll={this.blockAll} approveAll={this.approveAll} markBlock={this.markBlock} approveQ={this.approveQ} unBlock={this.unBlock}/>
       </div>
     )
@@ -108,7 +109,7 @@ export default class App extends Component {
     if (isReport) {
       itemsIds.forEach((task, i) => {
         const itemReports = this.getReport(task)
-        const allReportsFlagged = Object.values(itemReports).filter(item => item.isBlock === false && item.approved === false)
+        const allReportsFlagged = Object.values(itemReports).filter(item => item.isBlock === false && item.isApproved === false)
         if (allReportsFlagged.length) {
           total = total + 1
         }
@@ -117,12 +118,25 @@ export default class App extends Component {
     else {
       itemsIds.forEach((task, i) => {
         const itemReports = this.getReport(task)
-        const allReportsBlocked= Object.values(itemReports).filter(item => item.isBlock === true && item.approved !== true)
+        const allReportsBlocked= Object.values(itemReports).filter(item => item.isBlock === true && item.isApproved !== true)
         if (allReportsBlocked.length) {
           total = total + 1
         }
       })
     }
+    return total
+  }
+
+  returnApproved() {
+    var total = 0
+    const itemsIds = Object.keys(this.state.reports)
+    itemsIds.forEach((task, i) => {
+      const itemReports = this.getReport(task)
+      const allReportsApproved = Object.values(itemReports).filter(item => item.isBlock === false && item.isApproved === true)
+      if (allReportsApproved.length) {
+        total = total + 1
+      }
+    })
     return total
   }
 

@@ -31,7 +31,7 @@ export default class LeftReportsTable extends Component {
 
     return (
       <div className="questionBox">
-      <div className="cellBoxTop">
+      <div className="headerTop">
         <p className="listTitle">Reported ({totalReported})</p>
         <button className="noBorderButton" disabled={!totalReported} onClick={() => approveAll(itemsAndReports)}>Approve All</button>
         <button className="noBorderButton" disabled={!totalReported} onClick={() => blockAll(itemsAndReports)}>Block All</button>

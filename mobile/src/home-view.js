@@ -98,7 +98,7 @@ export default class HomeView extends Component {
       case 'home':
         return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
       case "modal":
-        return <ModalView changeView={this.changeView} saveItem={this.saveItem} updateItem = {this.updateItem} itemStage={this.state.itemStage} selectItemType={this.selectItemType} currentItem={this.state.currentItem} advanceStage={this.advanceStage} backStage={this.backStage}/>
+        return <ModalView changeView={this.changeView} clearView={this.clearModal} saveItem={this.saveItem} updateItem = {this.updateItem} itemStage={this.state.itemStage} selectItemType={this.selectItemType} currentItem={this.state.currentItem} advanceStage={this.advanceStage} backStage={this.backStage}/>
       default:
         return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
     }
@@ -131,10 +131,10 @@ export default class HomeView extends Component {
 
   selectItemType = (type) => {
     if (type === "found") {
-      this.setState({currentItem: newFoundItem, itemStage: 1})
+      this.setState({currentItem: Object.assign({}, newFoundItem), itemStage: 1})
     }
     else {
-      this.setState({currentItem: newLostItem, itemStage: 1})
+      this.setState({currentItem: Object.assign({}, newLostItem), itemStage: 1})
     }
   }
 
@@ -191,6 +191,10 @@ export default class HomeView extends Component {
   }
 
   changeView = (newView) => {
+    this.setState({currentPage: newView, itemStage: 0})
+  }
+
+  clearModal = (newView) => {
     this.setState({currentPage: newView})
   }
 

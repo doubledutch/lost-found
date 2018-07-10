@@ -22,6 +22,7 @@ export default class RightReportsTable extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      isShowingApproved: false
     }
   }
 
@@ -31,14 +32,18 @@ export default class RightReportsTable extends Component {
 
     return (
       <div className="questionBox2">
-      <div className="cellBoxTop">
-        <p className="listTitle">Blocked ({totalBlocked})</p>
-      </div>
+      {this.renderHeaderBox()}
       <ul className='listBox2' ref={(input) => {this.flaggedList = input}}>
         { itemsAndReports.map((itemAndReport) => {
           const id = itemAndReport.item.id
-          const allReportsFlagged = Object.values(itemAndReport.reports).filter(item => item.isBlock === true && item.approved !== true)
-          if (allReportsFlagged.length) {
+          let allReports = []
+          if (this.state.isShowingApproved){
+            allReports = Object.values(itemAndReport.reports).filter(item => item.isBlock === false && item.isApproved === true)
+          }
+          else {
+            allReports = Object.values(itemAndReport.reports).filter(item => item.isBlock === true && item.isApproved !== true)
+          }
+          if (allReports.length) {
             return (
               <li className='cellBox' key={id}>
                 <CustomCell
@@ -47,19 +52,49 @@ export default class RightReportsTable extends Component {
                   returnContent={returnContent}
                   unBlock={approveQ}
                   getUser={getUser}
-                  report = {allReportsFlagged}
+                  report = {allReports}
                   content = {itemAndReport.item}
-                  singleReport = {allReportsFlagged[0]}
-                  allReportsFlagged = {allReportsFlagged}
+                  singleReport = {allReports[0]}
+                  allReportsFlagged = {allReports}
                 />
               </li>
             )
           }
         }) }
-        {(totalBlocked) ? null : this.renderMessage("Blocked items will appear here", "Any item in this list will not be", "visible to attendees")}
+        {this.renderMessageBox()}
       </ul>
     </div>
     )
+  }
+
+  renderMessageBox = () => {
+    if (!this.state.isShowingApproved){
+      if (!this.props.totalBlocked){
+        return this.renderMessage("Blocked items will appear here", "Any item in this list will not be", "visible to attendees")
+      }
+    }
+    else {
+      if (!this.props.totalApproved){
+        return this.renderMessage("Approved items will appear here", "Any item in this list will be", "visible to attendees")
+      }
+    }
+  }
+
+  renderHeaderBox = () => {
+    return (
+      <div className="headerTop">
+        <button className={this.state.isShowingApproved ? "selectedUnderlineButton" : "underlineButton"} onClick={this.showApproved}>Approved ({this.props.totalApproved})</button>
+        <button className={this.state.isShowingApproved ? "underlineButton" : "selectedUnderlineButton"} onClick={this.showBlocked}>Blocked ({this.props.totalBlocked})</button>
+      </div>
+    )
+  }
+
+  showApproved = () => {
+    this.setState({isShowingApproved: true})
+  }
+
+  showBlocked = () => {
+    this.setState({isShowingApproved: false})
   }
 
   renderMessage = (m1, m2, m3) => (

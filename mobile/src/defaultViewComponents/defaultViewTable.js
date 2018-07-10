@@ -30,6 +30,7 @@ export default class DefaultViewTable extends Component {
         <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)}/>
         <FlatList
           data={data}
+          ListFooterComponent={<View style={{height: 300}}></View>}
           renderItem={({item}) => {
             const reports = this.props.reports
             const isReported = ((reports && reports.find(report => report === item.id)) ? true : false)
@@ -42,6 +43,7 @@ export default class DefaultViewTable extends Component {
     )
   }
 
+  //Need to build out to put user created objects at top of list
   verifyData = () => {
     let items = Object.values(this.props.items)
     items.filter(item=> item.status !== "resolved")
