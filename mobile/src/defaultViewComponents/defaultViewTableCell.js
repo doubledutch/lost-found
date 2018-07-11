@@ -46,11 +46,10 @@ export default class DefaultViewTableCell extends Component {
     const { item } = this.props
     return (
       <View style={s.container}>
-        <View style={{flexDirection: "row", alignItems: "center"}}>
+        <View style={{flexDirection: "row", alignItems: "center", alignItems: "flex-start"}}>
           <Text style={item.type === "lost" ? s.redText : s.greenText}>{item.type.toUpperCase()}:</Text>
           <Text style={s.headlineText}>{this.props.item.description}</Text>
-          <View style={{flex: 1}}/>
-          <Chevron style={isExpand} expandCell={this.expandCell}/>
+          <View style={{marginTop:4}}><Chevron style={isExpand} expandCell={this.expandCell}/></View>
         </View>
         <View style={{flexDirection: "row", marginTop: 10, alignItems: "center"}}>
           <Avatar user={item.creator}/>
@@ -70,7 +69,7 @@ export default class DefaultViewTableCell extends Component {
         <View style={{flexDirection: "row", marginTop: 10}}>
           <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation: "Current Location: " + item.currentLocation}</Text>
           <View style={{flex:1}}/>
-          { item.creator.id === client.currentUser.id ? <TouchableOpacity onPress={()=>reportItem(item)}>
+          { item.creator.id !== client.currentUser.id ? <TouchableOpacity onPress={()=>reportItem(item)}>
             <Text style={s.reportText}>{isReported ? "Reported" : "Report"}</Text>
           </TouchableOpacity> : null }
         </View>
@@ -82,9 +81,9 @@ export default class DefaultViewTableCell extends Component {
   renderCellButtons = () => {
     return (
       <View style={s.buttonBox}>
-        <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
+        { item.creator.id !== client.currentUser.id ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
           <Text style={s.largeButtonText}>Message</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> : null }
         { (this.props.isAdmin || this.props.item.creator.id === client.currentUser.id) &&
           <TouchableOpacity style={[s.largeButton, s.resolveButton]} onPress={() => this.props.resolveItem(this.props.item)}>
             <Text style={s.largeButtonText}>Resolve</Text>
@@ -184,6 +183,7 @@ const s = ReactNative.StyleSheet.create({
   headlineText: {
     color: "#4A4A4A",
     fontSize: 18,
-    marginLeft: 5
+    marginLeft: 5,
+    flex: 1,
   }
 })

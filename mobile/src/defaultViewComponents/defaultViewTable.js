@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import ReactNative, { View, FlatList } from 'react-native'
+import client from '@doubledutch/rn-client'
 import DefaultViewTableCell from "./defaultViewTableCell"
 import DefaultViewTableHeader from "./defaultViewTableHeader"
 
@@ -43,14 +44,18 @@ export default class DefaultViewTable extends Component {
     )
   }
 
-  //Need to build out to put user created objects at top of list
   verifyData = () => {
     let items = Object.values(this.props.items)
     items.filter(item=> item.status !== "resolved")
     if (this.props.currentFilter !== "All") {
       items = items.filter(item => item.type === this.props.currentFilter.toLowerCase()) || []
     }
-    return items
+    items.sort(function (a,b){ 
+      return b.dateCreate - a.dateCreate
+    })
+    const userList = items.filter(item => item.creator.id === client.currentUser.id) || []
+    const otherList = items.filter(item => item.creator.id !== client.currentUser.id) || []
+    return userList.concat(otherList)
   }
 
 
