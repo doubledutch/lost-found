@@ -231,7 +231,7 @@ export default class App extends Component {
 
   saveLostFoundLocal = (input) => {
         //On initial launching of the app this fbc object would not exist. In that case the default is to be on. On first action we would set the object to the expected state and from there use update.
-        if (this.state.lostFoundLocation === {}) {
+        if (Object.keys(this.state.lostFoundLocation).length === 0) {
           fbc.database.public.adminRef('lostFoundLocation').push({"location": input})
         }
         else {
