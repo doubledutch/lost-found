@@ -215,16 +215,7 @@ export default class App extends Component {
   }
 
   returnContent = (report, key) => {
-    // const array = Object.values(report)
-    // if (array[0].isQuestion) {
-      console.log(this.state.items)
-      console.log(key)
       return this.state.items[key]
-    // }
-    // else {
-    //   const question = this.state.answersByQuestion[array[0].questionId]
-    //   return question[key]
-    // }
   }
 
   onAdminSelected = attendee => {
