@@ -38,7 +38,7 @@ export default class DefaultView extends Component {
       <View style={{flex: 1}}>
         <DefaultViewTopBar lostFoundLocation={lostFoundLocation}/>
         <DefaultViewHeader changeView={changeView} />
-        <DefaultViewTable items={items} currentFilter={currentFilter} changeTableFilter={changeTableFilter} reportItem={reportItem} reports={reports} resolveItem={resolveItem}/>
+        <DefaultViewTable changeView={changeView} items={items} currentFilter={currentFilter} changeTableFilter={changeTableFilter} reportItem={reportItem} reports={reports} resolveItem={resolveItem}/>
       </View>
     )
   }

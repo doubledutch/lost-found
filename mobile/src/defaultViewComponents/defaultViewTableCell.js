@@ -81,13 +81,13 @@ export default class DefaultViewTableCell extends Component {
   renderCellButtons = () => {
     return (
       <View style={s.buttonBox}>
-        { item.creator.id !== client.currentUser.id ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
+        { this.props.item.creator.id !== client.currentUser.id ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
           <Text style={s.largeButtonText}>Message</Text>
         </TouchableOpacity> : null }
         { (this.props.isAdmin || this.props.item.creator.id === client.currentUser.id) &&
-          <TouchableOpacity style={[s.largeButton, s.resolveButton]} onPress={() => this.props.resolveItem(this.props.item)}>
-            <Text style={s.largeButtonText}>Resolve</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={[s.largeButton, s.resolveButton]} onPress={() => this.props.resolveItem(this.props.item)}>
+          <Text style={s.largeButtonText}>Resolve</Text>
+        </TouchableOpacity>
         }
       </View>
     )

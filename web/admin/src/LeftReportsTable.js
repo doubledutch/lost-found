@@ -33,8 +33,6 @@ export default class LeftReportsTable extends Component {
       <div className="questionBox">
       <div className="headerTop">
         <p className="listTitle">Reported ({totalReported})</p>
-        <button className="noBorderButton" disabled={!totalReported} onClick={() => approveAll(itemsAndReports)}>Approve All</button>
-        <button className="noBorderButton" disabled={!totalReported} onClick={() => blockAll(itemsAndReports)}>Block All</button>
       </div>
       <ul className='listBox' ref={(input) => {this.flaggedList = input}}>
         { itemsAndReports.map((itemAndReport) => {
