@@ -96,11 +96,11 @@ export default class HomeView extends Component {
   renderPage = () => {
     switch (this.state.currentPage) {
       case 'home':
-        return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
+        return <DefaultView editCell={this.editCell} isAdmin={this.state.isAdmin} changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
       case "modal":
         return <ModalView changeView={this.changeView} clearView={this.clearModal} saveItem={this.saveItem} updateItem = {this.updateItem} itemStage={this.state.itemStage} selectItemType={this.selectItemType} currentItem={this.state.currentItem} advanceStage={this.advanceStage} backStage={this.backStage}/>
       default:
-        return <DefaultView changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
+        return <DefaultView editCell={this.editCell} isAdmin={this.state.isAdmin} changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
     }
   }
 
@@ -113,7 +113,7 @@ export default class HomeView extends Component {
       onRequestClose={() => {
         alert('Modal has been closed.');
       }}
-      >
+    >
       <ReportModal handleChange={this.handleChange} makeReport={this.makeReport}/>
     </Modal>
     )
@@ -139,15 +139,28 @@ export default class HomeView extends Component {
   }
 
   saveItem = () => {
-    fbc.database.public.userRef('items').push(this.state.currentItem)
-    .then(() => {
-      setTimeout(() => {
-        this.changeView("home")
-        this.setState({currentItem: {}, itemStage: 0})
-        }
-        ,250)
-    })
-    .catch(error => this.setState({questionError: "Retry"}))
+    if (this.state.currentItem.id) {
+      fbc.database.public.userRef('items').child(this.state.currentItem.id).update(this.state.currentItem)
+      .then(() => {
+        setTimeout(() => {
+          this.changeView("home")
+          this.setState({currentItem: {}, itemStage: 0})
+          }
+          ,250)
+      })
+      .catch(error => this.setState({questionError: "Retry"}))
+    }
+    else { 
+      fbc.database.public.userRef('items').push(this.state.currentItem)
+      .then(() => {
+        setTimeout(() => {
+          this.changeView("home")
+          this.setState({currentItem: {}, itemStage: 0})
+          }
+          ,250)
+      })
+      .catch(error => this.setState({questionError: "Retry"}))
+    }
   }
 
   reportItem = (item) => {
@@ -160,6 +173,10 @@ export default class HomeView extends Component {
 
   handleChange = (prop, value) => {
     this.setState({[prop]: value})
+  }
+
+  editCell = (item) => {
+    this.setState({currentItem: item, currentPage: "modal", itemStage: 1})
   }
 
   createReport = (ref, item) => {
@@ -211,7 +228,8 @@ const newFoundItem = {
   currentLocation: "",
   dateCreate: new Date().getTime(),
   creator: client.currentUser,
-  isResolved: false
+  isResolved: false,
+  isBlock: false
 }
 
 const newLostItem = {
@@ -220,6 +238,7 @@ const newLostItem = {
   lastLocation: "",
   dateCreate: new Date().getTime(),
   isResolved: false,
+  isBlock: false,
   creator: client.currentUser
 }
 

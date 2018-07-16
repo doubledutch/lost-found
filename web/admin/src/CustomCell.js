@@ -32,7 +32,7 @@ export default class CustomCell extends Component {
     )
   }
   renderCell = () => {  
-    const { currentKey, difference, report, content, singleReport } = this.props
+    const { currentKey, difference, report, content, singleReport, markBlock } = this.props
       return(
         <div className='cellBox'>
           <div className='cellBoxLeft'>
@@ -50,9 +50,10 @@ export default class CustomCell extends Component {
           <CustomButtons
             report = {report}
             currentKey = {currentKey}
-            markBlock={this.props.markBlock}
+            markBlock={markBlock}
             unBlock={this.props.unBlock}
             currentUser={content.userId}
+            isShowingApproved={this.props.isShowingApproved}
           />
         </div>
       )

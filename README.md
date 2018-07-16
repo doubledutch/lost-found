@@ -8,7 +8,7 @@ This extension connects to a simple firebase database via
 [@doubledutch/firebase-connector](https://www.npmjs.com/package/@doubledutch/firebase-connector)
 on a per-event basis.
 
-#### `private/admin`
+#### `public/users`
 
 ```json
 {
@@ -20,14 +20,6 @@ on a per-event basis.
     "dateCreate": "new Date().getTime()",
     "creator": "client.currentUser",
     "isResolved": false
-  },
-  "items": {
-    "type": "lost",
-    "description":"",
-    "lastLocation": "",
-    "dateCreate": "new Date().getTime()",
-    "isResolved": false,
-    "creator": "client.currentUser"
   },
   "reports": {
     ":item.id": {

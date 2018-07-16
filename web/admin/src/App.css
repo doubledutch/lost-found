@@ -119,6 +119,13 @@ ul {
   background-color: #EFEFEF;
 }
 
+.h2NoMargin {
+  margin-bottom: 0;
+}
+pWithMargin {
+  margin-bottom: 20
+}
+
 .listBox2 {
   flex: 1;
   margin: 0px;
@@ -402,6 +409,9 @@ select {
   margin: 0px 5px 0 0;
 }
 
+.titleBox {
+  margin-bottom: 40px;
+}
 .payload {
   color: #888;
   font-style: italic;

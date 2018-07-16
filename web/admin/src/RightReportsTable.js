@@ -29,7 +29,6 @@ export default class RightReportsTable extends Component {
 
   render() {
     const { totalBlocked, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, blockAll, approveAll, unBlock } = this.props
-
     return (
       <div className="questionBox2">
       {this.renderHeaderBox()}
@@ -52,10 +51,12 @@ export default class RightReportsTable extends Component {
                   returnContent={returnContent}
                   unBlock={approveQ}
                   getUser={getUser}
+                  markBlock={markBlock}
                   report = {allReports}
                   content = {itemAndReport.item}
                   singleReport = {allReports[0]}
                   allReportsFlagged = {allReports}
+                  isShowingApproved = {this.state.isShowingApproved}
                 />
               </li>
             )
@@ -73,11 +74,10 @@ export default class RightReportsTable extends Component {
         return this.renderMessage("Blocked items will appear here", "Any item in this list will not be", "visible to attendees")
       }
     }
-    else {
-      if (!this.props.totalApproved){
-        return this.renderMessage("Approved items will appear here", "Any item in this list will be", "visible to attendees")
-      }
+    if (!this.props.totalApproved){
+      return this.renderMessage("Approved items will appear here", "Any item in this list will be", "visible to attendees")
     }
+    else { return null }
   }
 
   renderHeaderBox = () => {

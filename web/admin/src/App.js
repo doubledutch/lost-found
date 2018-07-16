@@ -90,9 +90,9 @@ export default class App extends Component {
       }
       return latestReportTimeFor(b) - latestReportTimeFor(a)
     })
-    const totalBlocked = this.returnTotal(false)
-    const totalReported = this.returnTotal(true)
-    const totalApproved = this.returnApproved()
+    const totalBlocked = this.totalQuestions(false)
+    const totalReported = this.totalQuestions(true)
+    const totalApproved = this.approvedQuestions()
     return (
       <div>
         <SettingsContainer saveLostFoundLocal={this.saveLostFoundLocal} lostFoundLocation={this.state.lostFoundLocation.location || ""}/>
@@ -103,7 +103,7 @@ export default class App extends Component {
     )
   }
 
-  returnTotal(isReport) {
+  totalQuestions(isReport) {
     var total = 0
     const itemsIds = Object.keys(this.state.reports)
     if (isReport) {
@@ -127,8 +127,8 @@ export default class App extends Component {
     return total
   }
 
-  returnApproved() {
-    var total = 0
+  approvedQuestions() {
+    let total = 0
     const itemsIds = Object.keys(this.state.reports)
     itemsIds.forEach((task, i) => {
       const itemReports = this.getReport(task)
@@ -162,14 +162,10 @@ export default class App extends Component {
   markBlock = (reports, key, userId) => {
     if (reports.length && key && userId) {
       reports.forEach((item) => {
-        fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: true})
+        fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: true, isApproved: false})
       })
-      if (reports[0].isQuestion) {
-        fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: true})
-      }
-      else {
-        fbc.database.public.usersRef(userId).child("answers").child(key).update({isBlock: true})
-      }
+      fbc.database.public.usersRef(userId).child("items").child(key).update({isBlock: true, isApproved: false})
+
     }
   }
 
@@ -178,12 +174,7 @@ export default class App extends Component {
       reports.forEach((item) => {
         fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: false, isApproved: true})
       })
-      if (reports[0].isQuestion) {
-        fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: false})
-      }
-      else {
-        fbc.database.public.usersRef(userId).child("answers").child(key).update({isBlock: false})
-      }
+      fbc.database.public.usersRef(userId).child("items").child(key).update({isBlock: false, isApproved: true})
     }
   }
 
@@ -192,12 +183,7 @@ export default class App extends Component {
       reports.forEach((item) => {
         fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: false})
       })
-      if (reports[0].isQuestion) {
-        fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: false})
-      }
-      else {
-        fbc.database.public.usersRef(userId).child("answers").child(key).update({isBlock: false})
-      }
+      fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: false})
     }
   }
 

@@ -24,40 +24,41 @@ import DefaultViewTableHeader from "./defaultViewTableHeader"
 export default class DefaultViewTable extends Component {
 
   render() {
-    const { currentFilter, changeTableFilter, reportItem, resolveItem } = this.props
+    const { currentFilter, changeTableFilter, reportItem, resolveItem, isAdmin, editCell } = this.props
     const userData = this.verifyData(true)
     const data = this.verifyData(false)
+
     return (
       <View>
         <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)}/>
-        {userData.length ? <FlatList
+        {userData.length ? <View style={{minHeight: "50%", display: "flex", flex: 1}}><FlatList
           data={userData}
           renderItem={({item}) => {
             const reports = this.props.reports
             const isReported = ((reports && reports.find(report => report === item.id)) ? true : false)
             return (
-              <DefaultViewTableCell item={item} reportItem={reportItem} isReported={isReported} resolveItem={resolveItem}/>
+              <DefaultViewTableCell editCell={editCell} isAdmin={isAdmin} item={item} reportItem={reportItem} isReported={isReported} resolveItem={resolveItem}/>
             )
           }} 
-        /> : null }
-        {Object.values(this.props.items).length || data.length ? <FlatList
+        /></View> : null }
+        {Object.values(this.props.items).length || data.length ? <View style={{minHeight: 100, display: "flex", flex: 1}}><FlatList
           data={data}
-          ListFooterComponent={<View style={{height: 300}}></View>}
+          ListFooterComponent={<View style={s.tableFooter}></View>}
           renderItem={({item}) => {
             const reports = this.props.reports
             const isReported = ((reports && reports.find(report => report === item.id)) ? true : false)
             return (
-              <DefaultViewTableCell item={item} reportItem={reportItem} isReported={isReported} resolveItem={resolveItem}/>
+              <DefaultViewTableCell editCell={editCell} isAdmin={isAdmin} item={item} reportItem={reportItem} isReported={isReported} resolveItem={resolveItem}/>
             )
           }}
-        /> : this.renderEmptyStateText()}
+        /></View> : this.renderEmptyStateText()}
       </View>
     )
   }
 
   renderEmptyStateText = () => {
     return (
-      <View style={{flex: 1, alignItems: "center", justifyContent: "center", marginTop: 150}}>
+      <View style={s.emptyStateBox}>
         <Text style={s.emptyStateText}>Nobody has reported any items</Text>
         <TouchableOpacity onPress={()=>this.props.changeView("modal")}><Text style={s.emptyStateButton}>Tap here to report a lost or found item</Text></TouchableOpacity>
       </View>
@@ -67,15 +68,15 @@ export default class DefaultViewTable extends Component {
 
   verifyData = (bool) => {
     let items = Object.values(this.props.items)
-    items.filter(item=> item.status !== "resolved")
+    let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
     if (this.props.currentFilter !== "All") {
-      items = items.filter(item => item.type === this.props.currentFilter.toLowerCase()) || []
+      newItems.filter(item => item.type === this.props.currentFilter.toLowerCase()) || []
     }
     items.sort(function (a,b){ 
       return b.dateCreate - a.dateCreate
     })
-    if (bool) { return items.filter(item => item.creator.id === client.currentUser.id) || [] }
-    else { return items.filter(item => item.creator.id !== client.currentUser.id) || [] }
+    if (bool) { return newItems.filter(item => item.creator.id === client.currentUser.id) || [] }
+    else { return newItems.filter(item => item.creator.id !== client.currentUser.id) || [] }
   }
 
 
@@ -85,6 +86,8 @@ const s = ReactNative.StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#d9e1f9',
+    alignItems:"center",
+    justifyContent: "center"
   },
   emptyStateText: {
     fontSize: 20,
@@ -94,5 +97,14 @@ const s = ReactNative.StyleSheet.create({
     marginTop: 10,
     fontSize: 20, 
     color: "#009DCD"
+  },
+  emptyStateBox: {
+    flex: 1, 
+    alignItems: "center", 
+    justifyContent: "center", 
+    marginTop: 150
+  },
+  tableFooter : {
+    height: 300
   }
 })
