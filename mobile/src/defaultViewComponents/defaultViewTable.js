@@ -31,7 +31,7 @@ export default class DefaultViewTable extends Component {
     return (
       <View>
         <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)}/>
-        {userData.length ? <View style={{minHeight: "50%", display: "flex", flex: 1}}><FlatList
+        {userData.length ? <View style={s.topListBox}><FlatList
           data={userData}
           renderItem={({item}) => {
             const reports = this.props.reports
@@ -41,7 +41,7 @@ export default class DefaultViewTable extends Component {
             )
           }} 
         /></View> : null }
-        {Object.values(this.props.items).length || data.length ? <View style={{minHeight: 100, display: "flex", flex: 1}}><FlatList
+        {Object.values(this.props.items).length || data.length ? <View style={s.bottomListBox}><FlatList
           data={data}
           ListFooterComponent={<View style={s.tableFooter}></View>}
           renderItem={({item}) => {
@@ -92,6 +92,16 @@ const s = ReactNative.StyleSheet.create({
   emptyStateText: {
     fontSize: 20,
     color: "#838383"
+  },
+  topListBox: {
+    minHeight: "50%", 
+    display: "flex", 
+    flex: 1
+  },
+  bottomListBox:{
+    minHeight: 100, 
+    display: "flex", 
+    flex: 1
   },
   emptyStateButton: {
     marginTop: 10,

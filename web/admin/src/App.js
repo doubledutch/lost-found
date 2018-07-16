@@ -90,8 +90,8 @@ export default class App extends Component {
       }
       return latestReportTimeFor(b) - latestReportTimeFor(a)
     })
-    const totalBlocked = this.totalQuestions(false)
-    const totalReported = this.totalQuestions(true)
+    const totalBlocked = this.totalItems(false)
+    const totalReported = this.totalItems(true)
     const totalApproved = this.approvedQuestions()
     return (
       <div>
@@ -103,7 +103,7 @@ export default class App extends Component {
     )
   }
 
-  totalQuestions(isReport) {
+  totalItems(isReport) {
     var total = 0
     const itemsIds = Object.keys(this.state.reports)
     if (isReport) {
