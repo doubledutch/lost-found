@@ -69,15 +69,15 @@ export default class RightReportsTable extends Component {
   }
 
   renderMessageBox = () => {
-    if (!this.state.isShowingApproved){
-      if (!this.props.totalBlocked){
-        return this.renderMessage("Blocked items will appear here", "Any item in this list will not be", "visible to attendees")
-      }
+    if (!this.state.isShowingApproved && !this.props.totalBlocked){
+      return this.renderMessage("Blocked items will appear here", "Any item in this list will not be", "visible to attendees")
     }
-    if (!this.props.totalApproved){
+    if (this.state.isShowingApproved && !this.props.totalApproved){
       return this.renderMessage("Approved items will appear here", "Any item in this list will be", "visible to attendees")
     }
-    else { return null }
+    else { 
+      return null 
+    }
   }
 
   renderHeaderBox = () => {

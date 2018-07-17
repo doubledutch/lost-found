@@ -29,7 +29,7 @@ export default class DefaultViewTable extends Component {
     const data = this.verifyData(false)
 
     return (
-      <View>
+      <View style={{flex: 1}}>
         <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)}/>
         {userData.length ? <View style={s.topListBox}><FlatList
           data={userData}
@@ -94,14 +94,12 @@ const s = ReactNative.StyleSheet.create({
     color: "#838383"
   },
   topListBox: {
-    minHeight: "50%", 
     display: "flex", 
-    flex: 1
+    flex: 2
   },
   bottomListBox:{
-    minHeight: 100, 
     display: "flex", 
-    flex: 1
+    flex: 2
   },
   emptyStateButton: {
     marginTop: 10,
@@ -111,8 +109,7 @@ const s = ReactNative.StyleSheet.create({
   emptyStateBox: {
     flex: 1, 
     alignItems: "center", 
-    justifyContent: "center", 
-    marginTop: 150
+    justifyContent: "center",
   },
   tableFooter : {
     height: 300
