@@ -75,7 +75,11 @@ export default class DefaultViewTable extends Component {
     items.sort(function (a,b){ 
       return b.dateCreate - a.dateCreate
     })
-    if (bool) { return newItems.filter(item => item.creator.id === client.currentUser.id) || [] }
+    if (bool) {
+      const liveItems = newItems.filter(item => item.creator.id === client.currentUser.id) || []
+      const resolvedItems = items.filter(item => item.isResolved) || []
+      return liveItems.concat(resolvedItems)
+    }
     else { return newItems.filter(item => item.creator.id !== client.currentUser.id) || [] }
   }
 

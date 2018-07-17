@@ -45,9 +45,9 @@ export default class DefaultViewTableCell extends Component {
     const { isExpand } = this.state
     const { item } = this.props
     return (
-      <View style={s.container}>
+      <View style={item.isResolved ? s.containerResolved : s.container}>
         <View style={{flexDirection: "row", alignItems: "center", alignItems: "flex-start"}}>
-          <Text style={item.type === "lost" ? s.redText : s.greenText}>{item.type.toUpperCase()}:</Text>
+          <Text style={item.type === "lost" ? s.redText : s.greenText}>{item.isResolved ? "RESOLVED" : item.type.toUpperCase()}:</Text>
           <Text style={s.headlineText}>{this.props.item.description}</Text>
           <View style={{marginTop:4}}><Chevron style={isExpand} expandCell={this.expandCell}/></View>
         </View>
@@ -69,7 +69,7 @@ export default class DefaultViewTableCell extends Component {
         <View style={{flexDirection: "row", marginTop: 10}}>
           <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation: "Current Location: " + item.currentLocation}</Text>
           <View style={{flex:1}}/>
-          { item.creator.id !== client.currentUser.id ? 
+          { item.creator.id === client.currentUser.id ? 
           <TouchableOpacity onPress={()=>reportItem(item)}>
             <Text style={s.reportText}>{isReported ? "Reported" : "Report"}</Text>
           </TouchableOpacity> : null }
@@ -118,6 +118,15 @@ const s = ReactNative.StyleSheet.create({
     justifyContent: "center",
     flexDirection: "column",
     flex: 1
+  },
+  containerResolved: {
+    backgroundColor: "white",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    justifyContent: "center",
+    flexDirection: "column",
+    flex: 1,
+    opacity: 0.5
   },
   leftTabGreen: {
     backgroundColor: "#87C34B",
