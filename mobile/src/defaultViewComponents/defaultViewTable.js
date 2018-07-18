@@ -25,8 +25,8 @@ export default class DefaultViewTable extends Component {
 
   render() {
     const { currentFilter, changeTableFilter, reportItem, resolveItem, isAdmin, editCell } = this.props
-    const userData = this.verifyData(true)
-    const data = this.verifyData(false)
+    const userData = this.verifyData(false)
+    const data = this.verifyData(true)
 
     return (
       <View style={{flex: 1}}>
@@ -67,7 +67,7 @@ export default class DefaultViewTable extends Component {
   }
 
   verifyData = (bool) => {
-    let items = Object.values(this.props.items)
+    const items = Object.values(this.props.items) || []
     let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
     if (this.props.currentFilter !== "All") {
       newItems.filter(item => item.type === this.props.currentFilter.toLowerCase())
@@ -76,11 +76,11 @@ export default class DefaultViewTable extends Component {
       return b.dateCreate - a.dateCreate
     })
     if (bool) {
-      const liveItems = newItems.filter(item => item.creator.id === client.currentUser.id)
+      const liveItems = newItems.filter(item => item.creator.id !== client.currentUser.id)
       const resolvedItems = items.filter(item => item.isResolved)
       return liveItems.concat(resolvedItems)
     }
-    else { return newItems.filter(item => item.creator.id !== client.currentUser.id) }
+    else { return newItems.filter(item => item.creator.id === client.currentUser.id) }
   }
 
 
