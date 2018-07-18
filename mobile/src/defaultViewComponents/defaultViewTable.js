@@ -67,7 +67,7 @@ export default class DefaultViewTable extends Component {
   }
 
   verifyData = (bool) => {
-    const items = Object.values(this.props.items) || []
+    const items = Object.values(this.props.items)
     let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
     if (this.props.currentFilter !== "All") {
       newItems.filter(item => item.type === this.props.currentFilter.toLowerCase())
