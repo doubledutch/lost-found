@@ -65,14 +65,13 @@ export default class DefaultViewTableCell extends Component {
     const { item, reportItem, isReported } = this.props
     return (
       <View>
-        { item.type === "found" ? <Text style={s.foundText}>Found: {item.lastLocation}</Text> : null}
+        { item.type === "found" && <Text style={s.foundText}>Found: {item.lastLocation}</Text> }
         <View style={{flexDirection: "row", marginTop: 10}}>
           <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation: "Current Location: " + item.currentLocation}</Text>
           <View style={{flex:1}}/>
-          { item.creator.id === client.currentUser.id ? 
-          <TouchableOpacity onPress={()=>reportItem(item)}>
+          { item.creator.id === client.currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
             <Text style={s.reportText}>{isReported ? "Reported" : "Report"}</Text>
-          </TouchableOpacity> : null }
+          </TouchableOpacity> }
         </View>
         {this.renderCellButtons()}
       </View>

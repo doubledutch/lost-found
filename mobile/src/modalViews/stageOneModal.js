@@ -37,12 +37,7 @@ export default class StageOneModal extends Component {
     )
   }
 
-  isNextEnabled = () => {
-    if (this.props.currentItem.description.trim().length) {
-      return true
-    }
-    else { return false }
-  }
+  isNextEnabled = () => this.props.currentItem.description.trim().length > 0
 
   renderInputSection = () => {
     const { currentItem } = this.props

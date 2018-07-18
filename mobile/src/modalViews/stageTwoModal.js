@@ -51,12 +51,7 @@ export default class StageTwoModal extends Component {
     }
   }
 
-  isNextEnabled = () => {
-    if (this.props.currentItem.lastLocation.trim().length) {
-      return true
-    }
-    else { return false }
-  }
+  isNextEnabled = () => this.props.currentItem.lastLocation.trim().length > 0
 
 
 

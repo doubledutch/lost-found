@@ -29,14 +29,7 @@ export default class StageThreeModal extends Component {
     )
   }
 
-  isNextEnabled = () => {
-    if (this.props.currentItem.currentLocation.trim().length) {
-      return true
-    }
-    else { return false }
-  }
-
-
+  isNextEnabled = () => this.props.currentItem.currentLocation.trim().length > 0
 
   renderInputSection = () => {
     const { currentItem } = this.props

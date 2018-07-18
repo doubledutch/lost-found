@@ -139,28 +139,18 @@ export default class HomeView extends Component {
   }
 
   saveItem = () => {
-    if (this.state.currentItem.id) {
-      fbc.database.public.userRef('items').child(this.state.currentItem.id).update(this.state.currentItem)
-      .then(() => {
-        setTimeout(() => {
-          this.changeView("home")
-          this.setState({currentItem: {}, itemStage: 0})
-          }
-          ,250)
-      })
-      .catch(error => this.setState({questionError: "Retry"}))
-    }
-    else { 
-      fbc.database.public.userRef('items').push(this.state.currentItem)
-      .then(() => {
-        setTimeout(() => {
-          this.changeView("home")
-          this.setState({currentItem: {}, itemStage: 0})
-          }
-          ,250)
-      })
-      .catch(error => this.setState({questionError: "Retry"}))
-    }
+    const itemsRef = fbc.database.public.userRef('items')
+    const update = this.state.currentItem.id
+    ? itemsRef.child(this.state.currentItem.id).update(this.state.currentItem)
+    : itemsRef.push(this.state.currentItem)
+    update.then(() => {
+      setTimeout(() => {
+        this.changeView("home")
+        this.setState({currentItem: {}, itemStage: 0})
+        }
+        ,250)
+    })
+    .catch(error => this.setState({questionError: "Retry"}))
   }
 
   reportItem = (item) => {
