@@ -82,10 +82,10 @@ export default class DefaultViewTableCell extends Component {
     return (
       <View style={s.buttonBox}>
         { this.props.item.creator.id !== client.currentUser.id 
-          ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
+      ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
           <Text style={s.largeButtonText}>Message</Text>
         </TouchableOpacity> 
-        : <TouchableOpacity onPress={() => this.props.editCell(this.props.item)} style={s.largeButton}>
+      : <TouchableOpacity onPress={() => this.props.editCell(this.props.item)} style={s.largeButton}>
           <Text style={s.largeButtonText}>Edit</Text>
         </TouchableOpacity>}
         { (this.props.isAdmin || this.props.item.creator.id === client.currentUser.id) &&

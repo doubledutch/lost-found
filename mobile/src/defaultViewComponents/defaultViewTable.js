@@ -80,7 +80,7 @@ export default class DefaultViewTable extends Component {
       return b.dateCreate - a.dateCreate
     })
     if (bool) {
-      let liveItems = newItems.filter(item => item.creator.id !== client.currentUser.id)
+      const liveItems = newItems.filter(item => item.creator.id !== client.currentUser.id)
       const resolvedItems = items.filter(item => item.isResolved)
       return liveItems.concat(resolvedItems)
     }
