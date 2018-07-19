@@ -28,20 +28,18 @@ export default class RightReportsTable extends Component {
 
 
   render() {
-    const { totalBlocked, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, blockAll, approveAll, unBlock } = this.props
+    const { totalBlocked, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, unBlock } = this.props
     return (
       <div className="questionBox2">
       {this.renderHeaderBox()}
       <ul className='listBox2' ref={(input) => {this.flaggedList = input}}>
         { itemsAndReports.map((itemAndReport) => {
           const id = itemAndReport.item.id
-          let allReports = []
-          if (this.state.isShowingApproved){
-            allReports = Object.values(itemAndReport.reports).filter(item => item.isBlock === false && item.isApproved === true)
-          }
-          else {
-            allReports = Object.values(itemAndReport.reports).filter(item => item.isBlock === true && item.isApproved !== true)
-          }
+          const allReportsFilter = this.state.isShowingApproved
+          ? item => item.isBlock === false && item.isApproved === true
+          : item => item.isBlock === true && item.isApproved !== true
+          const allReports = Object.values(itemAndReport.reports).filter(allReportsFilter)
+          
           if (allReports.length) {
             return (
               <li className='cellBox' key={id}>

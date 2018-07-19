@@ -33,7 +33,7 @@ export default class CustomButtons extends Component {
       return (
         <span className='cellBoxRight'>
           <img className='button1' onClick={() => unBlock(report, currentKey, currentUser)} src={checkocircle} alt="check" />
-          { isShowingApproved === false ? null : <img className='button1' onClick={() => markBlock(report, currentKey, currentUser)} src={deleteocircle} alt="block" />}
+          { isShowingApproved !== false && <img className='button1' onClick={() => markBlock(report, currentKey, currentUser)} src={deleteocircle} alt="block" />}
         </span>
       )
     }

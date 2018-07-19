@@ -120,7 +120,7 @@ export default class HomeView extends Component {
   }
 
   updateItem = (variable, input) => {
-    const updatedItem = this.state.currentItem
+    const updatedItem = Object.assign({},this.state.currentItem)
     updatedItem[variable] = input
     this.setState({currentItem: updatedItem})
   }
@@ -140,7 +140,9 @@ export default class HomeView extends Component {
 
   saveItem = () => {
     const itemsRef = fbc.database.public.userRef('items')
-    const update = this.state.currentItem.id
+    let item = this.state.currentItem
+    item.dateCreate = new Date().getTime()
+    const update = item.id
     ? itemsRef.child(this.state.currentItem.id).update(this.state.currentItem)
     : itemsRef.push(this.state.currentItem)
     update.then(() => {
@@ -216,7 +218,6 @@ const newFoundItem = {
   description: "",
   lastLocation: "",
   currentLocation: "",
-  dateCreate: new Date().getTime(),
   creator: client.currentUser,
   isResolved: false,
   isBlock: false
@@ -226,7 +227,6 @@ const newLostItem = {
   type: "lost",
   description:"",
   lastLocation: "",
-  dateCreate: new Date().getTime(),
   isResolved: false,
   isBlock: false,
   creator: client.currentUser

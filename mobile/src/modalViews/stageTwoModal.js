@@ -69,7 +69,6 @@ export default class StageTwoModal extends Component {
     }
     
     const androidStyle = {
-      paddingLeft: 0,
       marginTop: 17,
       marginBottom: 10
     }

@@ -32,14 +32,14 @@ export default class ReportsContainer extends Component {
   }
 
   renderTables = () => {
-    const { totalApproved, totalBlocked, totalReported, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, blockAll, approveAll, unBlock } = this.props
+    const { totalApproved, totalBlocked, totalReported, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, unBlock } = this.props
 
     return (
       <div style={{marginBottom: 30}} className="App" >
         <LeftReportsTable totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={getUser} 
-        getReport={getReport} returnItem={returnItem} returnContent={returnContent} markBlock={markBlock} approveQ={approveQ} blockAll={blockAll} approveAll={approveAll} unBlock={unBlock}/>
+        getReport={getReport} returnItem={returnItem} returnContent={returnContent} markBlock={markBlock} approveQ={approveQ} unBlock={unBlock}/>
         <RightReportsTable totalApproved={totalApproved} totalBlocked={totalBlocked} markBlock={markBlock} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={getUser} 
-        getReport={getReport} returnItem={returnItem} returnContent={returnContent} approveQ={approveQ} blockAll={blockAll} approveAll={approveAll} unBlock={unBlock}/>
+        getReport={getReport} returnItem={returnItem} returnContent={returnContent} approveQ={approveQ} unBlock={unBlock}/>
       </div>
     )
   }

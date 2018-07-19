@@ -53,7 +53,6 @@ export default class StageOneModal extends Component {
     }
     
     const androidStyle = {
-      paddingLeft: 0,
       marginTop: 17,
       marginBottom: 10
     }

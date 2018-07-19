@@ -69,7 +69,7 @@ export default class DefaultViewTableCell extends Component {
         <View style={{flexDirection: "row", marginTop: 10}}>
           <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation: "Current Location: " + item.currentLocation}</Text>
           <View style={{flex:1}}/>
-          { item.creator.id === client.currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
+          { item.creator.id !== client.currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
             <Text style={s.reportText}>{isReported ? "Reported" : "Report"}</Text>
           </TouchableOpacity> }
         </View>
@@ -81,9 +81,11 @@ export default class DefaultViewTableCell extends Component {
   renderCellButtons = () => {
     return (
       <View style={s.buttonBox}>
-        { this.props.item.creator.id !== client.currentUser.id ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
+        { this.props.item.creator.id !== client.currentUser.id 
+          ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
           <Text style={s.largeButtonText}>Message</Text>
-        </TouchableOpacity> : <TouchableOpacity onPress={() => this.props.editCell(this.props.item)} style={s.largeButton}>
+        </TouchableOpacity> 
+        : <TouchableOpacity onPress={() => this.props.editCell(this.props.item)} style={s.largeButton}>
           <Text style={s.largeButtonText}>Edit</Text>
         </TouchableOpacity>}
         { (this.props.isAdmin || this.props.item.creator.id === client.currentUser.id) &&
@@ -98,7 +100,7 @@ export default class DefaultViewTableCell extends Component {
   convertTime = (dateString) => {
     const date = new Date(dateString)
     return ( 
-      date.toLocaleString()
+      date.toLocaleString('en-US', {month: "2-digit", day: "2-digit", year: "numeric", hour: '2-digit', minute:'2-digit'})
     )
   }
 

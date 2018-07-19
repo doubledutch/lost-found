@@ -37,7 +37,7 @@ export default class CustomCell extends Component {
         <div className='cellBox'>
           <div className='cellBoxLeft'>
             <div className="combinedText">
-              {content.type==="lost"?<p className='introTextRed'>LOST: </p> : <p className='introTextGreen'>FOUND: </p>}
+              {content.type==="lost" ? <p className='introTextRed'>LOST: </p> : <p className='introTextGreen'>FOUND: </p>}
               <p className="questionText">"{content.description}"</p>
             </div>
             <div className="cellBoxTop">

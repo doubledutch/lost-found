@@ -37,7 +37,7 @@ export default class DefaultViewTableHeader extends Component {
   }
 
   returnFilteredItems = (items, type) => {
-    let foundItems = items.filter(item => item.type === type) || []
+    const foundItems = items.filter(item => item.type === type)
     return foundItems
   }
 

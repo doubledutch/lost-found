@@ -92,13 +92,13 @@ export default class App extends Component {
     })
     const totalBlocked = this.totalItems(false)
     const totalReported = this.totalItems(true)
-    const totalApproved = this.approvedQuestions()
+    const totalApproved = this.approvedListings()
     return (
       <div>
         <SettingsContainer saveLostFoundLocal={this.saveLostFoundLocal} lostFoundLocation={this.state.lostFoundLocation.location || ""}/>
         <AdminsContainer attendees={this.state.allUsers} onAdminSelected={this.onAdminSelected} onAdminDeselected={this.onAdminDeselected} client={client} isAdmin={this.isAdmin} admins={this.state.admins}/>
         <ReportsContainer totalApproved={totalApproved} totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={this.getUser} getReport={this.getReport} 
-        returnItem={this.returnItem} returnContent={this.returnContent} blockAll={this.blockAll} approveAll={this.approveAll} markBlock={this.markBlock} approveQ={this.approveQ} unBlock={this.unBlock}/>
+        returnItem={this.returnItem} returnContent={this.returnContent} markBlock={this.markBlock} approveQ={this.approveQ} unBlock={this.unBlock}/>
       </div>
     )
   }
@@ -127,7 +127,7 @@ export default class App extends Component {
     return total
   }
 
-  approvedQuestions() {
+  approvedListings() {
     let total = 0
     const itemsIds = Object.keys(this.state.reports)
     itemsIds.forEach((task, i) => {
@@ -138,25 +138,6 @@ export default class App extends Component {
       }
     })
     return total
-  }
-
-  blockAll = (questionsOrAnswersAndReports) => {
-    questionsOrAnswersAndReports.map((questionOrAnswerAndReport) => {
-      const currentKey = questionOrAnswerAndReport.questionOrAnswer.id
-      const userId = questionOrAnswerAndReport.questionOrAnswer.userId
-      const allReportsFlagged = Object.values(questionOrAnswerAndReport.reports).filter(item => item.block !== true && item.approved !== true)
-      this.markBlock(allReportsFlagged, currentKey, questionOrAnswerAndReport.questionOrAnswer.userId)
-    })
-  }
-
-
-  approveAll = (questionsOrAnswersAndReports) => {
-    questionsOrAnswersAndReports.map((questionOrAnswerAndReport) => {
-      const currentKey = questionOrAnswerAndReport.questionOrAnswer.id
-      const userId = questionOrAnswerAndReport.questionOrAnswer.userId
-      const allReportsFlagged = Object.values(questionOrAnswerAndReport.reports).filter(item => item.block !== true && item.approved !== true)
-      this.approveQ(allReportsFlagged, currentKey, userId)
-    })
   }
 
   markBlock = (reports, key, userId) => {
