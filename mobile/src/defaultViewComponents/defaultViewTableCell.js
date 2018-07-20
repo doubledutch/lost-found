@@ -27,13 +27,20 @@ export default class DefaultViewTableCell extends Component {
     this.state = { 
       isExpand: false
     }
+  }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.item !== this.props.item) {
+      this.setState({isExpand: false})
+    }
   }
 
   render() {
     return (
       <View style={{marginTop: 5, flexDirection: "row"}}>
-        <View style={this.props.item.type === "lost" ? s.leftTabRed : s.leftTabGreen}/>
+        {this.props.item.isResolved
+        ? <View style={s.leftTabGray}/>
+        : <View style={this.props.item.type === "lost" ? s.leftTabRed : s.leftTabGreen}/>}
         {this.renderStandardCell()}
       </View>
     )
@@ -47,13 +54,15 @@ export default class DefaultViewTableCell extends Component {
     return (
       <View style={item.isResolved ? s.containerResolved : s.container}>
         <View style={{flexDirection: "row", alignItems: "center", alignItems: "flex-start"}}>
-          <Text style={item.type === "lost" ? s.redText : s.greenText}>{item.isResolved ? "RESOLVED" : item.type.toUpperCase()}:</Text>
+          {item.isResolved
+          ? <Text style={s.grayText}>RESOLVED:</Text>  
+          : <Text style={item.type === "lost" ? s.redText : s.greenText}>{item.type.toUpperCase()}:</Text>}
           <Text style={s.headlineText}>{this.props.item.description}</Text>
-          <View style={{marginTop:4}}><Chevron style={isExpand} expandCell={this.expandCell}/></View>
+          <View style={{marginTop:4}}><Chevron style={isExpand} disabled={item.isResolved} expandCell={this.expandCell}/></View>
         </View>
         <View style={{flexDirection: "row", marginTop: 10, alignItems: "center"}}>
           <Avatar user={item.creator}/>
-          <Text style={s.nameText}>{item.creator.firstName + " " + item.creator.lastName}</Text>
+          {content.creator && <Text style={s.nameText}>{item.creator.firstName + " " + item.creator.lastName}</Text>}
           <Text style={s.timeText}>{this.convertTime(item.dateCreate)}</Text>
         </View>
         {isExpand ? this.renderExpandedCell() : null }
@@ -137,6 +146,10 @@ const s = ReactNative.StyleSheet.create({
     backgroundColor: "#E98686",
     width: 3,
   },
+  leftTabRed: {
+    backgroundColor: "gray",
+    width: 3,
+  },
   foundText: {
     marginTop: 10,
     fontSize: 14,
@@ -191,6 +204,10 @@ const s = ReactNative.StyleSheet.create({
   },
   redText: {
     color: "#E98686",
+    fontSize: 18
+  },
+  grayText: {
+    color: "gray",
     fontSize: 18
   },
   headlineText: {

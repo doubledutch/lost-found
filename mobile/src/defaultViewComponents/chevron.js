@@ -14,14 +14,14 @@ export default (props) => {
   }
     if (Platform.OS === "ios") {
       return (
-        <TouchableOpacity onPress={props.expandCell}>
+        <TouchableOpacity onPress={props.expandCell} disabled={props.disabled} >
           <Image source={{uri}} style={[style, rotate]} alt="chevron" />
         </TouchableOpacity>
       )
     }
     else {
       return (
-        <TouchableOpacity onPress={props.expandCell}>
+        <TouchableOpacity onPress={props.expandCell} disabled={props.disabled} >
           <Text style={{fontSize: 22, color: "gray"}}>+</Text>
         </TouchableOpacity>
       )
