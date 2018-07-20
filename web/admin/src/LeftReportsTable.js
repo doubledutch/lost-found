@@ -27,14 +27,12 @@ export default class LeftReportsTable extends Component {
 
 
   render() {
-    const { totalReported, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, blockAll, approveAll, unBlock } = this.props
+    const { totalReported, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, unBlock } = this.props
 
     return (
       <div className="questionBox">
-      <div className="cellBoxTop">
+      <div className="headerTop">
         <p className="listTitle">Reported ({totalReported})</p>
-        <button className="noBorderButton" disabled={!totalReported} onClick={() => approveAll(itemsAndReports)}>Approve All</button>
-        <button className="noBorderButton" disabled={!totalReported} onClick={() => blockAll(itemsAndReports)}>Block All</button>
       </div>
       <ul className='listBox' ref={(input) => {this.flaggedList = input}}>
         { itemsAndReports.map((itemAndReport) => {

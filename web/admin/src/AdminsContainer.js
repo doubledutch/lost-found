@@ -33,9 +33,12 @@ export default class SettingsContainer extends Component {
   render() {
     return (
       <div className="sectionContainer">
-        <div className="containerRow">
-          <h2>Admins</h2>
-          <button className="displayButton" onClick={() => this.handleBoxExpand(!this.state.isBoxExpanded)}>{(this.state.isBoxExpanded ? "Hide Section" : "View Section")}</button>
+        <div className="titleBox">
+          <div className="containerRow">
+            <h2 className="h2NoMargin">Admins</h2>
+            <button className="displayButton" onClick={() => this.handleBoxExpand(!this.state.isBoxExpanded)}>{(this.state.isBoxExpanded ? "Hide Section" : "View Section")}</button>
+          </div>
+          <p>Admins have the ability to mark any Lost & Found posting as resolved directly from the mobile app</p>
         </div>
         {this.state.isBoxExpanded ?  <div style={{marginBottom: 25}}><AttendeeSelector 
             client={this.props.client}

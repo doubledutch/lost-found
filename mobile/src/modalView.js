@@ -18,7 +18,7 @@ export default class ModalView extends Component {
     return (
       <View style={{flex: 1}}>
         {this.renderCurrentStage()}
-        <TouchableOpacity style={s.modalBottom} onPress={() => this.props.changeView("home")}></TouchableOpacity> 
+        <TouchableOpacity style={s.modalBottom} onPress={() => this.props.clearView("home")}></TouchableOpacity> 
       </View>
     )
   }

@@ -28,16 +28,16 @@ export default class StageOneModal extends Component {
     return (
       <View style={s.bottomButtons}>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.topicsButton} onPress={this.props.backStage}><Text style={s.topicsButtonText}>Back</Text></TouchableOpacity>
+          <TouchableOpacity style={s.topicsButton} onPress={this.props.backStage}><Text style={s.topicsButtonText}>Previous</Text></TouchableOpacity>
         </View>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.sendButton} disabled={!this.props.currentItem.description.length} onPress={this.props.advanceStage}><Text style={s.sendButtonText}>Next</Text></TouchableOpacity>
+          <TouchableOpacity style={this.isNextEnabled() ? s.sendButton : s.sendButtonDisabled} disabled={!this.isNextEnabled()} onPress={this.props.advanceStage}><Text style={s.sendButtonText}>Next</Text></TouchableOpacity>
         </View>
       </View>
     )
   }
 
-
+  isNextEnabled = () => this.props.currentItem.description.trim().length > 0
 
   renderInputSection = () => {
     const { currentItem } = this.props
@@ -53,7 +53,6 @@ export default class StageOneModal extends Component {
     }
     
     const androidStyle = {
-      paddingLeft: 0,
       marginTop: 17,
       marginBottom: 10
     }
@@ -81,6 +80,11 @@ export default class StageOneModal extends Component {
       <Text style={s.counter}>{250 - this.props.currentItem.description.length} </Text>
     </View>
     )
+  }
+
+  saveInput = (input) => {
+    this.props.updateItem("description", input)
+    this.setState({input})
   }
 
   _handleSizeChange = event => {
@@ -133,6 +137,13 @@ const s = ReactNative.StyleSheet.create({
     justifyContent: 'center',
     marginRight: 10,
     backgroundColor: client.primaryColor,
+    height: 42,
+    borderRadius: 4,
+  },
+  sendButtonDisabled: {
+    justifyContent: 'center',
+    marginRight: 10,
+    backgroundColor: new Color(client.primaryColor).limitSaturation(0.5).rgbString(),
     height: 42,
     borderRadius: 4,
   },

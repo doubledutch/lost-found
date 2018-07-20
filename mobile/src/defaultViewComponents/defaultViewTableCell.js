@@ -27,13 +27,20 @@ export default class DefaultViewTableCell extends Component {
     this.state = { 
       isExpand: false
     }
+  }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.item !== this.props.item) {
+      this.setState({isExpand: false})
+    }
   }
 
   render() {
     return (
       <View style={{marginTop: 5, flexDirection: "row"}}>
-        <View style={this.props.item.type === "lost" ? s.leftTabRed : s.leftTabGreen}/>
+        {this.props.item.isResolved
+        ? <View style={s.leftTabGray}/>
+        : <View style={this.props.item.type === "lost" ? s.leftTabRed : s.leftTabGreen}/>}
         {this.renderStandardCell()}
       </View>
     )
@@ -45,16 +52,17 @@ export default class DefaultViewTableCell extends Component {
     const { isExpand } = this.state
     const { item } = this.props
     return (
-      <View style={s.container}>
-        <View style={{flexDirection: "row", alignItems: "center"}}>
-          <Text style={item.type === "lost" ? s.redText : s.greenText}>{item.type.toUpperCase()}:</Text>
+      <View style={item.isResolved ? s.containerResolved : s.container}>
+        <View style={{flexDirection: "row", alignItems: "center", alignItems: "flex-start"}}>
+          {item.isResolved
+          ? <Text style={s.grayText}>RESOLVED:</Text>  
+          : <Text style={item.type === "lost" ? s.redText : s.greenText}>{item.type.toUpperCase()}:</Text>}
           <Text style={s.headlineText}>{this.props.item.description}</Text>
-          <View style={{flex: 1}}/>
-          <Chevron style={isExpand} expandCell={this.expandCell}/>
+          <View style={{marginTop:4}}><Chevron style={isExpand} disabled={item.isResolved} expandCell={this.expandCell}/></View>
         </View>
         <View style={{flexDirection: "row", marginTop: 10, alignItems: "center"}}>
           <Avatar user={item.creator}/>
-          <Text style={s.nameText}>{item.creator.firstName + " " + item.creator.lastName}</Text>
+          {item.creator && <Text style={s.nameText}>{item.creator.firstName + " " + item.creator.lastName}</Text>}
           <Text style={s.timeText}>{this.convertTime(item.dateCreate)}</Text>
         </View>
         {isExpand ? this.renderExpandedCell() : null }
@@ -66,13 +74,13 @@ export default class DefaultViewTableCell extends Component {
     const { item, reportItem, isReported } = this.props
     return (
       <View>
-        { item.type === "found" ? <Text style={s.foundText}>Found: {item.lastLocation}</Text> : null}
+        { item.type === "found" && <Text style={s.foundText}>Found: {item.lastLocation}</Text> }
         <View style={{flexDirection: "row", marginTop: 10}}>
           <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation: "Current Location: " + item.currentLocation}</Text>
           <View style={{flex:1}}/>
-          { item.creator.id === client.currentUser.id ? <TouchableOpacity onPress={()=>reportItem(item)}>
+          { item.creator.id !== client.currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
             <Text style={s.reportText}>{isReported ? "Reported" : "Report"}</Text>
-          </TouchableOpacity> : null }
+          </TouchableOpacity> }
         </View>
         {this.renderCellButtons()}
       </View>
@@ -82,13 +90,17 @@ export default class DefaultViewTableCell extends Component {
   renderCellButtons = () => {
     return (
       <View style={s.buttonBox}>
-        <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
+        { this.props.item.creator.id !== client.currentUser.id 
+      ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
           <Text style={s.largeButtonText}>Message</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> 
+      : <TouchableOpacity onPress={() => this.props.editCell(this.props.item)} style={s.largeButton}>
+          <Text style={s.largeButtonText}>Edit</Text>
+        </TouchableOpacity>}
         { (this.props.isAdmin || this.props.item.creator.id === client.currentUser.id) &&
-          <TouchableOpacity style={[s.largeButton, s.resolveButton]} onPress={() => this.props.resolveItem(this.props.item)}>
-            <Text style={s.largeButtonText}>Resolve</Text>
-          </TouchableOpacity>
+        <TouchableOpacity style={[s.largeButton, s.resolveButton]} onPress={() => this.props.resolveItem(this.props.item)}>
+          <Text style={s.largeButtonText}>Resolve</Text>
+        </TouchableOpacity>
         }
       </View>
     )
@@ -97,7 +109,7 @@ export default class DefaultViewTableCell extends Component {
   convertTime = (dateString) => {
     const date = new Date(dateString)
     return ( 
-      date.toLocaleString()
+      date.toLocaleString('en-US', {month: "2-digit", day: "2-digit", year: "numeric", hour: '2-digit', minute:'2-digit'})
     )
   }
 
@@ -117,12 +129,25 @@ const s = ReactNative.StyleSheet.create({
     flexDirection: "column",
     flex: 1
   },
+  containerResolved: {
+    backgroundColor: "white",
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    justifyContent: "center",
+    flexDirection: "column",
+    flex: 1,
+    opacity: 0.5
+  },
   leftTabGreen: {
     backgroundColor: "#87C34B",
     width: 3,
   },
   leftTabRed: {
     backgroundColor: "#E98686",
+    width: 3,
+  },
+  leftTabRed: {
+    backgroundColor: "gray",
     width: 3,
   },
   foundText: {
@@ -181,9 +206,14 @@ const s = ReactNative.StyleSheet.create({
     color: "#E98686",
     fontSize: 18
   },
+  grayText: {
+    color: "gray",
+    fontSize: 18
+  },
   headlineText: {
     color: "#4A4A4A",
     fontSize: 18,
-    marginLeft: 5
+    marginLeft: 5,
+    flex: 1,
   }
 })

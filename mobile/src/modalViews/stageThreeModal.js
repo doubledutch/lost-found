@@ -20,16 +20,16 @@ export default class StageThreeModal extends Component {
     return (
       <View style={s.bottomButtons}>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.topicsButton} onPress={this.props.backStage}><Text style={s.topicsButtonText}>Back</Text></TouchableOpacity>
+          <TouchableOpacity style={s.topicsButton} onPress={this.props.backStage}><Text style={s.topicsButtonText}>Previous</Text></TouchableOpacity>
         </View>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.sendButton} disabled={!this.props.currentItem.currentLocation.length} onPress={this.props.saveItem}><Text style={s.sendButtonText}>Submit</Text></TouchableOpacity>
+          <TouchableOpacity style={this.isNextEnabled() ? s.sendButton : s.sendButtonDisabled} disabled={!this.isNextEnabled()} onPress={this.props.saveItem}><Text style={s.sendButtonText}>Submit</Text></TouchableOpacity>
         </View>
       </View>
     )
   }
 
-
+  isNextEnabled = () => this.props.currentItem.currentLocation.trim().length > 0
 
   renderInputSection = () => {
     const { currentItem } = this.props
@@ -110,6 +110,13 @@ const s = ReactNative.StyleSheet.create({
     backgroundColor: client.primaryColor,
     height: 42,
     borderRadius: 4,
+  },
+  sendButtonDisabled: {
+    justifyContent: 'center',
+    marginRight: 10,
+    height: 42,
+    borderRadius: 4,
+    backgroundColor: new Color(client.primaryColor).limitSaturation(0.5).rgbString(),
   },
   sendButtonText: {
     fontSize: 14,

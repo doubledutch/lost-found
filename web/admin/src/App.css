@@ -52,7 +52,7 @@ html, body, select {
 }
 
 .localInputButton {
-  width: 600px;
+  width: 49%;
   margin-right: 50px;
 }
 
@@ -119,6 +119,13 @@ ul {
   background-color: #EFEFEF;
 }
 
+.h2NoMargin {
+  margin-bottom: 0;
+}
+pWithMargin {
+  margin-bottom: 20
+}
+
 .listBox2 {
   flex: 1;
   margin: 0px;
@@ -174,6 +181,13 @@ ul {
   flex-flow: row wrap;
 }
 
+.headerTop {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  height: 45px;
+}
+
 .cellBoxLeft{
   flex: 1;
   margin-top: 15px;
@@ -193,6 +207,17 @@ ul {
 .listTitle{
   display: flex;
   flex: 1;
+}
+
+.selectedUnderlineButton {
+  border: none;
+  border-bottom: 2px solid #73aaf3;
+  height: 24px;
+}
+
+.underlineButton {
+  border: none;
+  height: 20px;
 }
 
 .combinedText{
@@ -384,6 +409,9 @@ select {
   margin: 0px 5px 0 0;
 }
 
+.titleBox {
+  margin-bottom: 40px;
+}
 .payload {
   color: #888;
   font-style: italic;

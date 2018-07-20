@@ -32,12 +32,12 @@ export default class CustomCell extends Component {
     )
   }
   renderCell = () => {  
-    const { currentKey, difference, report, content, singleReport } = this.props
+    const { currentKey, difference, report, content, singleReport, markBlock } = this.props
       return(
         <div className='cellBox'>
           <div className='cellBoxLeft'>
             <div className="combinedText">
-              {content.type==="lost"?<p className='introTextRed'>LOST: </p> : <p className='introTextGreen'>FOUND: </p>}
+              {content.type==="lost" ? <p className='introTextRed'>LOST: </p> : <p className='introTextGreen'>FOUND: </p>}
               <p className="questionText">"{content.description}"</p>
             </div>
             <div className="cellBoxTop">
@@ -50,9 +50,10 @@ export default class CustomCell extends Component {
           <CustomButtons
             report = {report}
             currentKey = {currentKey}
-            markBlock={this.props.markBlock}
+            markBlock={markBlock}
             unBlock={this.props.unBlock}
             currentUser={content.userId}
+            isShowingApproved={this.props.isShowingApproved}
           />
         </div>
       )

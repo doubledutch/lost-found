@@ -90,25 +90,26 @@ export default class App extends Component {
       }
       return latestReportTimeFor(b) - latestReportTimeFor(a)
     })
-    const totalBlocked = this.returnTotal(false)
-    const totalReported = this.returnTotal(true)
+    const totalBlocked = this.totalItems(false)
+    const totalReported = this.totalItems(true)
+    const totalApproved = this.approvedListings()
     return (
       <div>
         <SettingsContainer saveLostFoundLocal={this.saveLostFoundLocal} lostFoundLocation={this.state.lostFoundLocation.location || ""}/>
         <AdminsContainer attendees={this.state.allUsers} onAdminSelected={this.onAdminSelected} onAdminDeselected={this.onAdminDeselected} client={client} isAdmin={this.isAdmin} admins={this.state.admins}/>
-        <ReportsContainer totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={this.getUser} getReport={this.getReport} 
-        returnItem={this.returnItem} returnContent={this.returnContent} blockAll={this.blockAll} approveAll={this.approveAll} markBlock={this.markBlock} approveQ={this.approveQ} unBlock={this.unBlock}/>
+        <ReportsContainer totalApproved={totalApproved} totalBlocked={totalBlocked} totalReported={totalReported} itemsAndReports={itemsAndReports} getUser={this.getUser} getReport={this.getReport} 
+        returnItem={this.returnItem} returnContent={this.returnContent} markBlock={this.markBlock} approveQ={this.approveQ} unBlock={this.unBlock}/>
       </div>
     )
   }
 
-  returnTotal(isReport) {
+  totalItems(isReport) {
     var total = 0
     const itemsIds = Object.keys(this.state.reports)
     if (isReport) {
       itemsIds.forEach((task, i) => {
         const itemReports = this.getReport(task)
-        const allReportsFlagged = Object.values(itemReports).filter(item => item.isBlock === false && item.approved === false)
+        const allReportsFlagged = Object.values(itemReports).filter(item => item.isBlock === false && item.isApproved === false)
         if (allReportsFlagged.length) {
           total = total + 1
         }
@@ -117,7 +118,7 @@ export default class App extends Component {
     else {
       itemsIds.forEach((task, i) => {
         const itemReports = this.getReport(task)
-        const allReportsBlocked= Object.values(itemReports).filter(item => item.isBlock === true && item.approved !== true)
+        const allReportsBlocked= Object.values(itemReports).filter(item => item.isBlock === true && item.isApproved !== true)
         if (allReportsBlocked.length) {
           total = total + 1
         }
@@ -126,36 +127,26 @@ export default class App extends Component {
     return total
   }
 
-  blockAll = (questionsOrAnswersAndReports) => {
-    questionsOrAnswersAndReports.map((questionOrAnswerAndReport) => {
-      const currentKey = questionOrAnswerAndReport.questionOrAnswer.id
-      const userId = questionOrAnswerAndReport.questionOrAnswer.userId
-      const allReportsFlagged = Object.values(questionOrAnswerAndReport.reports).filter(item => item.block !== true && item.approved !== true)
-      this.markBlock(allReportsFlagged, currentKey, questionOrAnswerAndReport.questionOrAnswer.userId)
+  approvedListings() {
+    let total = 0
+    const itemsIds = Object.keys(this.state.reports)
+    itemsIds.forEach((task, i) => {
+      const itemReports = this.getReport(task)
+      const allReportsApproved = Object.values(itemReports).filter(item => item.isBlock === false && item.isApproved === true)
+      if (allReportsApproved.length) {
+        total = total + 1
+      }
     })
-  }
-
-
-  approveAll = (questionsOrAnswersAndReports) => {
-    questionsOrAnswersAndReports.map((questionOrAnswerAndReport) => {
-      const currentKey = questionOrAnswerAndReport.questionOrAnswer.id
-      const userId = questionOrAnswerAndReport.questionOrAnswer.userId
-      const allReportsFlagged = Object.values(questionOrAnswerAndReport.reports).filter(item => item.block !== true && item.approved !== true)
-      this.approveQ(allReportsFlagged, currentKey, userId)
-    })
+    return total
   }
 
   markBlock = (reports, key, userId) => {
     if (reports.length && key && userId) {
       reports.forEach((item) => {
-        fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: true})
+        fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: true, isApproved: false})
       })
-      if (reports[0].isQuestion) {
-        fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: true})
-      }
-      else {
-        fbc.database.public.usersRef(userId).child("answers").child(key).update({isBlock: true})
-      }
+      fbc.database.public.usersRef(userId).child("items").child(key).update({isBlock: true, isApproved: false})
+
     }
   }
 
@@ -164,12 +155,7 @@ export default class App extends Component {
       reports.forEach((item) => {
         fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: false, isApproved: true})
       })
-      if (reports[0].isQuestion) {
-        fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: false})
-      }
-      else {
-        fbc.database.public.usersRef(userId).child("answers").child(key).update({isBlock: false})
-      }
+      fbc.database.public.usersRef(userId).child("items").child(key).update({isBlock: false, isApproved: true})
     }
   }
 
@@ -178,12 +164,7 @@ export default class App extends Component {
       reports.forEach((item) => {
         fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: false})
       })
-      if (reports[0].isQuestion) {
-        fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: false})
-      }
-      else {
-        fbc.database.public.usersRef(userId).child("answers").child(key).update({isBlock: false})
-      }
+      fbc.database.public.usersRef(userId).child("questions").child(key).update({isBlock: false})
     }
   }
 
@@ -201,16 +182,7 @@ export default class App extends Component {
   }
 
   returnContent = (report, key) => {
-    // const array = Object.values(report)
-    // if (array[0].isQuestion) {
-      console.log(this.state.items)
-      console.log(key)
       return this.state.items[key]
-    // }
-    // else {
-    //   const question = this.state.answersByQuestion[array[0].questionId]
-    //   return question[key]
-    // }
   }
 
   onAdminSelected = attendee => {
@@ -226,7 +198,7 @@ export default class App extends Component {
 
   saveLostFoundLocal = (input) => {
         //On initial launching of the app this fbc object would not exist. In that case the default is to be on. On first action we would set the object to the expected state and from there use update.
-        if (!this.state.lostFoundLocation) {
+        if (Object.keys(this.state.lostFoundLocation).length === 0) {
           fbc.database.public.adminRef('lostFoundLocation').push({"location": input})
         }
         else {
