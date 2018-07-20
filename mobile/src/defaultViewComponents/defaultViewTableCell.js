@@ -62,7 +62,7 @@ export default class DefaultViewTableCell extends Component {
         </View>
         <View style={{flexDirection: "row", marginTop: 10, alignItems: "center"}}>
           <Avatar user={item.creator}/>
-          {content.creator && <Text style={s.nameText}>{item.creator.firstName + " " + item.creator.lastName}</Text>}
+          {item.creator && <Text style={s.nameText}>{item.creator.firstName + " " + item.creator.lastName}</Text>}
           <Text style={s.timeText}>{this.convertTime(item.dateCreate)}</Text>
         </View>
         {isExpand ? this.renderExpandedCell() : null }
