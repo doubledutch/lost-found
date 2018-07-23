@@ -126,7 +126,7 @@ export default class HomeView extends Component {
   }
 
   resolveItem = (item) => {
-    fbc.database.public.userRef('items').child(item.id).update({isResolved: true})
+    fbc.database.public.usersRef(item.creator.id).child("items").child(item.id).update({isResolved: true})
   }
 
   selectItemType = (type) => {
@@ -140,7 +140,7 @@ export default class HomeView extends Component {
 
   saveItem = () => {
     const itemsRef = fbc.database.public.userRef('items')
-    let item = this.state.currentItem
+    let item = this.trimWhiteSpaceItem()
     item.dateCreate = new Date().getTime()
     const update = item.id
     ? itemsRef.child(this.state.currentItem.id).update(this.state.currentItem)
@@ -153,6 +153,19 @@ export default class HomeView extends Component {
         ,250)
     })
     .catch(error => this.setState({questionError: "Retry"}))
+  }
+
+  trimWhiteSpaceItem = () => {
+    let editingItem = this.state.currentItem
+    editingItem.description = editingItem.description.trim()
+    editingItem.lastLocation = editingItem.lastLocation.trim()
+    if (editingItem.type === "found") {
+      editingItem.currentLocation = editingItem.currentLocation.trim()
+      return editingItem
+    }
+    else {
+      return editingItem
+    }
   }
 
   reportItem = (item) => {
