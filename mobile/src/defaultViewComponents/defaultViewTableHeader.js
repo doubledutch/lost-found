@@ -43,7 +43,6 @@ export default class DefaultViewTableHeader extends Component {
 
   changeTableFilter = (type) => {
     this.props.changeTableFilter(type)
-    this.props.onRefresh()
   }
 
 }

@@ -91,7 +91,8 @@ export default class DefaultViewTable extends Component {
       return liveItems.concat(resolvedItems)
     }
     else { 
-      const userItems = newItems.filter(item => item.creator.id === client.currentUser.id)
+      const filteredItems = newItems.filter(item => item.creator.id === client.currentUser.id)
+      const userItems = filteredItems.slice()
       return userItems
     }
   }
