@@ -163,7 +163,7 @@ export default class HomeView extends Component {
       lastLocation: currentItem.lastLocation.trim(),
       currentLocation: currentItem.type === 'found' ? currentItem.currentLocation.trim() : undefined
     }
-      return editingItem
+    return editingItem
   }
 
   reportItem = (item) => {
