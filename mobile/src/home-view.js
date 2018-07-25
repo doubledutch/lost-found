@@ -156,16 +156,14 @@ export default class HomeView extends Component {
   }
 
   trimWhiteSpaceItem = () => {
-    let editingItem = this.state.currentItem
-    editingItem.description = editingItem.description.trim()
-    editingItem.lastLocation = editingItem.lastLocation.trim()
-    if (editingItem.type === "found") {
-      editingItem.currentLocation = editingItem.currentLocation.trim()
-      return editingItem
+    const {currentItem} = this.state
+    const editingItem = {
+      ...currentItem,
+      description: currentItem.description.trim(),
+      lastLocation: currentItem.lastLocation.trim(),
+      currentLocation: currentItem.type === 'found' ? currentItem.currentLocation.trim() : undefined
     }
-    else {
       return editingItem
-    }
   }
 
   reportItem = (item) => {
