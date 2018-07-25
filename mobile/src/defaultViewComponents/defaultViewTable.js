@@ -27,12 +27,12 @@ export default class DefaultViewTable extends Component {
     const { currentFilter, changeTableFilter, reportItem, resolveItem, isAdmin, editCell } = this.props
     const userData = this.verifyData(false)
     const data = this.verifyData(true)
-
     return (
       <View style={{flex: 1}}>
-        <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)}/>
+        <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)} onRefresh={this.onRefresh}/>
         {userData.length ? <View style={s.topListBox}><FlatList
           data={userData}
+          ref={(ref) => { this.topListRef = ref; }}
           renderItem={({item}) => {
             const reports = this.props.reports
             const isReported = ((reports && reports.find(report => report === item.id)) ? true : false)
@@ -44,6 +44,7 @@ export default class DefaultViewTable extends Component {
         {Object.values(this.props.items).length || data.length ? <View style={s.bottomListBox}><FlatList
           data={data}
           ListFooterComponent={<View style={s.tableFooter}></View>}
+          ref={(ref) => { this.bottomListRef = ref; }}
           renderItem={({item}) => {
             const reports = this.props.reports
             const isReported = ((reports && reports.find(report => report === item.id)) ? true : false)
@@ -54,6 +55,11 @@ export default class DefaultViewTable extends Component {
         /></View> : this.renderEmptyStateText()}
       </View>
     )
+  }
+
+  onRefresh = () => {
+    this.topListRef.scrollToOffset({x: 0, y: 0, animated: true})
+    this.bottomListRef.scrollToOffset({x: 0, y: 0, animated: true})
   }
 
   renderEmptyStateText = () => {
@@ -68,25 +74,20 @@ export default class DefaultViewTable extends Component {
 
   verifyData = (isBottomTable) => {
     let items = Object.values(this.props.items)
+    items.sort((a,b) => b.dateCreate - a.dateCreate)
     let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
     if (this.props.currentFilter !== "All") {
       newItems = newItems.filter(item => item.type === this.props.currentFilter.toLowerCase())
       items = items.filter(item => item.type === this.props.currentFilter.toLowerCase())
     }
-    newItems.sort(function (a,b){ 
-      return b.dateCreate - a.dateCreate
-    })
-    items.sort(function (a,b){ 
-      return b.dateCreate - a.dateCreate
-    })
     if (isBottomTable) {
       const liveItems = newItems.filter(item => item.creator.id !== client.currentUser.id)
       const resolvedItems = items.filter(item => item.isResolved)
       return liveItems.concat(resolvedItems)
     }
     else { 
-      const userItems = newItems.filter(item => item.creator.id === client.currentUser.id) 
-      return userItems
+      const filteredItems = newItems.filter(item => item.creator.id === client.currentUser.id)
+      return filteredItems
     }
   }
 

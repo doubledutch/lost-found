@@ -19,17 +19,17 @@ import ReactNative, { TouchableOpacity, Text, View } from 'react-native'
 
 export default class DefaultViewTableHeader extends Component {
   render() {
-    const { currentFilter, changeTableFilter} = this.props
-    const items = this.props.items.filter(item => item.isBlock !== true)
+    const { currentFilter, changeTableFilter } = this.props
+    const items = this.props.items.filter(item => item.isBlock !== true && item.isResolved !== true)
     return (
       <View style={s.container}>
-        <TouchableOpacity style={s.button} onPress={()=>changeTableFilter("All")}>
+        <TouchableOpacity style={s.button} onPress={()=>this.changeTableFilter("All")}>
           <Text style={[currentFilter === "All" ? s.buttonBoldText : s.buttonStandardText, s.buttonGray]}>All ({items.length})</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={s.button} onPress={()=>changeTableFilter("Lost")}>
+        <TouchableOpacity style={s.button} onPress={()=>this.changeTableFilter("Lost")}>
           <Text style={[currentFilter === "Lost" ? s.buttonBoldText : s.buttonStandardText, s.buttonRed]}>Lost ({this.returnFilteredItems(items, "lost").length})</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={s.button} onPress={()=>changeTableFilter("Found")}>
+        <TouchableOpacity style={s.button} onPress={()=>this.changeTableFilter("Found")}>
         <Text style={[currentFilter === "Found" ? s.buttonBoldText : s.buttonStandardText, s.buttonGreen]}>Found ({this.returnFilteredItems(items, "found").length})</Text>
         </TouchableOpacity>
       </View>
@@ -39,6 +39,10 @@ export default class DefaultViewTableHeader extends Component {
   returnFilteredItems = (items, type) => {
     const foundItems = items.filter(item => item.type === type)
     return foundItems
+  }
+
+  changeTableFilter = (type) => {
+    this.props.changeTableFilter(type)
   }
 
 }

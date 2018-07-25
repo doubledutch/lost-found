@@ -42,7 +42,7 @@ export default class SettingsContainer extends Component {
         </div>
         {this.state.isBoxExpanded ?  <div style={{marginBottom: 25}}><AttendeeSelector 
             client={this.props.client}
-            searchTitle="Select Admins"
+            searchTitle="Make Admin"
             selectedTitle="Current Admins"
             onSelected={this.props.onAdminSelected}
             onDeselected={this.props.onAdminDeselected}

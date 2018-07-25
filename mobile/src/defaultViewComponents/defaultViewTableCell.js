@@ -76,15 +76,18 @@ export default class DefaultViewTableCell extends Component {
       <View>
         { item.type === "found" && <Text style={s.foundText}>Found: {item.lastLocation}</Text> }
         <View style={{flexDirection: "row", marginTop: 10}}>
-          <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation: "Current Location: " + item.currentLocation}</Text>
-          <View style={{flex:1}}/>
-          { item.creator.id !== client.currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
+          <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation : "Current Location: " + this.renderCurrentLocation(item.currentLocation)}</Text>
+          { item.creator.id === client.currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
             <Text style={s.reportText}>{isReported ? "Reported" : "Report"}</Text>
           </TouchableOpacity> }
         </View>
         {this.renderCellButtons()}
       </View>
     )
+  }
+
+  renderCurrentLocation = (location) => {
+    return location === "lostfound" ? "At Lost & Found" : "With person"
   }
 
   renderCellButtons = () => {
@@ -146,7 +149,7 @@ const s = ReactNative.StyleSheet.create({
     backgroundColor: "#E98686",
     width: 3,
   },
-  leftTabRed: {
+  leftTabGray: {
     backgroundColor: "gray",
     width: 3,
   },
@@ -157,7 +160,8 @@ const s = ReactNative.StyleSheet.create({
   },
   currentLocalText: {
     fontSize: 14,
-    color: "#878787"
+    color: "#878787",
+    flex: 1
   },
   buttonBox: {
     height: 45, 
