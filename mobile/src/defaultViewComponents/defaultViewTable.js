@@ -27,12 +27,6 @@ export default class DefaultViewTable extends Component {
     const { currentFilter, changeTableFilter, reportItem, resolveItem, isAdmin, editCell } = this.props
     const userData = this.verifyData(false)
     const data = this.verifyData(true)
-    userData.sort(function (a,b){ 
-      return b.dateCreate - a.dateCreate
-    })
-    data.sort(function (a,b){ 
-      return b.dateCreate - a.dateCreate
-    })
     return (
       <View style={{flex: 1}}>
         <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)} onRefresh={this.onRefresh}/>
@@ -80,6 +74,9 @@ export default class DefaultViewTable extends Component {
 
   verifyData = (isBottomTable) => {
     let items = Object.values(this.props.items)
+    items.sort(function (a,b){ 
+      return b.dateCreate - a.dateCreate
+    })
     let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
     if (this.props.currentFilter !== "All") {
       newItems = newItems.filter(item => item.type === this.props.currentFilter.toLowerCase())
