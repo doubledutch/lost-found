@@ -47,10 +47,6 @@ html, body, select {
   flex-direction: row wrap;
 }
 
-.avatar {
-  width: 40px;
-}
-
 .localInputButton {
   width: 49%;
   margin-right: 50px;
@@ -75,14 +71,11 @@ button.displayButton:focus, button.displayButton:active {
 
 ul {
   width: 100%;
-  overflow-y: auto;
-  list-style-type: none;
   border: 1px solid gray;
   -webkit-margin-before: 0;
   -webkit-margin-after: 0;
   -webkit-padding-start: 0;
-  overflow-x: auto;
-  white-space: nowrap;
+  overflow: auto;
   margin: 0 0 1em 0;
 }
 
@@ -109,13 +102,11 @@ ul {
   flex: 1;
   margin: 0px;
   padding: 0px;
-  list-style-type: none;
-  overflow-x:hidden; 
-  overflow-y:auto;
   border-style: solid;
   border-color:#DEDEDE;
   border-width: 1px;
   height: 500px;
+  width: 500px;
   background-color: #EFEFEF;
 }
 
@@ -130,13 +121,11 @@ pWithMargin {
   flex: 1;
   margin: 0px;
   padding: 0px;
-  list-style-type: none;
-  overflow-x:hidden; 
-  overflow-y:auto;
   border-style: solid;
   border-color:#DEDEDE;
   border-width: 1px;
   height: 500px;
+  width: 500px;
   background-color: #EFEFEF;
 }
 
@@ -161,13 +150,16 @@ pWithMargin {
 .cellBox {
   box-sizing: border-box;
   border-bottom: 1px;
-  min-height: 86px;
-  display: flex;
-  flex: 1;
-  flex-flow: nowrap;
   border-bottom-style: solid;
   border-bottom-color: #DEDEDE;
   background-color: white;
+  width: 500px;
+}
+
+.cellBoxDiv {
+  flex: 1; 
+  flex-flow: nowrap;
+  display: flex;
 }
 
  .cellContainer {
@@ -190,9 +182,9 @@ pWithMargin {
 
 .cellBoxLeft{
   flex: 1;
+  align-items: center;
   margin-top: 15px;
   margin-bottom: 10px;
-  padding-left: 20px;
   padding-right: 0px;
   margin-right: 0px;
 }
@@ -222,6 +214,7 @@ pWithMargin {
 
 .combinedText{
   display: flex;
+  flex: 1;
   flex-flow: nowrap;
   align-items: center;
 }
@@ -257,6 +250,7 @@ pWithMargin {
   margin-Top: 8px;
   margin-Bottom: 5px;
   margin-right: 5px;
+  width: 370px;
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-all;
@@ -291,13 +285,37 @@ pWithMargin {
 }
 
 .nameText{
+  width: 108px;
   font-size: 14px;
   margin-top: 0px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
   margin-bottom: 5px;
   padding-right: 10px;
   color: #8A8A8A;
   font-family: -apple-system, BlinkMacSystemFont, 'Fira Sans', 'Open Sans', 'Helvetica Neue', sans-serif;
 }
+
+.nameTextExt{
+  width: 200px;
+  font-size: 14px;
+  margin-top: 0px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  margin-bottom: 5px;
+  padding-right: 10px;
+  color: #8A8A8A;
+  font-family: -apple-system, BlinkMacSystemFont, 'Fira Sans', 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
 
 .button1{
   height: 30px;
@@ -307,29 +325,8 @@ pWithMargin {
   border-radius: 50%;
 }
 
-ul.categoryList {
-  border: 1px solid #E3ECF8;
-  border-radius: 5px;
-  background-color: #FCFCFC;
-}
-
-ul.qrCodeList {
-  height: 250px;
-  border: 1px solid #E3ECF8;
-  border-radius: 5px;
-  background-color: #FCFCFC;
-}
-
-ul.userList {
-  height: 500px;
-  border: 1px solid #E3ECF8;
-  border-radius: 5px;
-  background-color: #FCFCFC;
-  overflow-x: auto;
-}
 
 ul li {
-  height: 39px;
   padding: 0px 3px 0px 20px;
   flex: 1;
   display: flex;
@@ -339,31 +336,6 @@ ul li {
   border-bottom: 1px solid #E3ECF8;
   border-radius: 5px;
 }
-
-ul li .name {
-  margin: 0px;
-  padding: 5px;
-  margin-top: 2px;
-  font-size: 14px;
-}
-
-textarea {
-  font-size: 14px;
-  color: #4A4A4A;
-  height: 100px;	
-  width: 100%;
-  border: 1px solid #AAB9CA;	
-  border-radius: 4px;	
-  background-color: #FFFFFF;	
-  margin-top: 5px;
-  padding: 12px 15px;
-  box-sizing: border-box;
-}
-
-.catScans {
-  padding: 0 0.7em;
-}
-
 
 .field {
   margin: 0.7em 0;
@@ -379,44 +351,6 @@ select {
   color: #4A4A4A;
 }
 
-.catNumbText {
-  width: 30px;
-  border: none;
-  margin-left: 8px;
-  border-bottom: 1px solid #AAB9CA;
-  color: #4A4A4A;
-}
-
-.catNameText {
-  width: 190px;
-  border: none;
-  border-bottom: 1px solid #AAB9CA;
-  color: #4A4A4A;
-}
-
-.titleBar {
-  display: flex;
-  padding: 0px 20px;
-  margin: 10px 0px 5px 0px;
-  flex-direction: row;
-}
-
-.titleBar p {
-  width: 200px;
-  font-weight: 600;
-  font-size: 12px;
-  padding: 0;
-  margin: 0px 5px 0 0;
-}
-
 .titleBox {
   margin-bottom: 40px;
-}
-.payload {
-  color: #888;
-  font-style: italic;
-}
-
-.is-done {
-  background-color: #58dd63;
 }

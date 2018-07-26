@@ -141,7 +141,6 @@ export default class HomeView extends Component {
   saveItem = () => {
     const itemsRef = fbc.database.public.userRef('items')
     let item = this.trimWhiteSpaceItem()
-    item.dateCreate = new Date().getTime()
     const update = item.id
     ? itemsRef.child(this.state.currentItem.id).update(this.state.currentItem)
     : itemsRef.push(this.state.currentItem)
@@ -161,6 +160,7 @@ export default class HomeView extends Component {
       ...currentItem,
       description: currentItem.description.trim(),
       lastLocation: currentItem.lastLocation.trim(),
+      dateCreate: new Date().getTime(),
       currentLocation: currentItem.type === 'found' ? currentItem.currentLocation.trim() : undefined
     }
     return editingItem

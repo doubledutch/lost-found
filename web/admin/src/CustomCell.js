@@ -34,11 +34,11 @@ export default class CustomCell extends Component {
   renderCell = () => {  
     const { currentKey, difference, report, content, singleReport, markBlock } = this.props
       return(
-        <div className='cellBox'>
+        <li className='cellBox' key={currentKey}>
           <div className='cellBoxLeft'>
-            <div className="combinedText">
-              {content.type==="lost" ? <p className='introTextRed'>LOST: </p> : <p className='introTextGreen'>FOUND: </p>}
-              <p className="questionText">"{content.description}"</p>
+            <div className="questionText">
+            {content.type==="lost" ? <span className='introTextRed'>LOST: </span> : <span className='introTextGreen'>FOUND: </span>}
+            {content.description}
             </div>
             <div className="cellBoxTop">
               <p className="nameText">
@@ -55,7 +55,7 @@ export default class CustomCell extends Component {
             currentUser={content.userId}
             isShowingApproved={this.props.isShowingApproved}
           />
-        </div>
+        </li>
       )
   }
 
@@ -67,7 +67,7 @@ export default class CustomCell extends Component {
       const name = (user ? user.firstName + " " + user.lastName : "")
       users = users + (i > 0 ? ", " : " ") + name
     })
-    return <p className="nameText">Flagged by: {users}</p>
+    return <p className="nameTextExt">Flagged by: {users}</p>
   }
 
   showButton = (currentKey) => {

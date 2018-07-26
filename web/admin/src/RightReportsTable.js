@@ -42,7 +42,6 @@ export default class RightReportsTable extends Component {
           
           if (allReports.length) {
             return (
-              <li className='cellBox' key={id}>
                 <CustomCell
                   currentKey={id}
                   returnQuestion={returnItem}
@@ -56,7 +55,6 @@ export default class RightReportsTable extends Component {
                   allReportsFlagged = {allReports}
                   isShowingApproved = {this.state.isShowingApproved}
                 />
-              </li>
             )
           }
         }) }

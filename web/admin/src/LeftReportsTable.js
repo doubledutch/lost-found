@@ -40,7 +40,6 @@ export default class LeftReportsTable extends Component {
           const allReportsFlagged = Object.values(itemAndReport.reports).filter(item => item.isBlock === false && item.isApproved === false)
           if (allReportsFlagged.length) {
             return (
-              <li className='cellBox' key={id}>
                 <CustomCell
                   currentKey={id}
                   returnQuestion={returnItem}
@@ -53,7 +52,6 @@ export default class LeftReportsTable extends Component {
                   singleReport = {allReportsFlagged[0]}
                   allReportsFlagged = {allReportsFlagged}
                 />
-              </li>
             )
           }
         }) }
