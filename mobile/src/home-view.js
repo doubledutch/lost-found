@@ -141,10 +141,9 @@ export default class HomeView extends Component {
   saveItem = () => {
     const itemsRef = fbc.database.public.userRef('items')
     let item = this.trimWhiteSpaceItem()
-    item.dateCreate = new Date().getTime()
     const update = item.id
-    ? itemsRef.child(this.state.currentItem.id).update(this.state.currentItem)
-    : itemsRef.push(this.state.currentItem)
+    ? itemsRef.child(this.state.currentItem.id).update(item)
+    : itemsRef.push(item)
     update.then(() => {
       setTimeout(() => {
         this.changeView("home")
@@ -156,12 +155,13 @@ export default class HomeView extends Component {
   }
 
   trimWhiteSpaceItem = () => {
-    const {currentItem} = this.state
+    const { currentItem } = this.state
     const editingItem = {
       ...currentItem,
       description: currentItem.description.trim(),
       lastLocation: currentItem.lastLocation.trim(),
-      currentLocation: currentItem.type === 'found' ? currentItem.currentLocation.trim() : undefined
+      dateCreate: new Date().getTime(),
+      currentLocation: currentItem.type === 'found' ? currentItem.currentLocation.trim() : ""
     }
     return editingItem
   }
@@ -231,7 +231,8 @@ const newFoundItem = {
   currentLocation: "",
   creator: client.currentUser,
   isResolved: false,
-  isBlock: false
+  isBlock: false,
+  dateCreate: new Date().getTime()
 }
 
 const newLostItem = {
@@ -240,7 +241,8 @@ const newLostItem = {
   lastLocation: "",
   isResolved: false,
   isBlock: false,
-  creator: client.currentUser
+  creator: client.currentUser,
+  dateCreate: new Date().getTime()
 }
 
 const s = ReactNative.StyleSheet.create({

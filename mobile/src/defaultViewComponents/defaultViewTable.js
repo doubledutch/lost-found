@@ -27,31 +27,26 @@ export default class DefaultViewTable extends Component {
     const { currentFilter, changeTableFilter, reportItem, resolveItem, isAdmin, editCell } = this.props
     const userData = this.verifyData(false)
     const data = this.verifyData(true)
+    const renderItem = ({item}) => {
+      const reports = this.props.reports
+      const isReported = ((reports && reports.find(report => report === item.id)) ? true : false)
+      return (
+        <DefaultViewTableCell key={item.id} editCell={editCell} isAdmin={isAdmin} item={item} reportItem={reportItem} isReported={isReported} resolveItem={resolveItem}/>
+      )
+    }
     return (
       <View style={{flex: 1}}>
         <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)} onRefresh={this.onRefresh}/>
-        {userData.length ? <View style={s.topListBox}><FlatList
+        {userData.length > 2 ? <View style={s.topListBox}><FlatList
           data={userData}
           ref={(ref) => { this.topListRef = ref; }}
-          renderItem={({item}) => {
-            const reports = this.props.reports
-            const isReported = ((reports && reports.find(report => report === item.id)) ? true : false)
-            return (
-              <DefaultViewTableCell editCell={editCell} isAdmin={isAdmin} item={item} reportItem={reportItem} isReported={isReported} resolveItem={resolveItem}/>
-            )
-          }} 
-        /></View> : null }
+          renderItem={renderItem} 
+        /></View> : userData.map(item => renderItem({item})) }
         {Object.values(this.props.items).length || data.length ? <View style={s.bottomListBox}><FlatList
           data={data}
           ListFooterComponent={<View style={s.tableFooter}></View>}
           ref={(ref) => { this.bottomListRef = ref; }}
-          renderItem={({item}) => {
-            const reports = this.props.reports
-            const isReported = ((reports && reports.find(report => report === item.id)) ? true : false)
-            return (
-              <DefaultViewTableCell editCell={editCell} isAdmin={isAdmin} item={item} reportItem={reportItem} isReported={isReported} resolveItem={resolveItem}/>
-            )
-          }}
+          renderItem={renderItem}
         /></View> : this.renderEmptyStateText()}
       </View>
     )

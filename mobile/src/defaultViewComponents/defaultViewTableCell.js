@@ -77,7 +77,7 @@ export default class DefaultViewTableCell extends Component {
         { item.type === "found" && <Text style={s.foundText}>Found: {item.lastLocation}</Text> }
         <View style={{flexDirection: "row", marginTop: 10}}>
           <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation : "Current Location: " + this.renderCurrentLocation(item.currentLocation)}</Text>
-          { item.creator.id === client.currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
+          { item.creator.id !== client.currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
             <Text style={s.reportText}>{isReported ? "Reported" : "Report"}</Text>
           </TouchableOpacity> }
         </View>
@@ -130,7 +130,7 @@ const s = ReactNative.StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: "center",
     flexDirection: "column",
-    flex: 1
+    flex: 1,
   },
   containerResolved: {
     backgroundColor: "white",
@@ -164,12 +164,10 @@ const s = ReactNative.StyleSheet.create({
     flex: 1
   },
   buttonBox: {
-    height: 45, 
     alignItems:"center", 
     justifyContent: "center", 
-    flex: 1,
     flexDirection: "row",
-    marginTop: 10
+    marginTop: 10,
   },
   largeButton: {
     flex: 1,
@@ -178,7 +176,7 @@ const s = ReactNative.StyleSheet.create({
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 10
+    height: 45
   },
   resolveButton: {
     marginLeft: 10
