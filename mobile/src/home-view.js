@@ -155,14 +155,11 @@ export default class HomeView extends Component {
   }
 
   trimWhiteSpaceItem = () => {
-    const {currentItem} = this.state
-    const editingItem = {
-      ...currentItem,
-      description: currentItem.description.trim(),
-      lastLocation: currentItem.lastLocation.trim(),
-      dateCreate: new Date().getTime(),
-      currentLocation: currentItem.type === 'found' ? currentItem.currentLocation.trim() : undefined
-    }
+    const { currentItem } = this.state
+    let editingItem = currentItem
+    editingItem.description = editingItem.description.trim()
+    editingItem.lastLocation = editingItem.lastLocation.trim()
+    editingItem.dateCreate = new Date().getTime()
     return editingItem
   }
 
@@ -231,7 +228,8 @@ const newFoundItem = {
   currentLocation: "",
   creator: client.currentUser,
   isResolved: false,
-  isBlock: false
+  isBlock: false,
+  dateCreate: new Date().getTime()
 }
 
 const newLostItem = {
@@ -240,7 +238,8 @@ const newLostItem = {
   lastLocation: "",
   isResolved: false,
   isBlock: false,
-  creator: client.currentUser
+  creator: client.currentUser,
+  dateCreate: new Date().getTime()
 }
 
 const s = ReactNative.StyleSheet.create({
