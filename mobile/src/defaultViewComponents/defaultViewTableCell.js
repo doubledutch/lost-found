@@ -130,7 +130,7 @@ const s = ReactNative.StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: "center",
     flexDirection: "column",
-    flex: 1
+    flex: 1,
   },
   containerResolved: {
     backgroundColor: "white",
@@ -164,12 +164,10 @@ const s = ReactNative.StyleSheet.create({
     flex: 1
   },
   buttonBox: {
-    height: 45, 
     alignItems:"center", 
     justifyContent: "center", 
-    flex: 1,
     flexDirection: "row",
-    marginTop: 10
+    marginTop: 10,
   },
   largeButton: {
     flex: 1,
@@ -178,7 +176,7 @@ const s = ReactNative.StyleSheet.create({
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 10
+    height: 45
   },
   resolveButton: {
     marginLeft: 10

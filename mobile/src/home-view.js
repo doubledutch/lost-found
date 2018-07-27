@@ -142,8 +142,8 @@ export default class HomeView extends Component {
     const itemsRef = fbc.database.public.userRef('items')
     let item = this.trimWhiteSpaceItem()
     const update = item.id
-    ? itemsRef.child(this.state.currentItem.id).update(this.state.currentItem)
-    : itemsRef.push(this.state.currentItem)
+    ? itemsRef.child(this.state.currentItem.id).update(item)
+    : itemsRef.push(item)
     update.then(() => {
       setTimeout(() => {
         this.changeView("home")
@@ -156,10 +156,13 @@ export default class HomeView extends Component {
 
   trimWhiteSpaceItem = () => {
     const { currentItem } = this.state
-    let editingItem = currentItem
-    editingItem.description = editingItem.description.trim()
-    editingItem.lastLocation = editingItem.lastLocation.trim()
-    editingItem.dateCreate = new Date().getTime()
+    const editingItem = {
+      ...currentItem,
+      description: currentItem.description.trim(),
+      lastLocation: currentItem.lastLocation.trim(),
+      dateCreate: new Date().getTime(),
+      currentLocation: currentItem.type === 'found' ? currentItem.currentLocation.trim() : ""
+    }
     return editingItem
   }
 
