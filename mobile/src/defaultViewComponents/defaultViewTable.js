@@ -68,6 +68,7 @@ export default class DefaultViewTable extends Component {
   }
 
   verifyData = (isBottomTable) => {
+    const sortByDate = (a,b) => b.dateCreate - a.dateCreate
     let items = Object.values(this.props.items)
     let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
     if (this.props.currentFilter !== "All") {
@@ -75,15 +76,18 @@ export default class DefaultViewTable extends Component {
       items = items.filter(item => item.type === this.props.currentFilter.toLowerCase())
     }
     if (isBottomTable) {
-      const liveItems = newItems.filter(item => item.creator.id !== client.currentUser.id)
-      liveItems = liveItems.sort((a,b) => b.dateCreate - a.dateCreate)
-      const resolvedItems = items.filter(item => item.isResolved)
-      resolvedItems = resolvedItems.sort((a,b) => b.dateCreate - a.dateCreate)
+      const liveItems = newItems
+      .filter(item => item.creator.id !== client.currentUser.id)
+      .sort(sortByDate)
+      const resolvedItems = items
+      .filter(item => item.isResolved)
+      .sort(sortByDate)
       return liveItems.concat(resolvedItems)
     }
     else { 
-      const filteredItems = newItems.filter(item => item.creator.id === client.currentUser.id)
-      filteredItems = filteredItems.sort((a,b) => b.dateCreate - a.dateCreate)
+      const filteredItems = newItems
+      .filter(item => item.creator.id === client.currentUser.id)
+      .sort(sortByDate)
       return filteredItems
     }
   }
