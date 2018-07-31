@@ -68,20 +68,26 @@ export default class DefaultViewTable extends Component {
   }
 
   verifyData = (isBottomTable) => {
+    const sortByDate = (a,b) => b.dateCreate - a.dateCreate
     let items = Object.values(this.props.items)
-    items.sort((a,b) => b.dateCreate - a.dateCreate)
     let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
     if (this.props.currentFilter !== "All") {
       newItems = newItems.filter(item => item.type === this.props.currentFilter.toLowerCase())
       items = items.filter(item => item.type === this.props.currentFilter.toLowerCase())
     }
     if (isBottomTable) {
-      const liveItems = newItems.filter(item => item.creator.id !== client.currentUser.id)
-      const resolvedItems = items.filter(item => item.isResolved)
+      const liveItems = newItems
+      .filter(item => item.creator.id !== client.currentUser.id)
+      .sort(sortByDate)
+      const resolvedItems = items
+      .filter(item => item.isResolved)
+      .sort(sortByDate)
       return liveItems.concat(resolvedItems)
     }
     else { 
-      const filteredItems = newItems.filter(item => item.creator.id === client.currentUser.id)
+      const filteredItems = newItems
+      .filter(item => item.creator.id === client.currentUser.id)
+      .sort(sortByDate)
       return filteredItems
     }
   }
