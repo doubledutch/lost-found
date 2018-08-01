@@ -28,7 +28,7 @@ export default class LeftReportsTable extends Component {
 
   render() {
     const { totalReported, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, unBlock } = this.props
-
+    
     return (
       <div className="questionBox">
       <div className="headerTop">
