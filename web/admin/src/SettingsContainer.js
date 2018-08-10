@@ -60,7 +60,7 @@ renderInputBox = () => {
       <div className="sectionContainer">
         <div className="containerRow">
           <h2>Settings</h2>
-          <button className="displayButton" onClick={() => this.handleExpandBoxChange(!this.state.isBoxExpanded)}>{(this.state.isBoxExpanded ? "Hide Section" : "View Section")}</button>
+          <button className="displayButton" onClick={() => this.handleExpandBoxChange(!this.state.isBoxExpanded)}>{(this.state.isBoxExpanded ? "Hide Section" : "Show Section")}</button>
         </div>
         {this.state.isBoxExpanded ? this.renderInputBox() : null}
       </div>
