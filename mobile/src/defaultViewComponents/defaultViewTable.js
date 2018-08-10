@@ -42,12 +42,14 @@ export default class DefaultViewTable extends Component {
           ref={(ref) => { this.topListRef = ref; }}
           renderItem={renderItem} 
         /></View> : userData.map(item => renderItem({item})) }
-        {Object.values(this.props.items).length || data.length ? <View style={s.bottomListBox}><FlatList
+        {data.length > 0 && <View style={s.bottomListBox}><FlatList
           data={data}
           ListFooterComponent={<View style={s.tableFooter}></View>}
           ref={(ref) => { this.bottomListRef = ref; }}
           renderItem={renderItem}
-        /></View> : this.renderEmptyStateText()}
+        />
+        </View>}
+        {Object.values(this.props.items).length === 0 && this.renderEmptyStateText()}
       </View>
     )
   }
