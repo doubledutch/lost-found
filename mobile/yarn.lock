@@ -16,9 +16,10 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@doubledutch/base-client@^3.0.6":
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/@doubledutch/base-client/-/base-client-3.0.6.tgz#0be07225e7c1aca1d663264159af2644ea70d7be"
+"@doubledutch/base-client@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@doubledutch/base-client/-/base-client-4.2.0.tgz#3a9c96cd7f3d006692c78c39f2e9da21bf3cffd0"
+  integrity sha512-KU49gdwkA97axemiNojJFiGm8zxRVk0wHuimn8zx0xfGKH0wUIpoGEJhdcBCeflc21wAtPPheVZrbjtBLuHWiQ==
 
 "@doubledutch/firebase-connector@^3.3.1":
   version "3.4.3"
@@ -28,13 +29,15 @@
     firebase "^4.10.0"
     jest "^22.4.3"
 
-"@doubledutch/rn-client@^3.1.0":
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/@doubledutch/rn-client/-/rn-client-3.2.1.tgz#7366395a44be87d7047cb88b5de23b846b78370a"
+"@doubledutch/rn-client@^4.2.3":
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/@doubledutch/rn-client/-/rn-client-4.2.3.tgz#5a8e81d58409d619ddedd237c6db6610b0e423cf"
+  integrity sha512-1RvJbeTBeN/Z9NUUU16U9GzDtqKhX6VGla13EQcgTcHWCibvEQ5ibOf1YuHRk5/edMPm3LApXqLm6jI+WZrhPg==
   dependencies:
-    "@doubledutch/base-client" "^3.0.6"
+    "@doubledutch/base-client" "^4.2.0"
     react "16.0.0-alpha.12"
     react-native "0.46.4"
+    react-native-fetch-blob "0.10.8"
 
 "@firebase/app-types@0.2.0":
   version "0.2.0"
