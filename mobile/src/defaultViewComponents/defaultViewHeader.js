@@ -15,20 +15,10 @@
  */
 
 import React, { Component } from 'react'
-import ReactNative, {
-  KeyboardAvoidingView, Platform, TouchableOpacity, Text, TextInput, View, ScrollView
-} from 'react-native'
-import client, { Avatar } from '@doubledutch/rn-client'
-
+import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
 
 export default class DefaultViewHeader extends Component {
-  constructor() {
-    super()
-    this.state = { 
-      currentPage : "Home"
-    }
-
-  }
+  state = { currentPage : "Home" }
 
   render() {
     return (
@@ -39,11 +29,9 @@ export default class DefaultViewHeader extends Component {
       </View>
     )
   }
-
-
 }
 
-const s = ReactNative.StyleSheet.create({
+const s = StyleSheet.create({
   button:{
     height: 60, 
     marginTop: 10, 
