@@ -15,19 +15,13 @@
  */
 
 import React, { Component } from 'react'
-import ReactNative, {
-  Platform, TouchableOpacity, Text, View,
-} from 'react-native'
+import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
 import client, { Avatar } from '@doubledutch/rn-client'
 import Chevron from './chevron'
+import BindingContextTypes from '../BindingContextTypes';
 
 export default class DefaultViewTableCell extends Component {
-  constructor() {
-    super()
-    this.state = { 
-      isExpand: false
-    }
-  }
+  state = { isExpand: false }
 
   componentWillReceiveProps(newProps) {
     if (newProps.item !== this.props.item) {
@@ -45,8 +39,6 @@ export default class DefaultViewTableCell extends Component {
       </View>
     )
   }
-
-
 
   renderStandardCell = () => {
     const { isExpand } = this.state
@@ -71,13 +63,14 @@ export default class DefaultViewTableCell extends Component {
   }
 
   renderExpandedCell = () => {
+    const { currentUser } = this.context
     const { item, reportItem, isReported } = this.props
     return (
       <View>
         { item.type === "found" && <Text style={s.foundText}>Found: {item.lastLocation}</Text> }
         <View style={{flexDirection: "row", marginTop: 10}}>
           <Text style={s.currentLocalText}>{item.type === "lost" ? "Last Seen: " + item.lastLocation : "Current Location: " + this.renderCurrentLocation(item.currentLocation)}</Text>
-          { item.creator.id !== client.currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
+          { item.creator.id !== currentUser.id && <TouchableOpacity onPress={()=>reportItem(item)}>
             <Text style={s.reportText}>{isReported ? "Reported" : "Report"}</Text>
           </TouchableOpacity> }
         </View>
@@ -91,18 +84,19 @@ export default class DefaultViewTableCell extends Component {
   }
 
   renderCellButtons = () => {
+    const {currentUser, primaryBorder, primaryColor} = this.context
     return (
       <View style={s.buttonBox}>
-        { this.props.item.creator.id !== client.currentUser.id 
-      ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={s.largeButton}>
-          <Text style={s.largeButtonText}>Message</Text>
+        { this.props.item.creator.id !== currentUser.id 
+      ? <TouchableOpacity onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)} style={[s.largeButton, primaryBorder]}>
+          <Text style={primaryColor}>Message</Text>
         </TouchableOpacity> 
-      : <TouchableOpacity onPress={() => this.props.editCell(this.props.item)} style={s.largeButton}>
-          <Text style={s.largeButtonText}>Edit</Text>
+      : <TouchableOpacity onPress={() => this.props.editCell(this.props.item)} style={[s.largeButton, primaryBorder]}>
+          <Text style={primaryColor}>Edit</Text>
         </TouchableOpacity>}
-        { (this.props.isAdmin || this.props.item.creator.id === client.currentUser.id) &&
-        <TouchableOpacity style={[s.largeButton, s.resolveButton]} onPress={() => this.props.resolveItem(this.props.item)}>
-          <Text style={s.largeButtonText}>Resolve</Text>
+        { (this.props.isAdmin || this.props.item.creator.id === currentUser.id) &&
+        <TouchableOpacity style={[s.largeButton, primaryBorder, s.resolveButton]} onPress={() => this.props.resolveItem(this.props.item)}>
+          <Text style={primaryColor}>Resolve</Text>
         </TouchableOpacity>
         }
       </View>
@@ -120,10 +114,11 @@ export default class DefaultViewTableCell extends Component {
     const currentState = this.state.isExpand
     this.setState({isExpand: !currentState})
   }
-
 }
 
-const s = ReactNative.StyleSheet.create({
+DefaultViewTableCell.contextTypes = BindingContextTypes
+
+const s = StyleSheet.create({
   container: {
     backgroundColor: "white",
     paddingVertical: 10,
@@ -171,7 +166,6 @@ const s = ReactNative.StyleSheet.create({
   },
   largeButton: {
     flex: 1,
-    borderColor: client.primaryColor,
     borderRadius:5,
     borderWidth: 1,
     alignItems: "center",
@@ -180,9 +174,6 @@ const s = ReactNative.StyleSheet.create({
   },
   resolveButton: {
     marginLeft: 10
-  },
-  largeButtonText: {
-    color: client.primaryColor
   },
   nameText : {
     fontSize: 14,

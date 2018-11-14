@@ -15,9 +15,8 @@
  */
 
 import React, { Component } from 'react'
-import ReactNative, { Text, View } from 'react-native'
-import client, { } from '@doubledutch/rn-client'
-
+import { StyleSheet, Text, View } from 'react-native'
+import BindingContextTypes from '../BindingContextTypes'
 
 export default class DefaultViewTopBar extends Component {
   render() {
@@ -29,41 +28,30 @@ export default class DefaultViewTopBar extends Component {
   }
 
   renderBar = () => {
+    const { lightPrimaryBackground, primaryBorder, primaryColor } = this.context
+    debugger
     return (
-      <View style={s.button}>
-        <Text style={s.buttonText}>Official Lost & Found Location</Text>
-        <Text style={s.buttonDesText}>{this.props.lostFoundLocation.location}</Text>
+      <View style={[s.button, lightPrimaryBackground, primaryBorder]}>
+        <Text style={[s.buttonText, primaryColor]}>Official Lost &amp; Found Location</Text>
+        <Text style={[s.buttonDesText, primaryColor]}>{this.props.lostFoundLocation.location}</Text>
       </View>
     )
   }
-
-
 }
 
-function hexToRgb(hex) {
-  var hex = hex.slice(1)
-  var bigint = parseInt(hex, 16);
-  var r = (bigint >> 16) & 255;
-  var g = (bigint >> 8) & 255;
-  var b = bigint & 255;
-  return r + "," + g + "," + b;
-}
+DefaultViewTopBar.contextTypes = BindingContextTypes
 
-const s = ReactNative.StyleSheet.create({
+const s = StyleSheet.create({
   button:{
     padding: 20,
-    backgroundColor: 'rgba('+ hexToRgb(client.primaryColor) + ',0.1)',
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: client.primaryColor
   },
   buttonText:{
     fontSize: 18,
     fontWeight: "bold",
-    color: client.primaryColor
   },
   buttonDesText:{
-    color: client.primaryColor,
     fontSize: 18,
   }
 })

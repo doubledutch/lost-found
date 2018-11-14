@@ -1,12 +1,25 @@
+/*
+ * Copyright 2018 DoubleDutch, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict'
 import React, { Component } from 'react'
-import ReactNative, {
-  Platform, TouchableOpacity, Text, TextInput, View, ScrollView, FlatList, Modal, Image
-} from 'react-native'
-import client, { Color } from '@doubledutch/rn-client'
+import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import BindingContextTypes from '../BindingContextTypes';
 
 export default class StageThreeModal extends Component {
-
   render() {
     return (
       <View>
@@ -17,13 +30,14 @@ export default class StageThreeModal extends Component {
   }
 
   renderButtons = () => {
+    const {desaturatedPrimaryBackground, primaryBackground, primaryBorder, primaryColor} = this.context
     return (
       <View style={s.bottomButtons}>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.topicsButton} onPress={this.props.backStage}><Text style={s.topicsButtonText}>Previous</Text></TouchableOpacity>
+          <TouchableOpacity style={[s.topicsButton, primaryBorder]} onPress={this.props.backStage}><Text style={[s.topicsButtonText, primaryColor]}>Previous</Text></TouchableOpacity>
         </View>
         <View style={{flex:1}}>
-          <TouchableOpacity style={this.isNextEnabled() ? s.sendButton : s.sendButtonDisabled} disabled={!this.isNextEnabled()} onPress={this.props.saveItem}><Text style={s.sendButtonText}>Submit</Text></TouchableOpacity>
+          <TouchableOpacity style={this.isNextEnabled() ? [s.sendButton, primaryBackground] : [s.sendButtonDisabled, desaturatedPrimaryBackground]} disabled={!this.isNextEnabled()} onPress={this.props.saveItem}><Text style={s.sendButtonText}>Submit</Text></TouchableOpacity>
         </View>
       </View>
     )
@@ -38,46 +52,43 @@ export default class StageThreeModal extends Component {
         <Text style={{fontSize: 18, color: "#4A4A4A", padding: 10, fontWeight: "bold"}}>Where is the item now?</Text>
         <View style={{flexDirection: "row"}}>
           <TouchableOpacity onPress={() => this.props.updateItem("currentLocation", "lostfound")} style={{padding: 10}}>
-            {RadioButton(currentItem, "lostfound")}
+            {this.radioButton(currentItem, "lostfound")}
           </TouchableOpacity>
           <Text style={{fontSize: 14, color: "#4A4A4A", padding: 10, marginRight: 20, marginTop: 5, fontWeight: "bold"}}>At Lost & Found</Text>
           <TouchableOpacity onPress={() => this.props.updateItem("currentLocation", "person")} style={{padding: 10}}>
-            {RadioButton(currentItem, "person")}
+            {this.radioButton(currentItem, "person")}
           </TouchableOpacity>
           <Text style={{fontSize: 14, color: "#4A4A4A", padding: 10, marginTop: 5, fontWeight: "bold"}}>With me</Text>
         </View>
       </View>
     )
   }
+
+  radioButton = (item, status) => (
+    <View style={[this.context.primaryBorder, {
+      height: 24,
+      width: 24,
+      borderRadius: 12,
+      borderWidth: 2,
+      alignItems: 'center',
+      justifyContent: 'center',
+    }]}>
+      {
+        (item.currentLocation === status) ?
+          <View style={[this.context.primaryBackground, {
+            height: 12,
+            width: 12,
+            borderRadius: 6,
+          }]}/>
+          : null
+      }
+    </View>
+  )  
 }
 
-function RadioButton(item, status) {
-  return (
-      <View style={[{
-        height: 24,
-        width: 24,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: client.primaryColor,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }]}>
-        {
-          (item.currentLocation === status) ?
-            <View style={{
-              height: 12,
-              width: 12,
-              borderRadius: 6,
-              backgroundColor: client.primaryColor,
-            }}/>
-            : null
-        }
-      </View>
-  );
-}
+StageThreeModal.contextTypes = BindingContextTypes
 
-
-const s = ReactNative.StyleSheet.create({
+const s = StyleSheet.create({
   bottomButtons: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -93,7 +104,6 @@ const s = ReactNative.StyleSheet.create({
   topicsButton: {
     justifyContent: 'center',
     marginHorizontal: 10,
-    borderColor: client.primaryColor,
     height: 42,
     borderRadius: 4,
     borderWidth: 1
@@ -101,13 +111,11 @@ const s = ReactNative.StyleSheet.create({
   topicsButtonText: {
     fontSize: 14,
     marginHorizontal: 10,
-    color: client.primaryColor,
     textAlign: 'center'
   },
   sendButton: {
     justifyContent: 'center',
     marginRight: 10,
-    backgroundColor: client.primaryColor,
     height: 42,
     borderRadius: 4,
   },
@@ -116,7 +124,6 @@ const s = ReactNative.StyleSheet.create({
     marginRight: 10,
     height: 42,
     borderRadius: 4,
-    backgroundColor: new Color(client.primaryColor).limitSaturation(0.5).rgbString(),
   },
   sendButtonText: {
     fontSize: 14,

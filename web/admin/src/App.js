@@ -14,26 +14,22 @@
  * limitations under the License.
  */
 
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import '@doubledutch/react-components/lib/base.css'
 import './App.css'
 import SettingsContainer from "./SettingsContainer.js"
 import AdminsContainer from "./AdminsContainer.js"
 import client from '@doubledutch/admin-client'
 import ReportsContainer from "./ReportsContainer.js"
-import FirebaseConnector from '@doubledutch/firebase-connector'
 import {
-  mapPerPrivateAdminableushedDataToStateObjects,
+  provideFirebaseConnectorToReactComponent,
   mapPerUserPublicPushedDataToStateObjects,
   mapPerUserPrivateAdminablePushedDataToObjectOfStateObjects
 } from '@doubledutch/firebase-connector'
-const fbc = FirebaseConnector(client, 'lostfound')
 
-fbc.initializeAppWithSimpleBackend()
-
-export default class App extends Component {
-  constructor() {
-    super()
+class App extends PureComponent {
+  constructor(props) {
+    super(props)
     this.state = { 
       lostFoundLocation: {},
       admins: [],
@@ -41,14 +37,15 @@ export default class App extends Component {
       reports: {},
       items: {}  
     }
-    this.signin = fbc.signinAdmin()
+    this.signin = props.fbc.signinAdmin()
     .then(user => this.user = user)
     .catch(err => console.error(err))
   }
 
   componentDidMount() {
+    const {fbc} = this.props
     this.signin.then(() => {
-      client.getUsers().then(users => {
+      client.getAttendees().then(users => {
         this.setState({allUsers: users, isSignedIn: true})
         const locationRef = fbc.database.public.adminRef('lostFoundLocation') 
         const adminableUsersRef = () => fbc.database.private.adminableUsersRef()
@@ -141,6 +138,7 @@ export default class App extends Component {
   }
 
   markBlock = (reports, key, userId) => {
+    const {fbc} = this.props
     if (reports.length && key && userId) {
       reports.forEach((item) => {
         fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: true, isApproved: false})
@@ -151,6 +149,7 @@ export default class App extends Component {
   }
 
   approveQ = (reports, key, userId) => {
+    const {fbc} = this.props
     if (reports.length && key && userId) {
       reports.forEach((item) => {
         fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: false, isApproved: true})
@@ -160,6 +159,7 @@ export default class App extends Component {
   }
 
   unBlock = (reports, key, userId) => {
+    const {fbc} = this.props
     if (reports.length && key && userId) {
       reports.forEach((item) => {
         fbc.database.private.adminableUsersRef(item.userId).child("reports").child(key).update({isBlock: false})
@@ -186,27 +186,31 @@ export default class App extends Component {
   }
 
   onAdminSelected = attendee => {
+    const {fbc} = this.props
     const tokenRef = fbc.database.private.adminableUsersRef(attendee.id).child('adminToken')
     this.setState()
     fbc.getLongLivedAdminToken().then(token => tokenRef.set(token))
   }
 
   onAdminDeselected = attendee => {
-    const tokenRef = fbc.database.private.adminableUsersRef(attendee.id).child('adminToken')
+    const tokenRef = this.props.fbc.database.private.adminableUsersRef(attendee.id).child('adminToken')
     tokenRef.remove()
   }
 
   saveLostFoundLocal = (input) => {
-        //On initial launching of the app this fbc object would not exist. In that case the default is to be on. On first action we would set the object to the expected state and from there use update.
-        if (Object.keys(this.state.lostFoundLocation).length === 0) {
-          fbc.database.public.adminRef('lostFoundLocation').push({"location": input})
-        }
-        else {
-          fbc.database.public.adminRef('lostFoundLocation').child(this.state.lostFoundLocation.key).update({"location": input})
-        }
+    const {fbc} = this.props
+    //On initial launching of the app this fbc object would not exist. In that case the default is to be on. On first action we would set the object to the expected state and from there use update.
+    if (Object.keys(this.state.lostFoundLocation).length === 0) {
+      fbc.database.public.adminRef('lostFoundLocation').push({"location": input})
+    }
+    else {
+      fbc.database.public.adminRef('lostFoundLocation').child(this.state.lostFoundLocation.key).update({"location": input})
+    }
   }
 
   markComplete(task) {
-    fbc.database.public.allRef('tasks').child(task.key).remove()
+    this.props.fbc.database.public.allRef('tasks').child(task.key).remove()
   }
 }
+
+export default provideFirebaseConnectorToReactComponent(client, 'lostfound', (props, fbc) => <App {...props} fbc={fbc} />, PureComponent)

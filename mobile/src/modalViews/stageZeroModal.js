@@ -1,10 +1,25 @@
+/*
+ * Copyright 2018 DoubleDutch, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict'
 import React, { Component } from 'react'
 import ReactNative, { TouchableOpacity, Text, View } from 'react-native'
-import client, { } from '@doubledutch/rn-client'
+import BindingContextTypes from '../BindingContextTypes'
 
 export default class StageZeroModal extends Component {
-
   render() {
     return (
       <View>
@@ -14,20 +29,22 @@ export default class StageZeroModal extends Component {
   }
 
   renderButtons = () => {
+    const {primaryBackground, primaryBorder, primaryColor} = this.context
+
     return (
       <View style={s.bottomButtons}>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.topicsButton} onPress={() => this.props.selectItemType("found")}><Text style={s.topicsButtonText}>I Found Something</Text></TouchableOpacity>
+          <TouchableOpacity style={[s.topicsButton, primaryBorder]} onPress={() => this.props.selectItemType("found")}><Text style={[s.topicsButtonText, primaryColor]}>I Found Something</Text></TouchableOpacity>
         </View>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.sendButton} onPress={() => this.props.selectItemType("lost")}><Text style={s.sendButtonText}>I Lost Something</Text></TouchableOpacity>
+          <TouchableOpacity style={[s.sendButton, primaryBackground]} onPress={() => this.props.selectItemType("lost")}><Text style={s.sendButtonText}>I Lost Something</Text></TouchableOpacity>
         </View>
       </View>
     )
   }
-
 }
 
+StageZeroModal.contextTypes = BindingContextTypes
 
 const s = ReactNative.StyleSheet.create({
   container: {
@@ -82,7 +99,6 @@ const s = ReactNative.StyleSheet.create({
   topicsButton: {
     justifyContent: 'center',
     marginHorizontal: 10,
-    borderColor: client.primaryColor,
     height: 42,
     borderRadius: 4,
     borderWidth: 1
@@ -90,13 +106,11 @@ const s = ReactNative.StyleSheet.create({
   topicsButtonText: {
     fontSize: 14,
     marginHorizontal: 10,
-    color: client.primaryColor,
     textAlign: 'center'
   },
   sendButton: {
     justifyContent: 'center',
     marginRight: 10,
-    backgroundColor: client.primaryColor,
     height: 42,
     borderRadius: 4,
   },

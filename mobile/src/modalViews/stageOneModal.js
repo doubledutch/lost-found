@@ -1,20 +1,32 @@
+/*
+ * Copyright 2018 DoubleDutch, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 'use strict'
 import React, { Component } from 'react'
-import ReactNative, {
-  Platform, TouchableOpacity, Text, TextInput, View, ScrollView, FlatList, Modal, Image
-} from 'react-native'
-import client, { Color } from '@doubledutch/rn-client'
+import { StyleSheet, Platform, TouchableOpacity, Text, TextInput, View } from 'react-native'
+import BindingContextTypes from '../BindingContextTypes'
 
 export default class StageOneModal extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      input: '',
-      color: 'white', 
-      borderColor: '#EFEFEF',
-      inputHeight: 0,
-    }
+  state = {
+    input: '',
+    color: 'white', 
+    borderColor: '#EFEFEF',
+    inputHeight: 0,
   }
+
   render() {
     return (
       <View>
@@ -25,13 +37,14 @@ export default class StageOneModal extends Component {
   }
 
   renderButtons = () => {
+    const {desaturatedPrimaryBackground, primaryBackground, primaryBorder, primaryColor} = this.context
     return (
       <View style={s.bottomButtons}>
         <View style={{flex:1}}>
-          <TouchableOpacity style={s.topicsButton} onPress={this.props.backStage}><Text style={s.topicsButtonText}>Previous</Text></TouchableOpacity>
+          <TouchableOpacity style={[s.topicsButton, primaryBorder]} onPress={this.props.backStage}><Text style={[s.topicsButtonText, primaryColor]}>Previous</Text></TouchableOpacity>
         </View>
         <View style={{flex:1}}>
-          <TouchableOpacity style={this.isNextEnabled() ? s.sendButton : s.sendButtonDisabled} disabled={!this.isNextEnabled()} onPress={this.props.advanceStage}><Text style={s.sendButtonText}>Next</Text></TouchableOpacity>
+          <TouchableOpacity style={this.isNextEnabled() ? [s.sendButton, primaryBackground] : [s.sendButtonDisabled, desaturatedPrimaryBackground]} disabled={!this.isNextEnabled()} onPress={this.props.advanceStage}><Text style={s.sendButtonText}>Next</Text></TouchableOpacity>
         </View>
       </View>
     )
@@ -92,11 +105,11 @@ export default class StageOneModal extends Component {
       inputHeight: event.nativeEvent.contentSize.height
     });
   }
-
 }
 
+StageOneModal.contextTypes = BindingContextTypes
 
-const s = ReactNative.StyleSheet.create({
+const s = StyleSheet.create({
   counter: {
     justifyContent: 'center',
     marginTop:23,
@@ -122,7 +135,6 @@ const s = ReactNative.StyleSheet.create({
   topicsButton: {
     justifyContent: 'center',
     marginHorizontal: 10,
-    borderColor: client.primaryColor,
     height: 42,
     borderRadius: 4,
     borderWidth: 1
@@ -130,20 +142,17 @@ const s = ReactNative.StyleSheet.create({
   topicsButtonText: {
     fontSize: 14,
     marginHorizontal: 10,
-    color: client.primaryColor,
     textAlign: 'center'
   },
   sendButton: {
     justifyContent: 'center',
     marginRight: 10,
-    backgroundColor: client.primaryColor,
     height: 42,
     borderRadius: 4,
   },
   sendButtonDisabled: {
     justifyContent: 'center',
     marginRight: 10,
-    backgroundColor: new Color(client.primaryColor).limitSaturation(0.5).rgbString(),
     height: 42,
     borderRadius: 4,
   },

@@ -15,12 +15,12 @@
  */
 
 import React, { Component } from 'react'
-import ReactNative, { View, FlatList, Text, TouchableOpacity } from 'react-native'
-import client from '@doubledutch/rn-client'
+import { StyleSheet, View, FlatList, Text, TouchableOpacity } from 'react-native'
 import DefaultViewTableCell from "./defaultViewTableCell"
 import DefaultViewTableHeader from "./defaultViewTableHeader"
+import BindingContextTypes from '../BindingContextTypes'
 
-
+const getId = x => x.id
 export default class DefaultViewTable extends Component {
 
   render() {
@@ -39,11 +39,13 @@ export default class DefaultViewTable extends Component {
         <DefaultViewTableHeader currentFilter={currentFilter} changeTableFilter={changeTableFilter} items={Object.values(this.props.items)} onRefresh={this.onRefresh}/>
         {userData.length > 2 ? <View style={s.topListBox}><FlatList
           data={userData}
+          keyExtractor={getId}
           ref={(ref) => { this.topListRef = ref; }}
           renderItem={renderItem} 
         /></View> : userData.map(item => renderItem({item})) }
         {data.length > 0 && <View style={s.bottomListBox}><FlatList
           data={data}
+          keyExtractor={getId}
           ListFooterComponent={<View style={s.tableFooter}></View>}
           ref={(ref) => { this.bottomListRef = ref; }}
           renderItem={renderItem}
@@ -70,6 +72,7 @@ export default class DefaultViewTable extends Component {
   }
 
   verifyData = (isBottomTable) => {
+    const { currentUser } = this.context
     const sortByDate = (a,b) => b.dateCreate - a.dateCreate
     let items = Object.values(this.props.items)
     let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
@@ -79,7 +82,7 @@ export default class DefaultViewTable extends Component {
     }
     if (isBottomTable) {
       const liveItems = newItems
-      .filter(item => item.creator.id !== client.currentUser.id)
+      .filter(item => item.creator.id !== currentUser.id)
       .sort(sortByDate)
       const resolvedItems = items
       .filter(item => item.isResolved)
@@ -88,16 +91,16 @@ export default class DefaultViewTable extends Component {
     }
     else { 
       const filteredItems = newItems
-      .filter(item => item.creator.id === client.currentUser.id)
+      .filter(item => item.creator.id === currentUser.id)
       .sort(sortByDate)
       return filteredItems
     }
   }
-
-
 }
 
-const s = ReactNative.StyleSheet.create({
+DefaultViewTable.contextTypes = BindingContextTypes
+
+const s = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#d9e1f9',

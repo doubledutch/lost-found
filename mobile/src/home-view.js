@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-import React, { Component } from 'react'
-import ReactNative, { KeyboardAvoidingView, Platform, Modal } from 'react-native'
+import React, { PureComponent } from 'react'
+import { KeyboardAvoidingView, Platform, StyleSheet, Modal } from 'react-native'
 // rn-client must be imported before FirebaseConnector
-import client, { TitleBar } from '@doubledutch/rn-client'
-import FirebaseConnector from '@doubledutch/firebase-connector'
-import firebase from 'firebase'
+import client, { Color, TitleBar } from '@doubledutch/rn-client'
+import firebase from 'firebase/app'
 import ModalView from "./modalView"
 import DefaultView from "./defaultView"
 import ReportModal from './reportModal'
-import { mapPerUserPublicPushedDataToStateObjects } from '@doubledutch/firebase-connector'
+import { mapPerUserPublicPushedDataToStateObjects, provideFirebaseConnectorToReactComponent } from '@doubledutch/firebase-connector'
+import BindingContextTypes from './BindingContextTypes'
 
-const fbc = FirebaseConnector(client, 'lostfound')
-fbc.initializeAppWithSimpleBackend()
-
-export default class HomeView extends Component {
-  constructor() {
-    super()
+class HomeView extends PureComponent {
+  constructor(props) {
+    super(props)
     this.state = { 
       currentPage: "home",
       currentItem: {},
@@ -43,42 +40,59 @@ export default class HomeView extends Component {
       isAdmin: false,
     }
 
-    this.signin = fbc.signin()
+    this.signin = props.fbc.signin()
       .then(user => this.user = user)
 
     this.signin.catch(err => console.error(err))
   }
 
+  getChildContext() {
+    const {currentUser, primaryColor} = this.state
+    return {
+      currentUser,
+      primaryColor: {color: primaryColor},
+      primaryBorder: {borderColor: primaryColor},
+      primaryBackground: {backgroundColor: primaryColor},
+      lightPrimaryBackground: {backgroundColor: 'rgba('+ hexToRgb(primaryColor || '#000000') + ',0.1)'},
+      desaturatedPrimaryBackground: {backgroundColor: new Color(client.primaryColor).limitSaturation(0.5).rgbString()},
+    }
+  }
+
   componentDidMount() {
-    this.signin.then(() => {
-      const reportRef = fbc.database.private.adminableUserRef('reports')
-      const locationRef = fbc.database.public.adminRef('lostFoundLocation') 
-      const wireListeners = () => {
-        mapPerUserPublicPushedDataToStateObjects(fbc, 'items', this, 'items', (userId, key, value) => key)
-        reportRef.on('child_added', data => {
-          this.setState({ reports: [...this.state.reports, data.key ] })
-        })
-
-        locationRef.on('child_added', data => {
-          this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
-        })
-
-        locationRef.on('child_changed', data => {
-          this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
-        })
-      }
-
-      fbc.database.private.adminableUserRef('adminToken').once('value', async data => {
-        const longLivedToken = data.val()
-        if (longLivedToken) {
-          console.log('Attendee appears to be admin.  Logging out and logging in w/ admin token.')
-          await firebase.auth().signOut()
-          client.longLivedToken = longLivedToken
-          await fbc.signinAdmin()
-          console.log('Re-logged in as admin')
-          this.setState({isAdmin: true})
+    const {fbc} = this.props
+    client.getPrimaryColor().then(primaryColor => this.setState({primaryColor}))
+    client.getCurrentUser().then(currentUser => {
+      this.setState({currentUser})
+      this.signin.then(() => {
+        const reportRef = fbc.database.private.adminableUserRef('reports')
+        const locationRef = fbc.database.public.adminRef('lostFoundLocation') 
+        const wireListeners = () => {
+          mapPerUserPublicPushedDataToStateObjects(fbc, 'items', this, 'items', (userId, key, value) => key)
+          reportRef.on('child_added', data => {
+            this.setState({ reports: [...this.state.reports, data.key ] })
+          })
+  
+          locationRef.on('child_added', data => {
+            this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
+          })
+  
+          locationRef.on('child_changed', data => {
+            this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
+          })
         }
-        wireListeners()
+  
+        fbc.database.private.adminableUserRef('adminToken').once('value', async data => {
+          const longLivedToken = data.val()
+          if (longLivedToken) {
+            console.log('Attendee appears to be admin.  Logging out and logging in w/ admin token.')
+            await firebase.auth().signOut()
+            client.longLivedToken = longLivedToken
+            await fbc.signinAdmin()
+            console.log('Re-logged in as admin')
+            this.setState({isAdmin: true})
+          }
+          wireListeners()
+        })
       })
     })
   }
@@ -126,20 +140,20 @@ export default class HomeView extends Component {
   }
 
   resolveItem = (item) => {
-    fbc.database.public.usersRef(item.creator.id).child("items").child(item.id).update({isResolved: true})
+    this.props.fbc.database.public.usersRef(item.creator.id).child("items").child(item.id).update({isResolved: true})
   }
 
   selectItemType = (type) => {
     if (type === "found") {
-      this.setState({currentItem: Object.assign({}, newFoundItem), itemStage: 1})
+      this.setState({currentItem: Object.assign({}, this.newFoundItem()), itemStage: 1})
     }
     else {
-      this.setState({currentItem: Object.assign({}, newLostItem), itemStage: 1})
+      this.setState({currentItem: Object.assign({}, this.newLostItem()), itemStage: 1})
     }
   }
 
   saveItem = () => {
-    const itemsRef = fbc.database.public.userRef('items')
+    const itemsRef = this.props.fbc.database.public.userRef('items')
     let item = this.trimWhiteSpaceItem()
     const update = item.id
     ? itemsRef.child(this.state.currentItem.id).update(item)
@@ -151,7 +165,7 @@ export default class HomeView extends Component {
         }
         ,250)
     })
-    .catch(error => this.setState({questionError: "Retry"}))
+    .catch(() => this.setState({questionError: "Retry"}))
   }
 
   trimWhiteSpaceItem = () => {
@@ -171,7 +185,7 @@ export default class HomeView extends Component {
   }
 
   makeReport = () => {
-    this.createReport(fbc.database.private.adminableUserRef, this.state.currentItem)
+    this.createReport(this.props.fbc.database.private.adminableUserRef, this.state.currentItem)
   }
 
   handleChange = (prop, value) => {
@@ -193,8 +207,6 @@ export default class HomeView extends Component {
       this.setState({showReportModal: false, currentItem: {}})
     })
   }
-
-
 
   advanceStage = () => {
     const newStage = this.state.itemStage++
@@ -222,32 +234,44 @@ export default class HomeView extends Component {
     this.setState({currentFilter: item})
   }
 
+  newFoundItem = () => ({
+    type: "found",
+    description: "",
+    lastLocation: "",
+    currentLocation: "",
+    creator: this.state.currentUser,
+    isResolved: false,
+    isBlock: false,
+    dateCreate: new Date().getTime()
+  })
+  
+  newLostItem = () => ({
+    type: "lost",
+    description:"",
+    lastLocation: "",
+    isResolved: false,
+    isBlock: false,
+    creator: this.state.currentUser,
+    dateCreate: new Date().getTime()
+  })
 }
 
-const newFoundItem = {
-  type: "found",
-  description: "",
-  lastLocation: "",
-  currentLocation: "",
-  creator: client.currentUser,
-  isResolved: false,
-  isBlock: false,
-  dateCreate: new Date().getTime()
-}
+HomeView.childContextTypes = BindingContextTypes
 
-const newLostItem = {
-  type: "lost",
-  description:"",
-  lastLocation: "",
-  isResolved: false,
-  isBlock: false,
-  creator: client.currentUser,
-  dateCreate: new Date().getTime()
-}
+export default provideFirebaseConnectorToReactComponent(client, 'lostfound', (props, fbc) => <HomeView {...props} fbc={fbc} />, PureComponent)
 
-const s = ReactNative.StyleSheet.create({
+const s = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#EFEFEF',
   },
 })
+
+function hexToRgb(hex) {
+  var hex = hex.slice(1)
+  var bigint = parseInt(hex, 16);
+  var r = (bigint >> 16) & 255;
+  var g = (bigint >> 8) & 255;
+  var b = bigint & 255;
+  return r + "," + g + "," + b;
+}
