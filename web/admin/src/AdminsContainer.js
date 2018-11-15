@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,12 +22,12 @@ export default class SettingsContainer extends Component {
   constructor() {
     super()
     this.state = {
-      isBoxExpanded: true    
-    }   
+      isBoxExpanded: true,
+    }
   }
 
-  handleBoxExpand = (value) => {
-    this.setState({isBoxExpanded: value});
+  handleBoxExpand = value => {
+    this.setState({ isBoxExpanded: value })
   }
 
   render() {
@@ -36,17 +36,30 @@ export default class SettingsContainer extends Component {
         <div className="titleBox">
           <div className="containerRow">
             <h2 className="h2NoMargin">Admins</h2>
-            <button className="displayButton" onClick={() => this.handleBoxExpand(!this.state.isBoxExpanded)}>{(this.state.isBoxExpanded ? "Hide Section" : "Show Section")}</button>
+            <button
+              className="displayButton"
+              onClick={() => this.handleBoxExpand(!this.state.isBoxExpanded)}
+            >
+              {this.state.isBoxExpanded ? 'Hide Section' : 'Show Section'}
+            </button>
           </div>
-          <p>Admins have the ability to mark any Lost & Found posting as resolved directly from the mobile app</p>
+          <p>
+            Admins have the ability to mark any Lost & Found posting as resolved directly from the
+            mobile app
+          </p>
         </div>
-        {this.state.isBoxExpanded ?  <div style={{marginBottom: 25}}><AttendeeSelector 
-            client={this.props.client}
-            searchTitle="Make Admin"
-            selectedTitle="Current Admins"
-            onSelected={this.props.onAdminSelected}
-            onDeselected={this.props.onAdminDeselected}
-            selected={this.props.attendees.filter(a => this.isAdmin(a.id))} /></div> : null}
+        {this.state.isBoxExpanded ? (
+          <div style={{ marginBottom: 25 }}>
+            <AttendeeSelector
+              client={this.props.client}
+              searchTitle="Make Admin"
+              selectedTitle="Current Admins"
+              onSelected={this.props.onAdminSelected}
+              onDeselected={this.props.onAdminDeselected}
+              selected={this.props.attendees.filter(a => this.isAdmin(a.id))}
+            />
+          </div>
+        ) : null}
       </div>
     )
   }
@@ -54,5 +67,4 @@ export default class SettingsContainer extends Component {
   isAdmin(id) {
     return this.props.admins.includes(id)
   }
-
 }

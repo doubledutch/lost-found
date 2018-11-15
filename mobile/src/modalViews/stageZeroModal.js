@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,30 +14,35 @@
  * limitations under the License.
  */
 
-'use strict'
 import React, { Component } from 'react'
 import ReactNative, { TouchableOpacity, Text, View } from 'react-native'
 import BindingContextTypes from '../BindingContextTypes'
 
 export default class StageZeroModal extends Component {
   render() {
-    return (
-      <View>
-        {this.renderButtons()}
-      </View>
-    )
+    return <View>{this.renderButtons()}</View>
   }
 
   renderButtons = () => {
-    const {primaryBackground, primaryBorder, primaryColor} = this.context
+    const { primaryBackground, primaryBorder, primaryColor } = this.context
 
     return (
       <View style={s.bottomButtons}>
-        <View style={{flex:1}}>
-          <TouchableOpacity style={[s.topicsButton, primaryBorder]} onPress={() => this.props.selectItemType("found")}><Text style={[s.topicsButtonText, primaryColor]}>I Found Something</Text></TouchableOpacity>
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity
+            style={[s.topicsButton, primaryBorder]}
+            onPress={() => this.props.selectItemType('found')}
+          >
+            <Text style={[s.topicsButtonText, primaryColor]}>I Found Something</Text>
+          </TouchableOpacity>
         </View>
-        <View style={{flex:1}}>
-          <TouchableOpacity style={[s.sendButton, primaryBackground]} onPress={() => this.props.selectItemType("lost")}><Text style={s.sendButtonText}>I Lost Something</Text></TouchableOpacity>
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity
+            style={[s.sendButton, primaryBackground]}
+            onPress={() => this.props.selectItemType('lost')}
+          >
+            <Text style={s.sendButtonText}>I Lost Something</Text>
+          </TouchableOpacity>
         </View>
       </View>
     )
@@ -53,20 +58,20 @@ const s = ReactNative.StyleSheet.create({
   },
   counter: {
     justifyContent: 'center',
-    marginTop:23,
+    marginTop: 23,
     width: 30,
     fontSize: 14,
     marginRight: 11,
     height: 20,
-    color: '#9B9B9B', 
-    textAlign: 'center'
+    color: '#9B9B9B',
+    textAlign: 'center',
   },
   bottomButtons: {
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: 'white',
     height: 82,
-    paddingTop: 20
+    paddingTop: 20,
   },
   modal: {
     flexDirection: 'row',
@@ -76,14 +81,14 @@ const s = ReactNative.StyleSheet.create({
   modalBottom: {
     flex: 1,
     backgroundColor: 'black',
-    opacity: 0.5
+    opacity: 0.5,
   },
   rightBox: {
     flex: 1,
     flexDirection: 'column',
   },
   circleBox: {
-    marginTop:20,
+    marginTop: 20,
     marginRight: 10,
     marginLeft: 10,
     marginBottom: 20,
@@ -101,12 +106,12 @@ const s = ReactNative.StyleSheet.create({
     marginHorizontal: 10,
     height: 42,
     borderRadius: 4,
-    borderWidth: 1
+    borderWidth: 1,
   },
   topicsButtonText: {
     fontSize: 14,
     marginHorizontal: 10,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   sendButton: {
     justifyContent: 'center',
@@ -118,10 +123,10 @@ const s = ReactNative.StyleSheet.create({
     fontSize: 14,
     color: 'white',
     textAlign: 'center',
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   whiteText: {
     fontSize: 18,
     color: 'white',
-  }
+  },
 })

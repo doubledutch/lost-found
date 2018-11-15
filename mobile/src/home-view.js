@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,68 +19,80 @@ import { KeyboardAvoidingView, Platform, StyleSheet, Modal } from 'react-native'
 // rn-client must be imported before FirebaseConnector
 import client, { Color, TitleBar } from '@doubledutch/rn-client'
 import firebase from 'firebase/app'
-import ModalView from "./modalView"
-import DefaultView from "./defaultView"
+import {
+  mapPerUserPublicPushedDataToStateObjects,
+  provideFirebaseConnectorToReactComponent,
+} from '@doubledutch/firebase-connector'
+import ModalView from './modalView'
+import DefaultView from './defaultView'
 import ReportModal from './reportModal'
-import { mapPerUserPublicPushedDataToStateObjects, provideFirebaseConnectorToReactComponent } from '@doubledutch/firebase-connector'
 import BindingContextTypes from './BindingContextTypes'
 
 class HomeView extends PureComponent {
   constructor(props) {
     super(props)
-    this.state = { 
-      currentPage: "home",
+    this.state = {
+      currentPage: 'home',
       currentItem: {},
       itemStage: 0,
       items: {},
       lostFoundLocation: {},
-      currentFilter: "All",
+      currentFilter: 'All',
       showReportModal: false,
       reports: [],
       isAdmin: false,
     }
 
-    this.signin = props.fbc.signin()
-      .then(user => this.user = user)
+    this.signin = props.fbc.signin().then(user => (this.user = user))
 
     this.signin.catch(err => console.error(err))
   }
 
   getChildContext() {
-    const {currentUser, primaryColor} = this.state
+    const { currentUser, primaryColor } = this.state
     return {
       currentUser,
-      primaryColor: {color: primaryColor},
-      primaryBorder: {borderColor: primaryColor},
-      primaryBackground: {backgroundColor: primaryColor},
-      lightPrimaryBackground: {backgroundColor: 'rgba('+ hexToRgb(primaryColor || '#000000') + ',0.1)'},
-      desaturatedPrimaryBackground: {backgroundColor: new Color(client.primaryColor).limitSaturation(0.5).rgbString()},
+      primaryColor: { color: primaryColor },
+      primaryBorder: { borderColor: primaryColor },
+      primaryBackground: { backgroundColor: primaryColor },
+      lightPrimaryBackground: {
+        backgroundColor: `rgba(${hexToRgb(primaryColor || '#000000')},0.1)`,
+      },
+      desaturatedPrimaryBackground: {
+        backgroundColor: new Color(client.primaryColor).limitSaturation(0.5).rgbString(),
+      },
     }
   }
 
   componentDidMount() {
-    const {fbc} = this.props
-    client.getPrimaryColor().then(primaryColor => this.setState({primaryColor}))
+    const { fbc } = this.props
+    client.getPrimaryColor().then(primaryColor => this.setState({ primaryColor }))
     client.getCurrentUser().then(currentUser => {
-      this.setState({currentUser})
+      this.setState({ currentUser })
       this.signin.then(() => {
         const reportRef = fbc.database.private.adminableUserRef('reports')
-        const locationRef = fbc.database.public.adminRef('lostFoundLocation') 
+        const locationRef = fbc.database.public.adminRef('lostFoundLocation')
         const wireListeners = () => {
-          mapPerUserPublicPushedDataToStateObjects(fbc, 'items', this, 'items', (userId, key, value) => key)
+          mapPerUserPublicPushedDataToStateObjects(
+            fbc,
+            'items',
+            this,
+            'items',
+            (userId, key, value) => key,
+          )
           reportRef.on('child_added', data => {
-            this.setState({ reports: [...this.state.reports, data.key ] })
+            this.setState({ reports: [...this.state.reports, data.key] })
           })
-  
+
           locationRef.on('child_added', data => {
-            this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
+            this.setState({ lostFoundLocation: { ...data.val(), key: data.key } })
           })
-  
+
           locationRef.on('child_changed', data => {
-            this.setState({ lostFoundLocation: {...data.val(), key: data.key } })
+            this.setState({ lostFoundLocation: { ...data.val(), key: data.key } })
           })
         }
-  
+
         fbc.database.private.adminableUserRef('adminToken').once('value', async data => {
           const longLivedToken = data.val()
           if (longLivedToken) {
@@ -89,7 +101,7 @@ class HomeView extends PureComponent {
             client.longLivedToken = longLivedToken
             await fbc.signinAdmin()
             console.log('Re-logged in as admin')
-            this.setState({isAdmin: true})
+            this.setState({ isAdmin: true })
           }
           wireListeners()
         })
@@ -99,7 +111,10 @@ class HomeView extends PureComponent {
 
   render() {
     return (
-      <KeyboardAvoidingView style={s.container} behavior={Platform.select({ios: "padding", android: null})}>
+      <KeyboardAvoidingView
+        style={s.container}
+        behavior={Platform.select({ ios: 'padding', android: null })}
+      >
         <TitleBar title="Lost &amp; Found" client={client} signin={this.signin} />
         {this.modalControl()}
         {this.renderPage()}
@@ -110,62 +125,101 @@ class HomeView extends PureComponent {
   renderPage = () => {
     switch (this.state.currentPage) {
       case 'home':
-        return <DefaultView editCell={this.editCell} isAdmin={this.state.isAdmin} changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
-      case "modal":
-        return <ModalView changeView={this.changeView} clearView={this.clearModal} saveItem={this.saveItem} updateItem = {this.updateItem} itemStage={this.state.itemStage} selectItemType={this.selectItemType} currentItem={this.state.currentItem} advanceStage={this.advanceStage} backStage={this.backStage}/>
+        return (
+          <DefaultView
+            editCell={this.editCell}
+            isAdmin={this.state.isAdmin}
+            changeView={this.changeView}
+            items={this.state.items}
+            currentFilter={this.state.currentFilter}
+            changeTableFilter={this.changeTableFilter}
+            reportItem={this.reportItem}
+            reports={this.state.reports}
+            resolveItem={this.resolveItem}
+            lostFoundLocation={this.state.lostFoundLocation}
+          />
+        )
+      case 'modal':
+        return (
+          <ModalView
+            changeView={this.changeView}
+            clearView={this.clearModal}
+            saveItem={this.saveItem}
+            updateItem={this.updateItem}
+            itemStage={this.state.itemStage}
+            selectItemType={this.selectItemType}
+            currentItem={this.state.currentItem}
+            advanceStage={this.advanceStage}
+            backStage={this.backStage}
+          />
+        )
       default:
-        return <DefaultView editCell={this.editCell} isAdmin={this.state.isAdmin} changeView={this.changeView} items={this.state.items} currentFilter={this.state.currentFilter} changeTableFilter={this.changeTableFilter} reportItem={this.reportItem} reports={this.state.reports} resolveItem={this.resolveItem} lostFoundLocation={this.state.lostFoundLocation}/>
+        return (
+          <DefaultView
+            editCell={this.editCell}
+            isAdmin={this.state.isAdmin}
+            changeView={this.changeView}
+            items={this.state.items}
+            currentFilter={this.state.currentFilter}
+            changeTableFilter={this.changeTableFilter}
+            reportItem={this.reportItem}
+            reports={this.state.reports}
+            resolveItem={this.resolveItem}
+            lostFoundLocation={this.state.lostFoundLocation}
+          />
+        )
     }
   }
 
-  modalControl = () => {
-    return (
+  modalControl = () => (
     <Modal
       animationType="none"
-      transparent={true}
+      transparent
       visible={this.state.showReportModal}
       onRequestClose={() => {
-        alert('Modal has been closed.');
+        alert('Modal has been closed.')
       }}
     >
-      <ReportModal handleChange={this.handleChange} makeReport={this.makeReport}/>
+      <ReportModal handleChange={this.handleChange} makeReport={this.makeReport} />
     </Modal>
-    )
-  }
+  )
 
   updateItem = (variable, input) => {
-    const updatedItem = Object.assign({},this.state.currentItem)
+    const updatedItem = Object.assign({}, this.state.currentItem)
     updatedItem[variable] = input
-    this.setState({currentItem: updatedItem})
+    this.setState({ currentItem: updatedItem })
   }
 
-  resolveItem = (item) => {
-    this.props.fbc.database.public.usersRef(item.creator.id).child("items").child(item.id).update({isResolved: true})
+  resolveItem = item => {
+    this.props.fbc.database.public
+      .usersRef(item.creator.id)
+      .child('items')
+      .child(item.id)
+      .update({ isResolved: true })
   }
 
-  selectItemType = (type) => {
-    if (type === "found") {
-      this.setState({currentItem: Object.assign({}, this.newFoundItem()), itemStage: 1})
-    }
-    else {
-      this.setState({currentItem: Object.assign({}, this.newLostItem()), itemStage: 1})
+  selectItemType = type => {
+    if (type === 'found') {
+      this.setState({ currentItem: Object.assign({}, this.newFoundItem()), itemStage: 1 })
+    } else {
+      this.setState({ currentItem: Object.assign({}, this.newLostItem()), itemStage: 1 })
     }
   }
 
   saveItem = () => {
     const itemsRef = this.props.fbc.database.public.userRef('items')
-    let item = this.trimWhiteSpaceItem()
+    const item = this.trimWhiteSpaceItem()
     const update = item.id
-    ? itemsRef.child(this.state.currentItem.id).update(item)
-    : itemsRef.push(item)
-    update.then(() => {
-      setTimeout(() => {
-        this.changeView("home")
-        this.setState({currentItem: {}, itemStage: 0})
-        }
-        ,250)
-    })
-    .catch(() => this.setState({questionError: "Retry"}))
+      ? itemsRef.child(this.state.currentItem.id).update(item)
+      : itemsRef.push(item)
+    update
+      .then(() => {
+        setTimeout(() => {
+          this.changeView('home')
+          this.setState({ currentItem: {}, itemStage: 0 })
+        }, 250)
+      })
+      .catch(() => this.setState({ questionError: 'Retry' }))
   }
 
   trimWhiteSpaceItem = () => {
@@ -175,13 +229,13 @@ class HomeView extends PureComponent {
       description: currentItem.description.trim(),
       lastLocation: currentItem.lastLocation.trim(),
       dateCreate: new Date().getTime(),
-      currentLocation: currentItem.type === 'found' ? currentItem.currentLocation.trim() : ""
+      currentLocation: currentItem.type === 'found' ? currentItem.currentLocation.trim() : '',
     }
     return editingItem
   }
 
-  reportItem = (item) => {
-    this.setState({currentItem: item, showReportModal: true})
+  reportItem = item => {
+    this.setState({ currentItem: item, showReportModal: true })
   }
 
   makeReport = () => {
@@ -189,76 +243,86 @@ class HomeView extends PureComponent {
   }
 
   handleChange = (prop, value) => {
-    this.setState({[prop]: value})
+    this.setState({ [prop]: value })
   }
 
-  editCell = (item) => {
-    this.setState({currentItem: item, currentPage: "modal", itemStage: 1})
+  editCell = item => {
+    this.setState({ currentItem: item, currentPage: 'modal', itemStage: 1 })
   }
 
   createReport = (ref, item) => {
     const reportTime = new Date().getTime()
-    ref('reports').child(item.id).set({
-      reportTime,
-      isBlock: false,
-      isApproved: false
-    })
-    .then(() => {
-      this.setState({showReportModal: false, currentItem: {}})
-    })
+    ref('reports')
+      .child(item.id)
+      .set({
+        reportTime,
+        isBlock: false,
+        isApproved: false,
+      })
+      .then(() => {
+        this.setState({ showReportModal: false, currentItem: {} })
+      })
   }
 
   advanceStage = () => {
     const newStage = this.state.itemStage++
-    if (newStage === 6) { this.props.submitItem() }
-    else { this.setState({currentStage: newStage}) }
-  }
-
-  backStage = (stage) => {
-    const newStage = this.state.itemStage--
-    if (stage === 0) { }
-    else {
-      this.setState({currentStage: newStage}) 
+    if (newStage === 6) {
+      this.props.submitItem()
+    } else {
+      this.setState({ currentStage: newStage })
     }
   }
 
-  changeView = (newView) => {
-    this.setState({currentPage: newView, itemStage: 0})
+  backStage = stage => {
+    const newStage = this.state.itemStage--
+    if (stage === 0) {
+    } else {
+      this.setState({ currentStage: newStage })
+    }
   }
 
-  clearModal = (newView) => {
-    this.setState({currentPage: newView})
+  changeView = newView => {
+    this.setState({ currentPage: newView, itemStage: 0 })
   }
 
-  changeTableFilter = (item) => {
-    this.setState({currentFilter: item})
+  clearModal = newView => {
+    this.setState({ currentPage: newView })
+  }
+
+  changeTableFilter = item => {
+    this.setState({ currentFilter: item })
   }
 
   newFoundItem = () => ({
-    type: "found",
-    description: "",
-    lastLocation: "",
-    currentLocation: "",
+    type: 'found',
+    description: '',
+    lastLocation: '',
+    currentLocation: '',
     creator: this.state.currentUser,
     isResolved: false,
     isBlock: false,
-    dateCreate: new Date().getTime()
+    dateCreate: new Date().getTime(),
   })
-  
+
   newLostItem = () => ({
-    type: "lost",
-    description:"",
-    lastLocation: "",
+    type: 'lost',
+    description: '',
+    lastLocation: '',
     isResolved: false,
     isBlock: false,
     creator: this.state.currentUser,
-    dateCreate: new Date().getTime()
+    dateCreate: new Date().getTime(),
   })
 }
 
 HomeView.childContextTypes = BindingContextTypes
 
-export default provideFirebaseConnectorToReactComponent(client, 'lostfound', (props, fbc) => <HomeView {...props} fbc={fbc} />, PureComponent)
+export default provideFirebaseConnectorToReactComponent(
+  client,
+  'lostfound',
+  (props, fbc) => <HomeView {...props} fbc={fbc} />,
+  PureComponent,
+)
 
 const s = StyleSheet.create({
   container: {
@@ -269,9 +333,9 @@ const s = StyleSheet.create({
 
 function hexToRgb(hex) {
   var hex = hex.slice(1)
-  var bigint = parseInt(hex, 16);
-  var r = (bigint >> 16) & 255;
-  var g = (bigint >> 8) & 255;
-  var b = bigint & 255;
-  return r + "," + g + "," + b;
+  const bigint = parseInt(hex, 16)
+  const r = (bigint >> 16) & 255
+  const g = (bigint >> 8) & 255
+  const b = bigint & 255
+  return `${r},${g},${b}`
 }

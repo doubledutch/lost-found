@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,30 +16,45 @@
 
 import React, { Component } from 'react'
 import './App.css'
-import CustomCell from "./CustomCell"
+import CustomCell from './CustomCell'
 
 export default class LeftReportsTable extends Component {
   constructor(props) {
     super(props)
-    this.state = {
-    }
+    this.state = {}
   }
 
-
   render() {
-    const { totalReported, itemsAndReports, getUser, getReport, returnItem, returnContent, markBlock, approveQ, unBlock } = this.props
-    
+    const {
+      totalReported,
+      itemsAndReports,
+      getUser,
+      getReport,
+      returnItem,
+      returnContent,
+      markBlock,
+      approveQ,
+      unBlock,
+    } = this.props
+
     return (
       <div className="questionBox">
-      <div className="headerTop">
-        <p className="listTitle">Reported ({totalReported})</p>
-      </div>
-      <ul className='listBox' ref={(input) => {this.flaggedList = input}}>
-        { itemsAndReports.map((itemAndReport) => {
-          const id = itemAndReport.item.id
-          const allReportsFlagged = Object.values(itemAndReport.reports).filter(item => item.isBlock === false && item.isApproved === false)
-          if (allReportsFlagged.length) {
-            return (
+        <div className="headerTop">
+          <p className="listTitle">Reported ({totalReported})</p>
+        </div>
+        <ul
+          className="listBox"
+          ref={input => {
+            this.flaggedList = input
+          }}
+        >
+          {itemsAndReports.map(itemAndReport => {
+            const id = itemAndReport.item.id
+            const allReportsFlagged = Object.values(itemAndReport.reports).filter(
+              item => item.isBlock === false && item.isApproved === false,
+            )
+            if (allReportsFlagged.length) {
+              return (
                 <CustomCell
                   currentKey={id}
                   returnQuestion={returnItem}
@@ -47,17 +62,23 @@ export default class LeftReportsTable extends Component {
                   markBlock={markBlock}
                   unBlock={approveQ}
                   getUser={getUser}
-                  report = {allReportsFlagged}
-                  content = {itemAndReport.item}
-                  singleReport = {allReportsFlagged[0]}
-                  allReportsFlagged = {allReportsFlagged}
+                  report={allReportsFlagged}
+                  content={itemAndReport.item}
+                  singleReport={allReportsFlagged[0]}
+                  allReportsFlagged={allReportsFlagged}
                 />
-            )
-          }
-        }) }
-        {(totalReported) ? null : this.renderMessage("Reported Items Will Display Here", "All Pending Reports will remain visible", " to attendees")}
-      </ul>
-    </div>
+              )
+            }
+          })}
+          {totalReported
+            ? null
+            : this.renderMessage(
+                'Reported Items Will Display Here',
+                'All Pending Reports will remain visible',
+                ' to attendees',
+              )}
+        </ul>
+      </div>
     )
   }
 
@@ -68,5 +89,4 @@ export default class LeftReportsTable extends Component {
       <p className="smallModText">{m3}</p>
     </div>
   )
-
 }

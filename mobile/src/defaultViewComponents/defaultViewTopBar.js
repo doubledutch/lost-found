@@ -4,9 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,8 +21,8 @@ import BindingContextTypes from '../BindingContextTypes'
 export default class DefaultViewTopBar extends Component {
   render() {
     return (
-      <View style={{backgroundColor: "#FFFFFF"}}>
-        {this.props.lostFoundLocation.location ? this.renderBar(): null}
+      <View style={{ backgroundColor: '#FFFFFF' }}>
+        {this.props.lostFoundLocation.location ? this.renderBar() : null}
       </View>
     )
   }
@@ -42,16 +42,16 @@ export default class DefaultViewTopBar extends Component {
 DefaultViewTopBar.contextTypes = BindingContextTypes
 
 const s = StyleSheet.create({
-  button:{
+  button: {
     padding: 20,
-    justifyContent: "center",
+    justifyContent: 'center',
     borderWidth: 1,
   },
-  buttonText:{
+  buttonText: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
-  buttonDesText:{
+  buttonDesText: {
     fontSize: 18,
-  }
+  },
 })
