@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import { TextInput } from '@doubledutch/react-components'
+import { translate as t } from '@doubledutch/admin-client'
 import './App.css'
 
 export default class SettingsContainer extends Component {

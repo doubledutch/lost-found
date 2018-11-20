@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import './App.css'
+import { translate as t } from '@doubledutch/admin-client'
 import CustomButtons from './CustomButtons'
 
 export default class CustomCell extends Component {

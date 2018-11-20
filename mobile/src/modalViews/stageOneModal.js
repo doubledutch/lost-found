@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import { StyleSheet, Platform, TouchableOpacity, Text, TextInput, View } from 'react-native'
+import { translate as t } from '@doubledutch/rn-client'
 import BindingContextTypes from '../BindingContextTypes'
 
 export default class StageOneModal extends Component {
@@ -46,7 +47,7 @@ export default class StageOneModal extends Component {
       <View style={s.bottomButtons}>
         <View style={{ flex: 1 }}>
           <TouchableOpacity style={[s.topicsButton, primaryBorder]} onPress={this.props.backStage}>
-            <Text style={[s.topicsButtonText, primaryColor]}>Previous</Text>
+            <Text style={[s.topicsButtonText, primaryColor]}>{t('previous')}</Text>
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
@@ -59,7 +60,7 @@ export default class StageOneModal extends Component {
             disabled={!this.isNextEnabled()}
             onPress={this.props.advanceStage}
           >
-            <Text style={s.sendButtonText}>Next</Text>
+            <Text style={s.sendButtonText}>{t('next')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -100,9 +101,7 @@ export default class StageOneModal extends Component {
       <View style={[s.modal, borderStyle]}>
         <TextInput
           style={Platform.select({ ios: [newStyle, iosStyle], android: [newStyle, androidStyle] })}
-          placeholder={
-            currentItem.type === 'lost' ? 'Describe the lost item' : 'Describe the found item'
-          }
+          placeholder={currentItem.type === 'lost' ? t('describeLost') : t('describeFound')}
           value={this.props.currentItem.description}
           onChangeText={input => this.props.updateItem('description', input)}
           maxLength={250}

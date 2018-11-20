@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { translate as t } from '@doubledutch/rn-client'
 import BindingContextTypes from '../BindingContextTypes'
 
 export default class DefaultViewTopBar extends Component {
@@ -32,7 +33,7 @@ export default class DefaultViewTopBar extends Component {
     debugger
     return (
       <View style={[s.button, lightPrimaryBackground, primaryBorder]}>
-        <Text style={[s.buttonText, primaryColor]}>Official Lost &amp; Found Location</Text>
+        <Text style={[s.buttonText, primaryColor]}>{t('official')}</Text>
         <Text style={[s.buttonDesText, primaryColor]}>{this.props.lostFoundLocation.location}</Text>
       </View>
     )

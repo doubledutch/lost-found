@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { translate as t } from '@doubledutch/rn-client'
 import BindingContextTypes from './BindingContextTypes'
 
 export default class ReportModal extends Component {
@@ -31,7 +32,7 @@ export default class ReportModal extends Component {
         }}
       >
         <TouchableOpacity style={s.modal}>
-          <Text style={s.title}>Are you sure you want to report this content?</Text>
+          <Text style={s.title}>{t('confirmSubmit')}</Text>
           <View style={s.buttonBox}>
             <TouchableOpacity
               style={[s.buttonContainer, primaryBorder]}
@@ -39,13 +40,13 @@ export default class ReportModal extends Component {
                 handleChange('showReportModal', false)
               }}
             >
-              <Text style={[s.buttonTextColor, primaryColor]}>Cancel</Text>
+              <Text style={[s.buttonTextColor, primaryColor]}>{t('cancel')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[s.buttonContainer, primaryBorder, primaryBackground]}
               onPress={makeReport}
             >
-              <Text style={s.buttonText}>Report Content</Text>
+              <Text style={s.buttonText}>{t('reportContent')}</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>

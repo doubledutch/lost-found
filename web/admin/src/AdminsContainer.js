@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import './App.css'
+import { translate as t } from '@doubledutch/admin-client'
 import { AttendeeSelector } from '@doubledutch/react-components'
 
 export default class SettingsContainer extends Component {

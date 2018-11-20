@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import ReactNative, { TouchableOpacity, Text, View } from 'react-native'
+import { translate as t } from '@doubledutch/rn-client'
 
 export default class DefaultViewTableHeader extends Component {
   render() {
@@ -23,10 +24,10 @@ export default class DefaultViewTableHeader extends Component {
     const items = this.props.items.filter(item => item.isBlock !== true && item.isResolved !== true)
     return (
       <View style={s.container}>
-        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('All')}>
+        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter(t('all'))}>
           <Text
             style={[
-              currentFilter === 'All' ? s.buttonBoldText : s.buttonStandardText,
+              currentFilter === t('all') ? s.buttonBoldText : s.buttonStandardText,
               s.buttonGray,
             ]}
           >
@@ -36,21 +37,21 @@ export default class DefaultViewTableHeader extends Component {
         <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('Lost')}>
           <Text
             style={[
-              currentFilter === 'Lost' ? s.buttonBoldText : s.buttonStandardText,
+              currentFilter === t('lost') ? s.buttonBoldText : s.buttonStandardText,
               s.buttonRed,
             ]}
           >
-            Lost ({this.returnFilteredItems(items, 'lost').length})
+            Lost ({this.returnFilteredItems(items, t('lost')).length})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('Found')}>
+        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter(t('found'))}>
           <Text
             style={[
-              currentFilter === 'Found' ? s.buttonBoldText : s.buttonStandardText,
+              currentFilter === t('found') ? s.buttonBoldText : s.buttonStandardText,
               s.buttonGreen,
             ]}
           >
-            Found ({this.returnFilteredItems(items, 'found').length})
+            {t('found')} ({this.returnFilteredItems(items, t('found')).length})
           </Text>
         </TouchableOpacity>
       </View>
