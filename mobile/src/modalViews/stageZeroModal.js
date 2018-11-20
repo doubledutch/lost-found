@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import ReactNative, { TouchableOpacity, Text, View } from 'react-native'
+import { translate as t } from '@doubledutch/rn-client'
 import BindingContextTypes from '../BindingContextTypes'
 
 export default class StageZeroModal extends Component {
@@ -33,7 +34,7 @@ export default class StageZeroModal extends Component {
             style={[s.topicsButton, primaryBorder]}
             onPress={() => this.props.selectItemType('found')}
           >
-            <Text style={[s.topicsButtonText, primaryColor]}>I Found Something</Text>
+            <Text style={[s.topicsButtonText, primaryColor]}>{t('foundSomething')}</Text>
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
@@ -41,7 +42,7 @@ export default class StageZeroModal extends Component {
             style={[s.sendButton, primaryBackground]}
             onPress={() => this.props.selectItemType('lost')}
           >
-            <Text style={s.sendButtonText}>I Lost Something</Text>
+            <Text style={s.sendButtonText}>{t('lostSomething')}</Text>
           </TouchableOpacity>
         </View>
       </View>

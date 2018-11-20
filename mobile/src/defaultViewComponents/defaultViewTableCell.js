@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react'
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
-import client, { Avatar } from '@doubledutch/rn-client'
+import client, { Avatar, translate as t } from '@doubledutch/rn-client'
 import Chevron from './chevron'
 import BindingContextTypes from '../BindingContextTypes'
 
@@ -49,7 +49,7 @@ export default class DefaultViewTableCell extends Component {
       <View style={item.isResolved ? s.containerResolved : s.container}>
         <View style={{ flexDirection: 'row', alignItems: 'center', alignItems: 'flex-start' }}>
           {item.isResolved ? (
-            <Text style={s.grayText}>RESOLVED:</Text>
+            <Text style={s.grayText}>{t('resolvedCap')}</Text>
           ) : (
             <Text style={item.type === 'lost' ? s.redText : s.greenText}>
               {item.type.toUpperCase()}:
@@ -77,16 +77,18 @@ export default class DefaultViewTableCell extends Component {
     const { item, reportItem, isReported } = this.props
     return (
       <View>
-        {item.type === 'found' && <Text style={s.foundText}>Found: {item.lastLocation}</Text>}
+        {item.type === 'found' && (
+          <Text style={s.foundText}>{t('found', { location: item.lastLocation })}</Text>
+        )}
         <View style={{ flexDirection: 'row', marginTop: 10 }}>
           <Text style={s.currentLocalText}>
             {item.type === 'lost'
-              ? `Last Seen: ${item.lastLocation}`
-              : `Current Location: ${this.renderCurrentLocation(item.currentLocation)}`}
+              ? t('lastSeen', { location: item.lastLocation })
+              : t('currentLocal', { location: item.currentLocation })}
           </Text>
           {item.creator.id !== currentUser.id && (
             <TouchableOpacity onPress={() => reportItem(item)}>
-              <Text style={s.reportText}>{isReported ? 'Reported' : 'Report'}</Text>
+              <Text style={s.reportText}>{isReported ? t('reported') : t('report')}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -95,7 +97,8 @@ export default class DefaultViewTableCell extends Component {
     )
   }
 
-  renderCurrentLocation = location => (location === 'lostfound' ? 'At Lost & Found' : 'With person')
+  renderCurrentLocation = location =>
+    location === 'lostfound' ? t('atLostFound') : t('withPerson')
 
   renderCellButtons = () => {
     const { currentUser, primaryBorder, primaryColor } = this.context
@@ -106,14 +109,14 @@ export default class DefaultViewTableCell extends Component {
             onPress={() => client.openURL(`dd://profile/${this.props.item.creator.id}`)}
             style={[s.largeButton, primaryBorder]}
           >
-            <Text style={primaryColor}>Message</Text>
+            <Text style={primaryColor}>{t('message')}</Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
             onPress={() => this.props.editCell(this.props.item)}
             style={[s.largeButton, primaryBorder]}
           >
-            <Text style={primaryColor}>Edit</Text>
+            <Text style={primaryColor}>{t('edit')}</Text>
           </TouchableOpacity>
         )}
         {(this.props.isAdmin || this.props.item.creator.id === currentUser.id) && (
@@ -121,7 +124,7 @@ export default class DefaultViewTableCell extends Component {
             style={[s.largeButton, primaryBorder, s.resolveButton]}
             onPress={() => this.props.resolveItem(this.props.item)}
           >
-            <Text style={primaryColor}>Resolve</Text>
+            <Text style={primaryColor}>{t('resolve')}</Text>
           </TouchableOpacity>
         )}
       </View>

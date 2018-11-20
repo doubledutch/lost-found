@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import { StyleSheet, Platform, TouchableOpacity, Text, TextInput, View } from 'react-native'
+import { translate as t } from '@doubledutch/rn-client'
 import BindingContextTypes from '../BindingContextTypes'
 
 export default class StageTwoModal extends Component {
@@ -51,7 +52,7 @@ export default class StageTwoModal extends Component {
               style={[s.topicsButton, primaryBorder]}
               onPress={this.props.backStage}
             >
-              <Text style={[s.topicsButtonText, primaryColor]}>Previous</Text>
+              <Text style={[s.topicsButtonText, primaryColor]}>{t('previous')}</Text>
             </TouchableOpacity>
           </View>
           <View style={{ flex: 1 }}>
@@ -64,7 +65,7 @@ export default class StageTwoModal extends Component {
               disabled={!this.isNextEnabled()}
               onPress={this.props.advanceStage}
             >
-              <Text style={s.sendButtonText}>Next</Text>
+              <Text style={s.sendButtonText}>{t('next')}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -75,7 +76,7 @@ export default class StageTwoModal extends Component {
       <View style={s.bottomButtons}>
         <View style={{ flex: 1 }}>
           <TouchableOpacity style={[s.topicsButton, primaryBorder]} onPress={this.props.backStage}>
-            <Text style={[s.topicsButtonText, primaryColor]}>Previous</Text>
+            <Text style={[s.topicsButtonText, primaryColor]}>{t('previous')}</Text>
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
@@ -88,7 +89,7 @@ export default class StageTwoModal extends Component {
             disabled={!this.isNextEnabled()}
             onPress={this.props.saveItem}
           >
-            <Text style={s.sendButtonText}>Submit</Text>
+            <Text style={s.sendButtonText}>{t('submit')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -129,11 +130,7 @@ export default class StageTwoModal extends Component {
       <View style={[s.modal, borderStyle]}>
         <TextInput
           style={Platform.select({ ios: [newStyle, iosStyle], android: [newStyle, androidStyle] })}
-          placeholder={
-            currentItem.type === 'lost'
-              ? 'Where did you last see the item?'
-              : 'Where did you find the item?'
-          }
+          placeholder={currentItem.type === 'lost' ? t('whereLastSee') : t('whereFound')}
           value={this.props.currentItem.lastLocation}
           onChangeText={input => this.props.updateItem('lastLocation', input)}
           maxLength={250}

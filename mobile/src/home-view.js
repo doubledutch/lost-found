@@ -17,16 +17,19 @@
 import React, { PureComponent } from 'react'
 import { KeyboardAvoidingView, Platform, StyleSheet, Modal } from 'react-native'
 // rn-client must be imported before FirebaseConnector
-import client, { Color, TitleBar } from '@doubledutch/rn-client'
+import client, { Color, TitleBar, translate as t, useStrings } from '@doubledutch/rn-client'
 import firebase from 'firebase/app'
 import {
   mapPerUserPublicPushedDataToStateObjects,
   provideFirebaseConnectorToReactComponent,
 } from '@doubledutch/firebase-connector'
+import i18n from './i18n'
 import ModalView from './modalView'
 import DefaultView from './defaultView'
 import ReportModal from './reportModal'
 import BindingContextTypes from './BindingContextTypes'
+
+useStrings(i18n)
 
 class HomeView extends PureComponent {
   constructor(props) {
@@ -115,7 +118,7 @@ class HomeView extends PureComponent {
         style={s.container}
         behavior={Platform.select({ ios: 'padding', android: null })}
       >
-        <TitleBar title="Lost &amp; Found" client={client} signin={this.signin} />
+        <TitleBar title={t('title')} client={client} signin={this.signin} />
         {this.modalControl()}
         {this.renderPage()}
       </KeyboardAvoidingView>

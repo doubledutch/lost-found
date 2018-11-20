@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { translate as t } from '@doubledutch/rn-client'
 
 export default class DefaultViewHeader extends Component {
   state = { currentPage: 'Home' }
@@ -24,7 +25,7 @@ export default class DefaultViewHeader extends Component {
     return (
       <View>
         <TouchableOpacity style={s.button} onPress={() => this.props.changeView('modal')}>
-          <Text style={s.buttonText}>What did you lose or find?</Text>
+          <Text style={s.buttonText}>{t('whatLost')}</Text>
         </TouchableOpacity>
       </View>
     )

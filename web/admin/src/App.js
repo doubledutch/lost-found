@@ -17,15 +17,18 @@
 import React, { PureComponent } from 'react'
 import '@doubledutch/react-components/lib/base.css'
 import './App.css'
-import client from '@doubledutch/admin-client'
+import client, { translate as t, useStrings } from '@doubledutch/admin-client'
 import {
   provideFirebaseConnectorToReactComponent,
   mapPerUserPublicPushedDataToStateObjects,
   mapPerUserPrivateAdminablePushedDataToObjectOfStateObjects,
 } from '@doubledutch/firebase-connector'
-import SettingsContainer from './SettingsContainer.js'
-import AdminsContainer from './AdminsContainer.js'
-import ReportsContainer from './ReportsContainer.js'
+import i18n from './i18n'
+import SettingsContainer from './SettingsContainer'
+import AdminsContainer from './AdminsContainer'
+import ReportsContainer from './ReportsContainer'
+
+useStrings(i18n)
 
 class App extends PureComponent {
   constructor(props) {

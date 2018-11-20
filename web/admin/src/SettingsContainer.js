@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import { TextInput } from '@doubledutch/react-components'
+import { translate as t } from '@doubledutch/admin-client'
 import './App.css'
 
 export default class SettingsContainer extends Component {
@@ -49,9 +50,9 @@ export default class SettingsContainer extends Component {
   renderInputBox = () => (
     <div style={{ marginBottom: 30 }}>
       <TextInput
-        label="Where is the official lost and found location?"
+        label={t('officialQ')}
         className="dd-bordered localInputButton"
-        placeholder="Ex. The registration desk at the front of the convention center"
+        placeholder={t('officialPlaceholder')}
         onBlur={this.handleBlur}
         maxLength="150"
         name="lostLocation"
@@ -64,7 +65,7 @@ export default class SettingsContainer extends Component {
           value="save"
           onClick={() => this.props.saveLostFoundLocal(this.state.lostFoundLocation.trim())}
         >
-          Save
+          {t('save')}
         </button>
       ) : null}
     </div>
@@ -74,12 +75,12 @@ export default class SettingsContainer extends Component {
     return (
       <div className="sectionContainer">
         <div className="containerRow">
-          <h2>Settings</h2>
+          <h2>{t('settings')}</h2>
           <button
             className="displayButton"
             onClick={() => this.handleExpandBoxChange(!this.state.isBoxExpanded)}
           >
-            {this.state.isBoxExpanded ? 'Hide Section' : 'Show Section'}
+            {this.state.isBoxExpanded ? t('hide') : t('show')}
           </button>
         </div>
         {this.state.isBoxExpanded ? this.renderInputBox() : null}

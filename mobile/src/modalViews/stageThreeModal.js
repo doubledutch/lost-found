@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import { StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { translate as t } from '@doubledutch/rn-client'
 import BindingContextTypes from '../BindingContextTypes'
 
 export default class StageThreeModal extends Component {
@@ -39,7 +40,7 @@ export default class StageThreeModal extends Component {
       <View style={s.bottomButtons}>
         <View style={{ flex: 1 }}>
           <TouchableOpacity style={[s.topicsButton, primaryBorder]} onPress={this.props.backStage}>
-            <Text style={[s.topicsButtonText, primaryColor]}>Previous</Text>
+            <Text style={[s.topicsButtonText, primaryColor]}>{t('previous')}</Text>
           </TouchableOpacity>
         </View>
         <View style={{ flex: 1 }}>
@@ -52,7 +53,7 @@ export default class StageThreeModal extends Component {
             disabled={!this.isNextEnabled()}
             onPress={this.props.saveItem}
           >
-            <Text style={s.sendButtonText}>Submit</Text>
+            <Text style={s.sendButtonText}>{t('submit')}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -68,7 +69,7 @@ export default class StageThreeModal extends Component {
         style={{ paddingTop: 10, paddingRight: 10, paddingLeft: 10, backgroundColor: '#FFFFFF' }}
       >
         <Text style={{ fontSize: 18, color: '#4A4A4A', padding: 10, fontWeight: 'bold' }}>
-          Where is the item now?
+          {t('whereItem')}
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity
@@ -87,7 +88,7 @@ export default class StageThreeModal extends Component {
               fontWeight: 'bold',
             }}
           >
-            At Lost & Found
+            {t('atLostFound')}
           </Text>
           <TouchableOpacity
             onPress={() => this.props.updateItem('currentLocation', 'person')}
@@ -104,7 +105,7 @@ export default class StageThreeModal extends Component {
               fontWeight: 'bold',
             }}
           >
-            With me
+            {t('withMe')}
           </Text>
         </View>
       </View>

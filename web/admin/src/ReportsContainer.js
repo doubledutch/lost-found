@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import './App.css'
+import { translate as t } from '@doubledutch/admin-client'
 import RightReportsTable from './RightReportsTable.js'
 import LeftReportsTable from './LeftReportsTable.js'
 
@@ -81,12 +82,12 @@ export default class ReportsContainer extends Component {
     return (
       <div className="sectionContainer">
         <div className="containerRow">
-          <h2>Reported Posts</h2>
+          <h2>{t('reportedPosts')}</h2>
           <button
             className="displayButton"
             onClick={() => this.handleExpandBoxChange(!this.state.isBoxExpanded)}
           >
-            {this.state.isBoxExpanded ? 'Hide Section' : 'Show Section'}
+            {this.state.isBoxExpanded ? t('hide') : t('show')}
           </button>
         </div>
         {this.state.isBoxExpanded ? this.renderTables() : null}

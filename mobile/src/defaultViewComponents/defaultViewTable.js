@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import { StyleSheet, View, FlatList, Text, TouchableOpacity } from 'react-native'
+import { translate as t } from '@doubledutch/rn-client'
 import DefaultViewTableCell from './defaultViewTableCell'
 import DefaultViewTableHeader from './defaultViewTableHeader'
 import BindingContextTypes from '../BindingContextTypes'
@@ -95,9 +96,9 @@ export default class DefaultViewTable extends Component {
 
   renderEmptyStateText = () => (
     <View style={s.emptyStateBox}>
-      <Text style={s.emptyStateText}>Nobody has reported any items</Text>
+      <Text style={s.emptyStateText}>{t('emptyState')}</Text>
       <TouchableOpacity onPress={() => this.props.changeView('modal')}>
-        <Text style={s.emptyStateButton}>Tap here to report a lost or found item</Text>
+        <Text style={s.emptyStateButton}>{t('emptyStateButton')}</Text>
       </TouchableOpacity>
     </View>
   )

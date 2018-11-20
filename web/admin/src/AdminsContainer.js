@@ -16,6 +16,7 @@
 
 import React, { Component } from 'react'
 import './App.css'
+import { translate as t } from '@doubledutch/admin-client'
 import { AttendeeSelector } from '@doubledutch/react-components'
 
 export default class SettingsContainer extends Component {
@@ -35,7 +36,7 @@ export default class SettingsContainer extends Component {
       <div className="sectionContainer">
         <div className="titleBox">
           <div className="containerRow">
-            <h2 className="h2NoMargin">Admins</h2>
+            <h2 className="h2NoMargin">{t('admins')}</h2>
             <button
               className="displayButton"
               onClick={() => this.handleBoxExpand(!this.state.isBoxExpanded)}
@@ -43,10 +44,7 @@ export default class SettingsContainer extends Component {
               {this.state.isBoxExpanded ? 'Hide Section' : 'Show Section'}
             </button>
           </div>
-          <p>
-            Admins have the ability to mark any Lost & Found posting as resolved directly from the
-            mobile app
-          </p>
+          <p>{t('adminsDes')}</p>
         </div>
         {this.state.isBoxExpanded ? (
           <div style={{ marginBottom: 25 }}>
