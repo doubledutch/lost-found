@@ -81,18 +81,10 @@ export default class RightReportsTable extends Component {
 
   renderMessageBox = () => {
     if (!this.state.isShowingApproved && !this.props.totalBlocked) {
-      return this.renderMessage(
-        'Blocked items will appear here',
-        'Any item in this list will not be',
-        'visible to attendees',
-      )
+      return this.renderMessage(t('blockedMesOne'), t('blockedMesTwo'), t('blockedMesThree'))
     }
     if (this.state.isShowingApproved && !this.props.totalApproved) {
-      return this.renderMessage(
-        'Approved items will appear here',
-        'Any item in this list will be',
-        'visible to attendees',
-      )
+      return this.renderMessage(t('approvedMesOne'), t('approvedMesTwo'), t('approvedMesThree'))
     }
 
     return null
@@ -104,13 +96,13 @@ export default class RightReportsTable extends Component {
         className={this.state.isShowingApproved ? 'selectedUnderlineButton' : 'underlineButton'}
         onClick={this.showApproved}
       >
-        Approved ({this.props.totalApproved})
+        {t('approvedTotal', { total: this.props.totalApproved })}
       </button>
       <button
         className={this.state.isShowingApproved ? 'underlineButton' : 'selectedUnderlineButton'}
         onClick={this.showBlocked}
       >
-        Blocked ({this.props.totalBlocked})
+        {t('blockedTotal', { total: this.props.totalBlocked })}
       </button>
     </div>
   )

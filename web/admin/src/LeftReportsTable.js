@@ -41,7 +41,7 @@ export default class LeftReportsTable extends Component {
     return (
       <div className="questionBox">
         <div className="headerTop">
-          <p className="listTitle">Reported ({totalReported})</p>
+          <p className="listTitle">{t('reportedTotal', { total: totalReported })}</p>
         </div>
         <ul
           className="listBox"
@@ -73,11 +73,7 @@ export default class LeftReportsTable extends Component {
           })}
           {totalReported
             ? null
-            : this.renderMessage(
-                'Reported Items Will Display Here',
-                'All Pending Reports will remain visible',
-                ' to attendees',
-              )}
+            : this.renderMessage(t('reportedMesOne'), t('reportedMesTwo'), t('reportedMesThree'))}
         </ul>
       </div>
     )

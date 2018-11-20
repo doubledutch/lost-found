@@ -24,9 +24,9 @@ import {
   mapPerUserPrivateAdminablePushedDataToObjectOfStateObjects,
 } from '@doubledutch/firebase-connector'
 import i18n from './i18n'
-import SettingsContainer from './SettingsContainer.js'
-import AdminsContainer from './AdminsContainer.js'
-import ReportsContainer from './ReportsContainer.js'
+import SettingsContainer from './SettingsContainer'
+import AdminsContainer from './AdminsContainer'
+import ReportsContainer from './ReportsContainer'
 
 useStrings(i18n)
 

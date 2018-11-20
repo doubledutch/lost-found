@@ -39,9 +39,9 @@ export default class CustomCell extends Component {
         <div className="cellBoxLeft">
           <div className="questionText">
             {content.type === 'lost' ? (
-              <span className="introTextRed">LOST: </span>
+              <span className="introTextRed">{t('lostCap')}</span>
             ) : (
-              <span className="introTextGreen">FOUND: </span>
+              <span className="introTextGreen">{t('foundCap')}</span>
             )}
             {content.description}
           </div>
@@ -72,7 +72,7 @@ export default class CustomCell extends Component {
       const name = user ? `${user.firstName} ${user.lastName}` : ''
       users = users + (i > 0 ? ', ' : ' ') + name
     })
-    return <p className="nameTextExt">Flagged by: {users}</p>
+    return <p className="nameTextExt">{t('flagged', { users })}</p>
   }
 
   showButton = currentKey => {
