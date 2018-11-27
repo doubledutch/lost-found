@@ -30,7 +30,6 @@ export default class DefaultViewTopBar extends Component {
 
   renderBar = () => {
     const { lightPrimaryBackground, primaryBorder, primaryColor } = this.context
-    debugger
     return (
       <View style={[s.button, lightPrimaryBackground, primaryBorder]}>
         <Text style={[s.buttonText, primaryColor]}>{t('official')}</Text>

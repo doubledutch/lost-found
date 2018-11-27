@@ -111,6 +111,7 @@ class App extends PureComponent {
         <SettingsContainer
           saveLostFoundLocal={this.saveLostFoundLocal}
           lostFoundLocation={this.state.lostFoundLocation.location || ''}
+          deleteAll={this.deleteAll}
         />
         <AdminsContainer
           attendees={this.state.allUsers}
@@ -162,6 +163,13 @@ class App extends PureComponent {
       })
     }
     return total
+  }
+
+  deleteAll = () => {
+    if (window.confirm('Are you sure you want to delete all items?')) {
+      const { fbc } = this.props
+      fbc.database.public.usersRef().remove()
+    }
   }
 
   approvedListings() {
