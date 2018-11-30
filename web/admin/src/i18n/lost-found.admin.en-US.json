@@ -22,5 +22,6 @@
   "officialQ": "Where is the official lost and found location?",
   "officialPlaceholder": "Ex. The registration desk at the front of the convention center",
   "save": "Save",
-  "settings": "Settings"
+  "settings": "Settings",
+  "deleteAll": "Would you like to delete all lost and found items in this event?"
 }

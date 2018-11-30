@@ -62,7 +62,7 @@ class HomeView extends PureComponent {
         backgroundColor: `rgba(${hexToRgb(primaryColor || '#000000')},0.1)`,
       },
       desaturatedPrimaryBackground: {
-        backgroundColor: new Color(client.primaryColor).limitSaturation(0.5).rgbString(),
+        backgroundColor: new Color(primaryColor).limitSaturation(0.5).rgbString(),
       },
     }
   }
@@ -272,16 +272,13 @@ class HomeView extends PureComponent {
     if (newStage === 6) {
       this.props.submitItem()
     } else {
-      this.setState({ currentStage: newStage })
+      this.setState({ itemStage: newStage })
     }
   }
 
-  backStage = stage => {
-    const newStage = this.state.itemStage--
-    if (stage === 0) {
-    } else {
-      this.setState({ currentStage: newStage })
-    }
+  backStage = () => {
+    const newStage = this.state.itemStage - 1
+    this.setState({ itemStage: newStage })
   }
 
   changeView = newView => {

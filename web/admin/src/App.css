@@ -48,8 +48,24 @@ html, body, select {
 }
 
 .localInputButton {
-  width: 49%;
-  margin-right: 50px;
+}
+
+.deleteQuestionText {
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+.deleteBox {
+  display: flex;
+  flex-direction: row wrap;
+  width: 50%;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.deleteButton {
+  height: 40px;
+  margin-left: 20px;
 }
 
 
