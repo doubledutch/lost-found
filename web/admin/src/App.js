@@ -166,7 +166,7 @@ class App extends PureComponent {
   }
 
   deleteAll = () => {
-    if (window.confirm('Are you sure you want to delete all items?')) {
+    if (window.confirm(t('deleteAll'))) {
       const { fbc } = this.props
       fbc.database.public.usersRef().remove()
     }
