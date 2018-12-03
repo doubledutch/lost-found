@@ -1,5 +1,5 @@
-import enUS from './lost-found.admin.en-US.json'
-// import deDE from './lost-found.admin.de-DE.json'
+import enUS from './en-us/lost-found.admin.json'
+// import deDE from './de-de/lost-found.admin.json'
 
 export default {
   '': enUS,

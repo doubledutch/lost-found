@@ -1,5 +1,5 @@
-import enUS from './lost-found.mobile.en-US.json'
-// import deDE from './lost-found.mobile.de-DE.json'
+import enUS from './en-us/lost-found.mobile.json'
+// import deDE from './de-de/lost-found.mobile.json'
 
 export default (strings = {
   '': enUS,
