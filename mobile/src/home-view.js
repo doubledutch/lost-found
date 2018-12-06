@@ -113,12 +113,13 @@ class HomeView extends PureComponent {
   }
 
   render() {
+    const { suggestedTitle } = this.props
     return (
       <KeyboardAvoidingView
         style={s.container}
         behavior={Platform.select({ ios: 'padding', android: null })}
       >
-        <TitleBar title={t('title')} client={client} signin={this.signin} />
+        <TitleBar title={suggestedTitle || t('title')} client={client} signin={this.signin} />
         {this.modalControl()}
         {this.renderPage()}
       </KeyboardAvoidingView>
