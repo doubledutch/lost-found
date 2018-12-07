@@ -672,7 +672,7 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
-"@doubledutch/firebase-connector@^4.1.1":
+"@doubledutch/firebase-connector@^4.1.2":
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/@doubledutch/firebase-connector/-/firebase-connector-4.1.2.tgz#1eb0a8c413014cd4d5ffe4225f98fb2310f9bf68"
   integrity sha512-07XRbPpcVPHbJk7Ajh5XjDBRUZRpcEpfoyBGgF8N3zxkCj+8S6A5cli1i3PEGmAJKHMyjZUCqvHnUAO6pE0Lfg==
