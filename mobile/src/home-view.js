@@ -18,7 +18,7 @@ import React, { PureComponent } from 'react'
 import { KeyboardAvoidingView, Platform, StyleSheet, Modal } from 'react-native'
 // rn-client must be imported before FirebaseConnector
 import client, { Color, TitleBar, translate as t, useStrings } from '@doubledutch/rn-client'
-import firebase from 'firebase/app'
+import firebase from '@firebase/app'
 import {
   mapPerUserPublicPushedDataToStateObjects,
   provideFirebaseConnectorToReactComponent,
