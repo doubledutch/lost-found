@@ -109,7 +109,7 @@ export default class DefaultViewTable extends Component {
     const sortByDate = (a, b) => b.dateCreate - a.dateCreate
     let items = Object.values(this.props.items)
     let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
-    if (this.props.currentFilter !== 'All') {
+    if (this.props.currentFilter !== 'all') {
       newItems = newItems.filter(item => item.type === this.props.currentFilter.toLowerCase())
       items = items.filter(item => item.type === this.props.currentFilter.toLowerCase())
     }

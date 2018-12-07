@@ -40,7 +40,7 @@ class HomeView extends PureComponent {
       itemStage: 0,
       items: {},
       lostFoundLocation: {},
-      currentFilter: 'All',
+      currentFilter: 'all',
       showReportModal: false,
       reports: [],
       isAdmin: false,
