@@ -60,6 +60,7 @@ export default class DefaultViewTable extends Component {
         {userData.length > 2 ? (
           <View style={s.topListBox}>
             <FlatList
+              key={currentFilter}
               data={userData}
               keyExtractor={getId}
               ref={ref => {

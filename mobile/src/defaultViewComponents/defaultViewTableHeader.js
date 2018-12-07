@@ -20,7 +20,7 @@ import { translate as t } from '@doubledutch/rn-client'
 
 export default class DefaultViewTableHeader extends Component {
   render() {
-    const { currentFilter, changeTableFilter } = this.props
+    const { currentFilter } = this.props
     const items = this.props.items.filter(item => item.isBlock !== true && item.isResolved !== true)
     return (
       <View style={s.container}>
