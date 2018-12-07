@@ -91,8 +91,8 @@ export default class DefaultViewTable extends Component {
   }
 
   onRefresh = () => {
-    this.topListRef.scrollToOffset({ x: 0, y: 0, animated: true })
-    this.bottomListRef.scrollToOffset({ x: 0, y: 0, animated: true })
+    this.topListRef && this.topListRef.scrollToOffset({ offset: 0, animated: false })
+    this.bottomListRef && this.bottomListRef.scrollToOffset({ offset: 0, animated: false })
   }
 
   renderEmptyStateText = () => (
