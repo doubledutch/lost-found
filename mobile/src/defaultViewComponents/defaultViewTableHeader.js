@@ -44,7 +44,7 @@ export default class DefaultViewTableHeader extends Component {
             {t('lost')} ({this.returnFilteredItems(items, 'lost').length})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter(t('found'))}>
+        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('found')}>
           <Text
             style={[
               currentFilter === 'found' ? s.buttonBoldText : s.buttonStandardText,
