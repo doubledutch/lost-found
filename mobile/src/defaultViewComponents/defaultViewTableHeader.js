@@ -31,7 +31,7 @@ export default class DefaultViewTableHeader extends Component {
               s.buttonGray,
             ]}
           >
-            All ({items.length})
+            {t('all')} ({items.length})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('lost')}>
@@ -41,7 +41,7 @@ export default class DefaultViewTableHeader extends Component {
               s.buttonRed,
             ]}
           >
-            Lost ({this.returnFilteredItems(items, 'lost').length})
+            {t('lost')} ({this.returnFilteredItems(items, 'lost').length})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter(t('found'))}>
