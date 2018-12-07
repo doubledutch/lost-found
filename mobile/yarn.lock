@@ -672,6 +672,11 @@
     lodash "^4.17.10"
     to-fast-properties "^2.0.0"
 
+"@doubledutch/base-client@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@doubledutch/base-client/-/base-client-4.2.0.tgz#3a9c96cd7f3d006692c78c39f2e9da21bf3cffd0"
+  integrity sha512-KU49gdwkA97axemiNojJFiGm8zxRVk0wHuimn8zx0xfGKH0wUIpoGEJhdcBCeflc21wAtPPheVZrbjtBLuHWiQ==
+
 "@doubledutch/firebase-connector@^4.1.2":
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/@doubledutch/firebase-connector/-/firebase-connector-4.1.2.tgz#1eb0a8c413014cd4d5ffe4225f98fb2310f9bf68"
@@ -679,6 +684,16 @@
   dependencies:
     babel-runtime "^6.26.0"
     firebase "^5.5.8"
+
+"@doubledutch/rn-client@5.0.1-alpha":
+  version "5.0.1-alpha"
+  resolved "https://registry.yarnpkg.com/@doubledutch/rn-client/-/rn-client-5.0.1-alpha.tgz#6c503e11be4860a8c340362c831eec00282b18d6"
+  integrity sha512-GT5/j7Pr9OOCa/RzqJwFy8NktzY2H8zJjFMnyqBWueOq/bVAK/CwbbUusPKqVn+UEs6pNZmUNIfc2HAgnCuAlA==
+  dependencies:
+    "@doubledutch/base-client" "^4.2.0"
+    react "16.6.1"
+    react-native "0.57.5"
+    rn-fetch-blob "0.10.13"
 
 "@firebase/app-types@0.3.2":
   version "0.3.2"
