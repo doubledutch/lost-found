@@ -3,7 +3,7 @@
   "emptyState": "Nobody has reported any items",
   "emptyStateButton": "Tap here to report a lost or found item",
   "resolvedCap": "RESOLVED:",
-  "found": "Found: ${location}",
+  "foundLocation": "Found: ${location}",
   "lastSeen": "Last Seen: ${location}",
   "currentLocal": "Current Location: ${location}",
   "report": "Report",
