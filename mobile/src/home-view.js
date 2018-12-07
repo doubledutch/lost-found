@@ -40,7 +40,7 @@ class HomeView extends PureComponent {
       itemStage: 0,
       items: {},
       lostFoundLocation: {},
-      currentFilter: 'All',
+      currentFilter: 'all',
       showReportModal: false,
       reports: [],
       isAdmin: false,
@@ -269,7 +269,7 @@ class HomeView extends PureComponent {
   }
 
   advanceStage = () => {
-    const newStage = this.state.itemStage++
+    const newStage = this.state.itemStage + 1
     if (newStage === 6) {
       this.props.submitItem()
     } else {
