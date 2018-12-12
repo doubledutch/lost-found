@@ -30,6 +30,7 @@
   "lostSomething": "I Lost Something",
   "title": "Lost & Found",
   "confirmSubmit": "Are you sure you want to report this content?",
-  "reportContent": "Report Content"
+  "reportContent": "Report Content",
+  "cancel": "Cancel"
 
 }
