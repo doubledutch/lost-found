@@ -18,7 +18,7 @@ import React, { PureComponent } from 'react'
 import { KeyboardAvoidingView, Platform, StyleSheet, Modal } from 'react-native'
 // rn-client must be imported before FirebaseConnector
 import client, { Color, TitleBar, translate as t, useStrings } from '@doubledutch/rn-client'
-import firebase from 'firebase/app'
+import firebase from '@firebase/app'
 import {
   mapPerUserPublicPushedDataToStateObjects,
   provideFirebaseConnectorToReactComponent,
@@ -40,7 +40,7 @@ class HomeView extends PureComponent {
       itemStage: 0,
       items: {},
       lostFoundLocation: {},
-      currentFilter: 'All',
+      currentFilter: 'all',
       showReportModal: false,
       reports: [],
       isAdmin: false,
@@ -113,12 +113,13 @@ class HomeView extends PureComponent {
   }
 
   render() {
+    const { suggestedTitle } = this.props
     return (
       <KeyboardAvoidingView
         style={s.container}
         behavior={Platform.select({ ios: 'padding', android: null })}
       >
-        <TitleBar title={t('title')} client={client} signin={this.signin} />
+        <TitleBar title={suggestedTitle || t('title')} client={client} signin={this.signin} />
         {this.modalControl()}
         {this.renderPage()}
       </KeyboardAvoidingView>
@@ -268,7 +269,7 @@ class HomeView extends PureComponent {
   }
 
   advanceStage = () => {
-    const newStage = this.state.itemStage++
+    const newStage = this.state.itemStage + 1
     if (newStage === 6) {
       this.props.submitItem()
     } else {

@@ -78,7 +78,7 @@ export default class DefaultViewTableCell extends Component {
     return (
       <View>
         {item.type === 'found' && (
-          <Text style={s.foundText}>{t('found', { location: item.lastLocation })}</Text>
+          <Text style={s.foundText}>{t('foundLocation', { location: item.lastLocation })}</Text>
         )}
         <View style={{ flexDirection: 'row', marginTop: 10 }}>
           <Text style={s.currentLocalText}>
