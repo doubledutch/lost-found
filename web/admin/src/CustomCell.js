@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react'
 import './App.css'
-import { translate as t } from '@doubledutch/admin-client'
+import client, { translate as t } from '@doubledutch/admin-client'
 import CustomButtons from './CustomButtons'
 
 export default class CustomCell extends Component {
@@ -25,6 +25,7 @@ export default class CustomCell extends Component {
     this.state = {
       isShowingQuestion: false,
       question: '',
+      users: '',
     }
   }
 
@@ -66,13 +67,15 @@ export default class CustomCell extends Component {
 
   returnUsers = () => {
     const reports = this.props.report
-    let users = ''
-    reports.map((item, i) => {
-      const user = this.props.getUser(item)
-      const name = user ? `${user.firstName} ${user.lastName}` : ''
-      users = users + (i > 0 ? ', ' : ' ') + name
+    const attendeePromises = reports.map((item, i) => client.getAttendee(item.userId))
+    Promise.all(attendeePromises).then(attendees => {
+      let users = ''
+      attendees.forEach((user, i) => {
+        const name = user ? `${user.firstName} ${user.lastName}` : ''
+        users = users + (i > 0 ? ', ' : ' ') + name
+      })
+      return <p className="nameTextExt">{t('flagged', { users })}</p>
     })
-    return <p className="nameTextExt">{t('flagged', { users })}</p>
   }
 
   showButton = currentKey => {
@@ -83,6 +86,4 @@ export default class CustomCell extends Component {
   hideQuestion = () => {
     this.setState({ isShowingQuestion: false })
   }
-
-  showQuestion = (location, key) => {}
 }

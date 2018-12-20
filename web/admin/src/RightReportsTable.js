@@ -31,7 +31,6 @@ export default class RightReportsTable extends Component {
     const {
       totalBlocked,
       itemsAndReports,
-      getUser,
       getReport,
       returnItem,
       returnContent,
@@ -62,7 +61,6 @@ export default class RightReportsTable extends Component {
                   returnQuestion={returnItem}
                   returnContent={returnContent}
                   unBlock={approveQ}
-                  getUser={getUser}
                   markBlock={markBlock}
                   report={allReports}
                   content={itemAndReport.item}

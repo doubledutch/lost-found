@@ -126,7 +126,6 @@ class App extends PureComponent {
           totalBlocked={totalBlocked}
           totalReported={totalReported}
           itemsAndReports={itemsAndReports}
-          getUser={this.getUser}
           getReport={this.getReport}
           returnItem={this.returnItem}
           returnContent={this.returnContent}
@@ -239,10 +238,6 @@ class App extends PureComponent {
         .child(key)
         .update({ isBlock: false })
     }
-  }
-
-  getUser = task => {
-    client.getAttendee(task.userId).then(attendee => attendee)
   }
 
   getReport = key => this.state.reports[key]
