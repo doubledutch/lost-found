@@ -29,12 +29,17 @@ export default class CustomCell extends Component {
     }
   }
 
+  componentDidMount() {
+    this.getUsers()
+  }
+
   render() {
     return this.renderCell()
   }
 
   renderCell = () => {
     const { currentKey, difference, report, content, singleReport, markBlock } = this.props
+    const { users } = this.state
     return (
       <li className="cellBox" key={currentKey}>
         <div className="cellBoxLeft">
@@ -50,7 +55,7 @@ export default class CustomCell extends Component {
             <p className="nameText">
               {content.creator ? `-${content.creator.firstName} ${content.creator.lastName}` : null}
             </p>
-            {this.returnUsers()}
+            <p className="nameTextExt">{t('flagged', { users })}</p>
           </div>
         </div>
         <CustomButtons
@@ -65,7 +70,7 @@ export default class CustomCell extends Component {
     )
   }
 
-  returnUsers = () => {
+  getUsers = () => {
     const reports = this.props.report
     const attendeePromises = reports.map((item, i) => client.getAttendee(item.userId))
     Promise.all(attendeePromises).then(attendees => {
@@ -74,7 +79,7 @@ export default class CustomCell extends Component {
         const name = user ? `${user.firstName} ${user.lastName}` : ''
         users = users + (i > 0 ? ', ' : ' ') + name
       })
-      return <p className="nameTextExt">{t('flagged', { users })}</p>
+      this.setState({ users })
     })
   }
 
