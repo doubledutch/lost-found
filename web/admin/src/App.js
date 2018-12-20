@@ -242,8 +242,7 @@ class App extends PureComponent {
   }
 
   getUser = task => {
-    const user = this.state.allUsers.find(user => user.id === task.userId)
-    return user
+    client.getAttendee(task.userId).then(attendee => attendee)
   }
 
   getReport = key => this.state.reports[key]
