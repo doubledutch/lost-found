@@ -36,7 +36,6 @@ export default class LeftReportsTable extends Component {
       approveQ,
       unBlock,
     } = this.props
-
     return (
       <div className="questionBox">
         <div className="headerTop">
