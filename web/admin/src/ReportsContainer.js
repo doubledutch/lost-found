@@ -38,7 +38,6 @@ export default class ReportsContainer extends Component {
       totalBlocked,
       totalReported,
       itemsAndReports,
-      getUser,
       getReport,
       returnItem,
       returnContent,
@@ -53,7 +52,6 @@ export default class ReportsContainer extends Component {
           totalBlocked={totalBlocked}
           totalReported={totalReported}
           itemsAndReports={itemsAndReports}
-          getUser={getUser}
           getReport={getReport}
           returnItem={returnItem}
           returnContent={returnContent}
@@ -67,7 +65,6 @@ export default class ReportsContainer extends Component {
           markBlock={markBlock}
           totalReported={totalReported}
           itemsAndReports={itemsAndReports}
-          getUser={getUser}
           getReport={getReport}
           returnItem={returnItem}
           returnContent={returnContent}

@@ -29,7 +29,6 @@ export default class LeftReportsTable extends Component {
     const {
       totalReported,
       itemsAndReports,
-      getUser,
       getReport,
       returnItem,
       returnContent,
@@ -37,7 +36,6 @@ export default class LeftReportsTable extends Component {
       approveQ,
       unBlock,
     } = this.props
-
     return (
       <div className="questionBox">
         <div className="headerTop">
@@ -62,7 +60,6 @@ export default class LeftReportsTable extends Component {
                   returnContent={returnContent}
                   markBlock={markBlock}
                   unBlock={approveQ}
-                  getUser={getUser}
                   report={allReportsFlagged}
                   content={itemAndReport.item}
                   singleReport={allReportsFlagged[0]}

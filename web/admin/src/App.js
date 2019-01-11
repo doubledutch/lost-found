@@ -103,8 +103,8 @@ class App extends PureComponent {
         }
         return latestReportTimeFor(b) - latestReportTimeFor(a)
       })
-    const totalBlocked = this.totalItems(false)
-    const totalReported = this.totalItems(true)
+    const totalBlocked = this.totalItems(false, itemsAndReports)
+    const totalReported = this.totalItems(true, itemsAndReports)
     const totalApproved = this.approvedListings()
     return (
       <div>
@@ -126,7 +126,6 @@ class App extends PureComponent {
           totalBlocked={totalBlocked}
           totalReported={totalReported}
           itemsAndReports={itemsAndReports}
-          getUser={this.getUser}
           getReport={this.getReport}
           returnItem={this.returnItem}
           returnContent={this.returnContent}
@@ -138,13 +137,11 @@ class App extends PureComponent {
     )
   }
 
-  totalItems(isReport) {
+  totalItems(isReport, items) {
     let total = 0
-    const itemsIds = Object.keys(this.state.reports)
     if (isReport) {
-      itemsIds.forEach((task, i) => {
-        const itemReports = this.getReport(task)
-        const allReportsFlagged = Object.values(itemReports).filter(
+      items.forEach((itemAndReport, i) => {
+        const allReportsFlagged = Object.values(itemAndReport.reports).filter(
           item => item.isBlock === false && item.isApproved === false,
         )
         if (allReportsFlagged.length) {
@@ -152,9 +149,8 @@ class App extends PureComponent {
         }
       })
     } else {
-      itemsIds.forEach((task, i) => {
-        const itemReports = this.getReport(task)
-        const allReportsBlocked = Object.values(itemReports).filter(
+      items.forEach((itemAndReport, i) => {
+        const allReportsBlocked = Object.values(itemAndReport.reports).filter(
           item => item.isBlock === true && item.isApproved !== true,
         )
         if (allReportsBlocked.length) {
@@ -239,11 +235,6 @@ class App extends PureComponent {
         .child(key)
         .update({ isBlock: false })
     }
-  }
-
-  getUser = task => {
-    const user = this.state.allUsers.find(user => user.id === task.userId)
-    return user
   }
 
   getReport = key => this.state.reports[key]

@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react'
 import './App.css'
-import { translate as t } from '@doubledutch/admin-client'
+import client, { translate as t } from '@doubledutch/admin-client'
 import CustomButtons from './CustomButtons'
 
 export default class CustomCell extends Component {
@@ -25,7 +25,12 @@ export default class CustomCell extends Component {
     this.state = {
       isShowingQuestion: false,
       question: '',
+      users: '',
     }
+  }
+
+  componentDidMount() {
+    this.getUsers()
   }
 
   render() {
@@ -34,6 +39,7 @@ export default class CustomCell extends Component {
 
   renderCell = () => {
     const { currentKey, difference, report, content, singleReport, markBlock } = this.props
+    const { users } = this.state
     return (
       <li className="cellBox" key={currentKey}>
         <div className="cellBoxLeft">
@@ -49,7 +55,7 @@ export default class CustomCell extends Component {
             <p className="nameText">
               {content.creator ? `-${content.creator.firstName} ${content.creator.lastName}` : null}
             </p>
-            {this.returnUsers()}
+            <p className="nameTextExt">{t('flagged', { users })}</p>
           </div>
         </div>
         <CustomButtons
@@ -64,15 +70,16 @@ export default class CustomCell extends Component {
     )
   }
 
-  returnUsers = () => {
+  getUsers = () => {
     const reports = this.props.report
-    let users = ''
-    reports.map((item, i) => {
-      const user = this.props.getUser(item)
-      const name = user ? `${user.firstName} ${user.lastName}` : ''
-      users = users + (i > 0 ? ', ' : ' ') + name
+    const attendeePromises = reports.map((item, i) => client.getAttendee(item.userId))
+    Promise.all(attendeePromises).then(attendees => {
+      const users = attendees
+        .filter(user => user)
+        .map(user => `${user.firstName} ${user.lastName}`)
+        .join(', ')
+      this.setState({ users })
     })
-    return <p className="nameTextExt">{t('flagged', { users })}</p>
   }
 
   showButton = currentKey => {
@@ -83,6 +90,4 @@ export default class CustomCell extends Component {
   hideQuestion = () => {
     this.setState({ isShowingQuestion: false })
   }
-
-  showQuestion = (location, key) => {}
 }
