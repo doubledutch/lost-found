@@ -74,11 +74,10 @@ export default class CustomCell extends Component {
     const reports = this.props.report
     const attendeePromises = reports.map((item, i) => client.getAttendee(item.userId))
     Promise.all(attendeePromises).then(attendees => {
-      let users = ''
-      attendees.forEach((user, i) => {
-        const name = user ? `${user.firstName} ${user.lastName}` : ''
-        users = users + (i > 0 ? ', ' : ' ') + name
-      })
+      const users = attendees
+        .filter(user => user)
+        .map(user => `${user.firstName} ${user.lastName}`)
+        .join(', ')
       this.setState({ users })
     })
   }
