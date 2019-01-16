@@ -112,6 +112,7 @@ class App extends PureComponent {
           saveLostFoundLocal={this.saveLostFoundLocal}
           lostFoundLocation={this.state.lostFoundLocation.location || ''}
           deleteAll={this.deleteAll}
+          isEnabled={!!Object.values(this.state.items).length}
         />
         <AdminsContainer
           attendees={this.state.allUsers}

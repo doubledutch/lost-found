@@ -87,7 +87,11 @@ export default class SettingsContainer extends Component {
           {this.state.isBoxExpanded ? this.renderInputBox() : null}
           <div className="deleteBox">
             <p className="deleteQuestionText">{t('deleteAll')}</p>
-            <button className="dd-bordered deleteButton" onClick={this.props.deleteAll}>
+            <button
+              className="dd-bordered deleteButton"
+              onClick={this.props.deleteAll}
+              disabled={!this.props.isEnabled}
+            >
               Delete
             </button>
           </div>
