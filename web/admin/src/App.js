@@ -105,7 +105,7 @@ class App extends PureComponent {
       })
     const totalBlocked = this.totalItems(false, itemsAndReports)
     const totalReported = this.totalItems(true, itemsAndReports)
-    const totalApproved = this.approvedListings()
+    const totalApproved = this.approvedListings(itemsAndReports)
     return (
       <div>
         <SettingsContainer
@@ -161,19 +161,10 @@ class App extends PureComponent {
     return total
   }
 
-  deleteAll = () => {
-    if (window.confirm(t('deleteAll'))) {
-      const { fbc } = this.props
-      fbc.database.public.usersRef().remove()
-    }
-  }
-
-  approvedListings() {
+  approvedListings(items) {
     let total = 0
-    const itemsIds = Object.keys(this.state.reports)
-    itemsIds.forEach((task, i) => {
-      const itemReports = this.getReport(task)
-      const allReportsApproved = Object.values(itemReports).filter(
+    items.forEach((itemAndReport, i) => {
+      const allReportsApproved = Object.values(itemAndReport.reports).filter(
         item => item.isBlock === false && item.isApproved === true,
       )
       if (allReportsApproved.length) {
@@ -181,6 +172,13 @@ class App extends PureComponent {
       }
     })
     return total
+  }
+
+  deleteAll = () => {
+    if (window.confirm(t('deleteAll'))) {
+      const { fbc } = this.props
+      fbc.database.public.usersRef().remove()
+    }
   }
 
   markBlock = (reports, key, userId) => {
