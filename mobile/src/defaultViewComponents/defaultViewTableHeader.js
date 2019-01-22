@@ -20,38 +20,38 @@ import { translate as t } from '@doubledutch/rn-client'
 
 export default class DefaultViewTableHeader extends Component {
   render() {
-    const { currentFilter } = this.props
+    const { currentFilter, changeTableFilter } = this.props
     const items = this.props.items.filter(item => item.isBlock !== true && item.isResolved !== true)
     return (
       <View style={s.container}>
-        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('all')}>
+        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter(t('all'))}>
           <Text
             style={[
-              currentFilter === 'all' ? s.buttonBoldText : s.buttonStandardText,
+              currentFilter === t('all') ? s.buttonBoldText : s.buttonStandardText,
               s.buttonGray,
             ]}
           >
-            {t('all')} ({items.length})
+            All ({items.length})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('lost')}>
+        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('Lost')}>
           <Text
             style={[
-              currentFilter === 'lost' ? s.buttonBoldText : s.buttonStandardText,
+              currentFilter === t('lost') ? s.buttonBoldText : s.buttonStandardText,
               s.buttonRed,
             ]}
           >
-            {t('lost')} ({this.returnFilteredItems(items, 'lost').length})
+            Lost ({this.returnFilteredItems(items, t('lost')).length})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('found')}>
+        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter(t('found'))}>
           <Text
             style={[
-              currentFilter === 'found' ? s.buttonBoldText : s.buttonStandardText,
+              currentFilter === t('found') ? s.buttonBoldText : s.buttonStandardText,
               s.buttonGreen,
             ]}
           >
-            {t('found')} ({this.returnFilteredItems(items, 'found').length})
+            {t('found')} ({this.returnFilteredItems(items, t('found')).length})
           </Text>
         </TouchableOpacity>
       </View>
@@ -64,9 +64,7 @@ export default class DefaultViewTableHeader extends Component {
   }
 
   changeTableFilter = type => {
-    const { changeTableFilter, onRefresh } = this.props
-    changeTableFilter(type)
-    onRefresh()
+    this.props.changeTableFilter(type)
   }
 }
 

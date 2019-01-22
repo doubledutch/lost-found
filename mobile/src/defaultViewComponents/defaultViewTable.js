@@ -60,7 +60,6 @@ export default class DefaultViewTable extends Component {
         {userData.length > 2 ? (
           <View style={s.topListBox}>
             <FlatList
-              key={currentFilter}
               data={userData}
               keyExtractor={getId}
               ref={ref => {
@@ -91,8 +90,8 @@ export default class DefaultViewTable extends Component {
   }
 
   onRefresh = () => {
-    this.topListRef && this.topListRef.scrollToOffset({ offset: 0, animated: false })
-    this.bottomListRef && this.bottomListRef.scrollToOffset({ offset: 0, animated: false })
+    this.topListRef.scrollToOffset({ x: 0, y: 0, animated: true })
+    this.bottomListRef.scrollToOffset({ x: 0, y: 0, animated: true })
   }
 
   renderEmptyStateText = () => (
@@ -109,7 +108,7 @@ export default class DefaultViewTable extends Component {
     const sortByDate = (a, b) => b.dateCreate - a.dateCreate
     let items = Object.values(this.props.items)
     let newItems = items.filter(item => item.isResolved === false && item.isBlock !== true)
-    if (this.props.currentFilter !== 'all') {
+    if (this.props.currentFilter !== 'All') {
       newItems = newItems.filter(item => item.type === this.props.currentFilter.toLowerCase())
       items = items.filter(item => item.type === this.props.currentFilter.toLowerCase())
     }

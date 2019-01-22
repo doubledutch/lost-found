@@ -3,7 +3,7 @@
   "emptyState": "Nobody has reported any items",
   "emptyStateButton": "Tap here to report a lost or found item",
   "resolvedCap": "RESOLVED:",
-  "foundLocation": "Found: ${location}",
+  "found": "Found: ${location}",
   "lastSeen": "Last Seen: ${location}",
   "currentLocal": "Current Location: ${location}",
   "report": "Report",
@@ -30,7 +30,6 @@
   "lostSomething": "I Lost Something",
   "title": "Lost & Found",
   "confirmSubmit": "Are you sure you want to report this content?",
-  "reportContent": "Report Content",
-  "cancel": "Cancel"
+  "reportContent": "Report Content"
 
 }

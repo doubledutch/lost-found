@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { AppRegistry, YellowBox } from 'react-native'
+import { AppRegistry } from 'react-native'
 import HomeView from './src/home-view'
 
-YellowBox && YellowBox.ignoreWarnings(['Setting a timer'])
+console.ignoredYellowBox = ['Warning: View.propTypes has been deprecated']
 AppRegistry.registerComponent('lostfound', () => HomeView)
 AppRegistry.registerComponent('section', () => HomeView)
