@@ -32,7 +32,7 @@ export default class StageZeroModal extends Component {
         <View style={{ flex: 1 }}>
           <TouchableOpacity
             style={[s.topicsButton, primaryBorder]}
-            onPress={() => this.props.selectItemType('found')}
+            onPress={() => this.props.selectItemType('foundM')}
           >
             <Text style={[s.topicsButtonText, primaryColor]}>{t('foundSomething')}</Text>
           </TouchableOpacity>

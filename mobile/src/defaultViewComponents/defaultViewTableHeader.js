@@ -34,24 +34,24 @@ export default class DefaultViewTableHeader extends Component {
             All ({items.length})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter('Lost')}>
+        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter(t('lost'))}>
           <Text
             style={[
               currentFilter === t('lost') ? s.buttonBoldText : s.buttonStandardText,
               s.buttonRed,
             ]}
           >
-            Lost ({this.returnFilteredItems(items, t('lost')).length})
+            {t('lost')} ({this.returnFilteredItems(items, 'lost')})
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter(t('found'))}>
+        <TouchableOpacity style={s.button} onPress={() => this.changeTableFilter(t('foundM'))}>
           <Text
             style={[
-              currentFilter === t('found') ? s.buttonBoldText : s.buttonStandardText,
+              currentFilter === t('foundM') ? s.buttonBoldText : s.buttonStandardText,
               s.buttonGreen,
             ]}
           >
-            {t('found')} ({this.returnFilteredItems(items, t('found')).length})
+            {t('foundM')} ({this.returnFilteredItems(items, 'found')})
           </Text>
         </TouchableOpacity>
       </View>
@@ -60,7 +60,7 @@ export default class DefaultViewTableHeader extends Component {
 
   returnFilteredItems = (items, type) => {
     const foundItems = items.filter(item => item.type === type)
-    return foundItems
+    return foundItems.length
   }
 
   changeTableFilter = type => {
