@@ -73,7 +73,7 @@ const s = StyleSheet.create({
     fontSize: 14,
   },
   buttonTextColor: {
-    fontSize: 18,
+    fontSize: 14,
   },
   buttonBox: {
     flexDirection: 'row',
