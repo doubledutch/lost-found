@@ -216,11 +216,13 @@ pWithMargin {
   border: none;
   border-bottom: 2px solid #73aaf3;
   height: 24px;
+  background-color: white;
 }
 
 .underlineButton {
   border: none;
   height: 20px;
+  background-color: white;
 }
 
 .combinedText{
