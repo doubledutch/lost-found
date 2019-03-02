@@ -1,12 +1,12 @@
-import enUS from './en-us/lost-found.admin.json'
+import enUS from './en-us/lost-found.mobile.json'
 
-import arINT from './ar-int/lost-found.admin.json'
-import deDE from './de-de/lost-found.admin.json'
-import esES from './es-es/lost-found.admin.json'
-import frFR from './fr-fr/lost-found.admin.json'
-import itIT from './it-it/lost-found.admin.json'
-import jaJP from './ja-jp/lost-found.admin.json'
-import nlNL from './nl-nl/lost-found.admin.json'
+import arINT from './ar-int/lost-found.mobile.json'
+import deDE from './de-de/lost-found.mobile.json'
+import esES from './es-es/lost-found.mobile.json'
+import frFR from './fr-fr/lost-found.mobile.json'
+import itIT from './it-it/lost-found.mobile.json'
+import jaJP from './ja-jp/lost-found.mobile.json'
+import nlNL from './nl-nl/lost-found.mobile.json'
 
 export default {
   '': enUS,
