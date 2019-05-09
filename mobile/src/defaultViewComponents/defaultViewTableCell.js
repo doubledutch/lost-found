@@ -84,7 +84,7 @@ export default class DefaultViewTableCell extends Component {
           <Text style={s.currentLocalText}>
             {item.type === 'lost'
               ? t('lastSeen', { location: item.lastLocation })
-              : t('currentLocal', { location: item.currentLocation })}
+              : this.renderCurrentLocation(item.currentLocation)}
           </Text>
           {item.creator.id !== currentUser.id && (
             <TouchableOpacity onPress={() => reportItem(item)}>
