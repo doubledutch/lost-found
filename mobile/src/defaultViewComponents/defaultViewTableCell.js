@@ -98,7 +98,7 @@ export default class DefaultViewTableCell extends Component {
   }
 
   renderCurrentLocation = location =>
-    location === 'lostfound' ? `Current Location: ${t('atLostFound')}` : `Current Location: ${t('withPerson')}`
+    location === 'lostfound' ? t("currentLocal", {location: t('atLostFound')} ) : t("currentLocal", {location: t('withPerson')} )
 
   renderCellButtons = () => {
     const { currentUser, primaryBorder, primaryColor } = this.context
