@@ -5,7 +5,7 @@
   "resolvedCap" : "تم الحل:",
   "foundLocation" : "تم العثور على: ${location}",
   "lastSeen" : "تاريخ آخر تواجد: ${location}",
-  "currentLocal" : "الموقع الحالي: ${location}",
+  "currentLocal" : "الموقع الحالي:",
   "report" : "الإبلاغ",
   "reported" : "مبلغ عنها",
   "atLostFound" : "في عناصر مفقودة وموجودة",

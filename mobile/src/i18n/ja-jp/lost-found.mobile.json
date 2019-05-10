@@ -5,7 +5,7 @@
   "resolvedCap" : "解決済み：",
   "foundLocation" : "発見：${location}",
   "lastSeen" : "最後の情報：${location}",
-  "currentLocal" : "現在の場所：${location}",
+  "currentLocal" : "現在の場所：",
   "report" : "報告",
   "reported" : "報告済",
   "atLostFound" : "遺失物取扱所",

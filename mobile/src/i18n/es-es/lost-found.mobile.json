@@ -5,7 +5,7 @@
   "resolvedCap" : "RESUELTO:",
   "foundLocation" : "Encontrado: ${location}",
   "lastSeen" : "Visto por última vez: ${location}",
-  "currentLocal" : "Ubicación actual: ${location}",
+  "currentLocal" : "Ubicación actual:",
   "report" : "Reportar",
   "reported" : "Reportado:",
   "atLostFound" : "En Objetos perdidos",

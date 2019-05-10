@@ -5,7 +5,7 @@
   "resolvedCap" : "OPGELOST:",
   "foundLocation" : "Gevonden: ${location}",
   "lastSeen" : "Laatst gezien: ${location}",
-  "currentLocal" : "Huidige locatie: ${location}",
+  "currentLocal" : "Huidige locatie:",
   "report" : "Melden",
   "reported" : "Gemeld",
   "atLostFound" : "Bij verloren & gevonden voorwerpen",
