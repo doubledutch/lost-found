@@ -100,7 +100,7 @@ class HomeView extends PureComponent {
           const longLivedToken = data.val()
           if (longLivedToken) {
             console.log('Attendee appears to be admin.  Logging out and logging in w/ admin token.')
-            await firebase.auth().signOut()
+            await fbc.firebase.auth().signOut()
             client.longLivedToken = longLivedToken
             await fbc.signinAdmin()
             console.log('Re-logged in as admin')
