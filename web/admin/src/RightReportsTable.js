@@ -82,7 +82,7 @@ export default class RightReportsTable extends Component {
       return this.renderMessage(t('blockedMesOne'), t('blockedMesTwo'), t('blockedMesThree'))
     }
     if (this.state.isShowingApproved && !this.props.totalApproved) {
-      return this.renderMessage(t('approvedMesOne'), t('approvedMesTwo'), t('approvedMesThree'))
+      return this.renderMessage(t('approveMesOne'), t('approveMesTwo'), t('approveMesThree'))
     }
 
     return null

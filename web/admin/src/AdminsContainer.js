@@ -44,9 +44,9 @@ export default class SettingsContainer extends Component {
               {this.state.isBoxExpanded ? 'Hide Section' : 'Show Section'}
             </button>
           </div>
-          <p>{t('adminsDes')}</p>
+          {this.state.isBoxExpanded && <p>{t('adminsDes')}</p>}
         </div>
-        {this.state.isBoxExpanded ? (
+        {this.state.isBoxExpanded && (
           <div style={{ marginBottom: 25 }}>
             <AttendeeSelector
               client={this.props.client}
@@ -57,7 +57,7 @@ export default class SettingsContainer extends Component {
               selected={this.props.attendees.filter(a => this.isAdmin(a.id))}
             />
           </div>
-        ) : null}
+        )}
       </div>
     )
   }
