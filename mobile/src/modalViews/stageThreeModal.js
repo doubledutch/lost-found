@@ -20,6 +20,13 @@ import { translate as t } from '@doubledutch/rn-client'
 import BindingContextTypes from '../BindingContextTypes'
 
 export default class StageThreeModal extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      disabled: false
+    }
+  }
+
   render() {
     return (
       <View>
@@ -50,14 +57,19 @@ export default class StageThreeModal extends Component {
                 ? [s.sendButton, primaryBackground]
                 : [s.sendButtonDisabled, desaturatedPrimaryBackground]
             }
-            disabled={!this.isNextEnabled()}
-            onPress={this.props.saveItem}
+            disabled={!this.isNextEnabled() || this.state.disabled}
+            onPress={this.saveItem}
           >
             <Text style={s.sendButtonText}>{t('submit')}</Text>
           </TouchableOpacity>
         </View>
       </View>
     )
+  }
+
+  saveItem = () => {
+    this.setState({disabled: true})
+    this.props.saveItem()
   }
 
   isNextEnabled = () => this.props.currentItem.currentLocation.trim().length > 0
