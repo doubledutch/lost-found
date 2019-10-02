@@ -45,8 +45,6 @@ export default class StageTwoModal extends Component {
       primaryColor,
     } = this.context
 
-    console.log(this.state.disabled)
-
     if (this.props.currentItem.type === 'found') {
       return (
         <View style={s.bottomButtons}>
