@@ -38,6 +38,7 @@ export default class StageTwoModal extends Component {
   }
 
   renderButtons = () => {
+    const disabled = this.props.questionError ? false : disabled
     const {
       desaturatedPrimaryBackground,
       primaryBackground,
@@ -87,7 +88,7 @@ export default class StageTwoModal extends Component {
                 ? [s.sendButton, primaryBackground]
                 : [s.sendButtonDisabled, desaturatedPrimaryBackground]
             }
-            disabled={!this.isNextEnabled() || this.state.disabled}
+            disabled={!this.isNextEnabled() || disabled}
             onPress={this.saveItem}
           >
             <Text style={s.sendButtonText}>{t('submit')}</Text>

@@ -44,6 +44,7 @@ class HomeView extends PureComponent {
       showReportModal: false,
       reports: [],
       isAdmin: false,
+      questionError: false
     }
 
     this.signin = props.fbc.signin().then(user => (this.user = user))
@@ -155,6 +156,7 @@ class HomeView extends PureComponent {
             currentItem={this.state.currentItem}
             advanceStage={this.advanceStage}
             backStage={this.backStage}
+            questionError={this.state.questionError}
           />
         )
       default:
@@ -223,7 +225,7 @@ class HomeView extends PureComponent {
           this.setState({ currentItem: {}, itemStage: 0 })
         }, 250)
       })
-      .catch(() => this.setState({ questionError: 'Retry' }))
+      .catch(() => this.setState({ questionError: true }))
   }
 
   trimWhiteSpaceItem = () => {

@@ -42,6 +42,7 @@ export default class ModalView extends Component {
             backStage={this.props.backStage}
             currentItem={this.props.currentItem}
             saveItem={this.props.saveItem}
+            questionError={this.props.questionError}
           />
         )
       case 3:
@@ -51,6 +52,7 @@ export default class ModalView extends Component {
             currentItem={this.props.currentItem}
             backStage={this.props.backStage}
             saveItem={this.props.saveItem}
+            questionError={this.props.questionError}
           />
         )
       default:
