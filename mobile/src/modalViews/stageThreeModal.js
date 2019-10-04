@@ -37,7 +37,7 @@ export default class StageThreeModal extends Component {
   }
 
   renderButtons = () => {
-    const disabled = this.props.questionError ? false : disabled
+    const disabled = this.props.questionError ? false : this.state.disabled
     const {
       desaturatedPrimaryBackground,
       primaryBackground,
