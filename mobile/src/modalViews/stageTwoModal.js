@@ -25,6 +25,7 @@ export default class StageTwoModal extends Component {
     color: 'white',
     borderColor: '#EFEFEF',
     inputHeight: 0,
+    disabled: false
   }
 
   render() {
@@ -37,6 +38,7 @@ export default class StageTwoModal extends Component {
   }
 
   renderButtons = () => {
+    const disabled = this.props.questionError ? false : this.state.disabled
     const {
       desaturatedPrimaryBackground,
       primaryBackground,
@@ -86,14 +88,19 @@ export default class StageTwoModal extends Component {
                 ? [s.sendButton, primaryBackground]
                 : [s.sendButtonDisabled, desaturatedPrimaryBackground]
             }
-            disabled={!this.isNextEnabled()}
-            onPress={this.props.saveItem}
+            disabled={!this.isNextEnabled() || disabled}
+            onPress={this.saveItem}
           >
             <Text style={s.sendButtonText}>{t('submit')}</Text>
           </TouchableOpacity>
         </View>
       </View>
     )
+  }
+
+  saveItem = () => {
+    this.setState({disabled: true})
+    this.props.saveItem()
   }
 
   isNextEnabled = () => this.props.currentItem.lastLocation.trim().length > 0
